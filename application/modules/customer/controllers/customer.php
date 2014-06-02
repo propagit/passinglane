@@ -29,7 +29,11 @@ class Customer extends MX_Controller {
 			
 			case 'logout':
 				$this->logout();
-			break;					
+			break;	
+			
+			case 'download':
+				$this->download($param1);
+			break;				
 					
 			default:
 				$this->sign_up();
@@ -103,6 +107,21 @@ class Customer extends MX_Controller {
 	function get_customer($customer_id)
 	{
 		return $this->customer_model->identify($customer_id);	
+	}
+	
+	function download($order_item_id)
+	{
+		//if(modules::run('auth/is_customer_logged_in')){
+			//$customer_id = $this->session->userdata('customer_id');
+			//$order = $this->customer_model->validate_purchase($order_item_id,$customer_id);
+			//if($order){
+				//valid order -> proceed with download
+				$data['filename'] = 'website_comments.pdf';	
+				$data['path'] = base_url().'uploads/products/test_product/';
+				$this->load->view('orders/download', isset($data) ? $data : NULL);
+			//}
+		//}
+
 	}
 	
 

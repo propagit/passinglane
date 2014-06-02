@@ -154,15 +154,5 @@ class Ajax extends MX_Controller {
 		}				
 
 	}
-	
-	function download()
-	{
-		$out['status'] = true;
-		if(modules::run('auth/is_customer_logged_in',true)){
-			//
-		}else{
-			$out['status'] = false;	
-		}
-	}
 
 }

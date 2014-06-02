@@ -16,7 +16,7 @@
             <td class="left col-sm-6"><?=$order->product_name . ' ' . $order->product_subtitle; ?></td>
             <td class="center remove-line-height col-sm-2"><?=date('d-m-Y',strtotime($order->created));?></td>
             <td class="center col-sm-2"><?=date('d-m-Y',strtotime($order->reg_expiry));?></td>
-            <td class="center col-sm-1"><i class="fa fa-download fa-2x pointer download-product" data="<?=$order->order_item_id;?>"></i></td>
+            <td class="center col-sm-1"><a href="<?=base_url();?>customer/download/<?=$order->order_item_id;?>"><i class="fa fa-download fa-2x pointer download-product"></i></a></td>
         </tr>
     
     <?php } ?>
