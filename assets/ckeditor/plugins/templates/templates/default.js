@@ -1,0 +1,5 @@
+﻿/*
+ Copyright (c) 2003-2013, CKSource - Frederico Knabben. All rights reserved.
+ For licensing, see LICENSE.md or http://ckeditor.com/license
+*/
+CKEDITOR.addTemplates("default",{imagesPath:CKEDITOR.getUrl(CKEDITOR.plugins.getPath("templates")+"templates/images/"),templates:[{title:"Two Column",image:"template2.gif",description:"A title with some text and a table.",html:'<table><tr><td style="vertical-align:top; width:530px"><p>All Passing Lane training products are sold under a user site licence.<br />Schools, TAFEs and other training institutions may not assign, sub-contract, transfer, or sub license any of your rights and obligations under this agreement to any third party.</p></td><td style="vertical-align:top; width:300px"><ul><li><a href="#">WRITTEN MATERIALS</a></li><li><a href="#">VIDEO RESOURCES</a></li><li><a href="#">LICENCE AGREEMENT OVERVIEW</a></li></ul></td></tr></table>'}]});
