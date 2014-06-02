@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = "propates_admin";
-$db['default']['password'] = "pr0p4t3st_4dm1n";
-$db['default']['database'] = "propates_passinglane";
+$db['default']['username'] = "root";
+$db['default']['password'] = "root";
+$db['default']['database'] = "passinglane";
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
