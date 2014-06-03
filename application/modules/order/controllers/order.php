@@ -31,6 +31,9 @@ class Order extends MX_Controller {
 			case 'payment':
 				$this->payment();
 			break;
+			case 'test':
+				$this->test();
+			break;
 		}
 	}
 	
@@ -61,7 +64,7 @@ class Order extends MX_Controller {
 		Payment process control flow and logic
 			-> frontend gets directed to this controller process_payment
 				-> add order, set status as processing - [orders table]
-					-> when completed this proces then add order items - [ order_items table]
+					-> when completed add order items - [ order_items table]
 					-> when completed passes the control back to process_payment
 			-> process payment
 				-> if successful update order status to success
@@ -107,6 +110,7 @@ class Order extends MX_Controller {
 			}
 		}
 		if($order_successful){
+			$this->send_order_confirmation($order_id);
 			redirect('order/successful');
 		}else{
 			redirect('order/failed');
@@ -285,6 +289,33 @@ class Order extends MX_Controller {
 		
 		return true;	
 	}
+	
+	function send_order_notification($order_id)
+	{
+		
+	}
+	
+	function send_order_confirmation($order_id)
+	{
+		$order = $this->order_model->get_order($order_id);
+		$data['order'] = $order;
+		$message = $this->load->view('emails/order_confirmation', isset($data) ? $data : NULL, true);	
+		modules::run('email/send_email', array(
+			'to' => $order->email,
+			'from' => 'webmaster@passinglane.com',
+			'from_text' => 'Passing Lane',
+			'subject' => 'Order Confirmation',
+			'message' => $message,
+			'attachment' => modules::run('adminorder/download',$order_id,true)
+		));
+	}
+	
+	function test()
+	{
+		echo $this->send_order_confirmation(7);	
+	}
+
+	
 
 	
 	

@@ -56,7 +56,7 @@ $autoload['libraries'] = array('template','database', 'session');
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'date', 'text', 'email','html');
+$autoload['helper'] = array('url', 'date', 'text', 'email','html','number');
 /*
 | -------------------------------------------------------------------
 |  Auto-load Config files

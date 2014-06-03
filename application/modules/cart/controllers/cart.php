@@ -130,6 +130,7 @@ class Cart extends MX_Controller {
 		//shipping is just a new item that has the key shipping set as true
 		
 		//when a customer has shipping moudles get shipping details from shipping id and get shipping info else use the default setting or hard coded value
+		//IMP => the shipping id should have a prefix such as SHP like in the default shipping so that it won't have any conflict with the product id
 		$shipping_id = $this->input->post('shipping_id');
 		
 		$shipping = $this->get_default_shippings($shipping_id);

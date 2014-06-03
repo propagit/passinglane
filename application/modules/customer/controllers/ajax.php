@@ -66,6 +66,7 @@ class Ajax extends MX_Controller {
 		$customer['user_id'] = $user_id;
 		$this->session->set_flashdata('profile_created',true);
 		modules::run('auth/generate_session_vars',$customer);
+		modules::run('customer/send_welcome_email',$customer_id);
 		echo 'success';
 				
 	}

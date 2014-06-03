@@ -124,6 +124,20 @@ class Customer extends MX_Controller {
 
 	}
 	
+	function send_welcome_email($customer_id)
+	{
+		$customer = $this->customer_model->identify($customer_id);
+		$data['customer'] = $customer;
+		$message = $this->load->view('emails/welcome', isset($data) ? $data : NULL, true);	
+		modules::run('email/send_email', array(
+			'to' => $customer['email'],
+			'from' => 'webmaster@passinglane.com',
+			'from_text' => 'Passing Lane',
+			'subject' => 'Welcome @ Passing Lane Online Store',
+			'message' => $message
+		));	
+	}
+	
 
 
 

@@ -87,9 +87,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="facsimile" class="col-sm-3 control-label">Facsimile *</label>
+        <label for="facsimile" class="col-sm-3 control-label">Facsimile</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" id="facsimile" name="facsimile" placeholder="" data="required">
+            <input type="text" class="form-control" id="facsimile" name="facsimile" placeholder="">
         </div>
     </div>
     <div class="form-group">
@@ -204,11 +204,13 @@ function validate_other_fields()
 
 function create_customer()
 {
-	$j.ajax({
+	help.loading();
+	/* $j.ajax({
 	type: "POST",
 	url: "<?=base_url();?>customer/ajax/create_new_customer",
 	data: $j('#customer-signup-form').serialize(),
 	success: function(html) {
+		help.remove_loading();
 		if(html == 'email exists'){
 			$j('#msg-profile-creation-failed').removeClass('hide');
 			setTimeout(function(){
@@ -219,7 +221,7 @@ function create_customer()
 			window.location.href = "<?=$redirect_after_login_url;?>";	
 		}
 	  }
-	});	
+	});	 */
 }
 
 function toggle_other(element_id)
