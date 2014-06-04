@@ -83,7 +83,7 @@
        		<?php if(isset($order_items) && $order_items){?>
 	   		<tr>
 	   			<td colspan="4">		   		
-					<br /><p><span class="title-page"><b>Purchase Items</span> (PRICES DISPLAYED $AUD)</p>
+					<br /><p><span class="title-page"><b>Purchase Items</b></span> (PRICES DISPLAYED $AUD)</p>
 				</td>
 			</tr>
 	    	<tr>
