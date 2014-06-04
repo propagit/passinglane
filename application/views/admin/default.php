@@ -85,7 +85,6 @@
 	}
 
 	?>
-    <link href='http://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800,900' rel='stylesheet' type='text/css'>
 
 
     <header class="navbar navbar-inverse bs-docs-nav" role="banner">

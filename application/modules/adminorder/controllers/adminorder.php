@@ -121,7 +121,6 @@ class Adminorder extends MX_Controller {
 			$pdf->WriteHTML($stylesheet,1);
 			$pdf->WriteHTML($html,2);
 			$pdf->Output($pdfFilePath, 'F'); // save to file 
-			
 			#var_dump($html); die();
 		}
 		if($return_path){

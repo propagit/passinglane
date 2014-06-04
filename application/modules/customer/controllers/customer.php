@@ -33,7 +33,11 @@ class Customer extends MX_Controller {
 			
 			case 'download':
 				$this->download($param1);
-			break;				
+			break;	
+			
+			case 'download_failed':
+				$this->download_failed();
+			break;			
 					
 			default:
 				$this->sign_up();
@@ -111,17 +115,32 @@ class Customer extends MX_Controller {
 	
 	function download($order_item_id)
 	{
-		//if(modules::run('auth/is_customer_logged_in')){
-			//$customer_id = $this->session->userdata('customer_id');
-			//$order = $this->customer_model->validate_purchase($order_item_id,$customer_id);
-			//if($order){
+		if(modules::run('auth/is_customer_logged_in')){
+			$valid = true;
+			$this->load->helper('download');
+			$customer_id = $this->session->userdata('customer_id');
+			$order_item = $this->customer_model->validate_purchase($order_item_id,$customer_id);
+			if($order_item){
 				//valid order -> proceed with download
-				$data['filename'] = 'website_comments.pdf';	
-				$data['path'] = base_url().'uploads/products/test_product/';
-				$this->load->view('orders/download', isset($data) ? $data : NULL);
-			//}
-		//}
-
+				//product_file
+				//get product file name
+				$product = modules::run('adminproduct/get_product',$order_item->product_id);
+				$dir = md5('mbb'.$order_item->product_id); //get the encrypted dir
+				$filename = $product['product_file_name'];
+				$path = "./uploads/products/".$dir."/".$filename;
+				if(file_exists($path)){
+					$data = file_get_contents($path); // Read the file's contents
+					force_download($filename, $data);
+				}else{
+					redirect('customer/download_failed');
+				}
+			}
+		}
+	}
+	
+	function download_failed()
+	{
+		$this->load->view('orders/download_failed', isset($data) ? $data : NULL);	
 	}
 	
 	function send_welcome_email($customer_id)
