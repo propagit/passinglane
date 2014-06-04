@@ -64,7 +64,9 @@ $j(function(){
     $j('.custom-select').selectpicker();
 
     //init datepicker
-    $j('.date-picker').datepicker({});
+    $j('.date-picker').datepicker({
+        format: "mm/dd/yyyy"
+    });
     search_promotions();
 });
 function search_promotions() {

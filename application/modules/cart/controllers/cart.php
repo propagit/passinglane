@@ -269,7 +269,8 @@ class Cart extends MX_Controller {
 					{
 						$satisfied++;
 					}
-					if ($condition['condition_type'] == 'coupon')
+					if ($condition['condition_type'] == 'coupon'
+						&& $condition['actual_usages'] < $condition['allowed_usages'])
 					{
 						if ($condition['value'] == $coupon)
 						{

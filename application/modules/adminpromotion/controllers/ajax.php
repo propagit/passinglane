@@ -70,6 +70,11 @@ class Ajax extends MX_Controller {
         if (isset($input['conditions']))
         {
             $conditions = $input['conditions'];
+            $usages = array();
+            if (isset($input['usages']))
+            {
+                $usages = $input['usages'];
+            }
             foreach($conditions as $condition_id => $value)
             {
                 if (is_array($value)) # condition_type: product
@@ -88,7 +93,13 @@ class Ajax extends MX_Controller {
                     }
                     $value = serialize($value);
                 }
-                $this->promotion_condition_model->update_promotion_condition($condition_id, array('value' => $value));
+                $condition_data = array('value' => $value);
+                if (isset($usages[$condition_id]))
+                {
+                    $condition_data['allowed_usages'] = $usages[$condition_id];
+                }
+
+                $this->promotion_condition_model->update_promotion_condition($condition_id, $condition_data);
             }
         }
 

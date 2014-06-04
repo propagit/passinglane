@@ -9,7 +9,7 @@
         </div>
         <div class="input-group">
             <span class="input-group-addon">$</span>
-            <input type="text" class="form-control" name="conditions[<?=$condition['condition_id'];?>]" value="<?=$condition['value'];?>" />
+            <input type="text" class="form-control" name="conditions[<?=$condition['condition_id'];?>]" value="<?=$condition['value'];?>" onkeypress="return help.check_numeric(this, event,'nd');" />
         </div>
     </div>
 </div>

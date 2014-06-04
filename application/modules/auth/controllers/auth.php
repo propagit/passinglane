@@ -13,13 +13,13 @@ class Auth extends MX_Controller {
 		$this->template->set_template('login');
 		$this->load->model('auth_model');
 	}
-	
-	
+
+
 	function is_user_logged_in()
 	{
 		return $this->session->userdata('is_user_logged_in');
 	}
-	
+
 	function login_user()
 	{
 		$this->template->write('title', 'Administration');
@@ -30,13 +30,13 @@ class Auth extends MX_Controller {
 				$data = array('username' => $_POST['username'], 'password' => $_POST['password']);
 				$user = $this->auth_model->validate($data);
 				if ($user)
-				{					
-					if($user['level']==1){										
-						$this->session->set_userdata('is_user_logged_in', true);						
+				{
+					if($user['level']==1){
+						$this->session->set_userdata('is_user_logged_in', true);
 						redirect(base_url());
 					}
 					else
-					
+
 					if($user['level']==9)
 					{
 						$this->session->set_userdata('is_admin_logged_in', true);
@@ -45,7 +45,7 @@ class Auth extends MX_Controller {
 				}
 			}
 			$this->template->write('msg_error', '<div class="alert alert-error">Wrong username/password</div>');
-			
+
 		}
 		$this->template->render();
 	}
@@ -54,7 +54,7 @@ class Auth extends MX_Controller {
 	function is_admin_logged_in()
 	{
 		return $this->session->userdata('is_admin_logged_in');
-	}	
+	}
 	# Raquel: check username and password
 	function login_admin()
 	{
@@ -67,21 +67,21 @@ class Auth extends MX_Controller {
 				$user = $this->auth_model->validate($data);
 				if ($user)
 				{
-										
+
 					$this->session->set_userdata('is_admin_logged_in', true);
-		
+
 					redirect('admin');
 				}
 			}
 			$this->template->write('msg_error', '<div class="alert alert-error">Wrong username/password</div>');
-			
+
 		}
 		$this->template->render();
-		
-		
-		
+
+
+
 	}
-	
+
 	function logout_admin()
 	{
 		#$this->session->sess_destroy();
@@ -89,17 +89,17 @@ class Auth extends MX_Controller {
 		$this->session->unset_userdata('is_admin_logged_in');
 		redirect('admin');
 	}
-	
+
 	function validate_user($data)
 	{
 		$customer = $this->auth_model->validate_user($data);
 		if(count($customer)){
 			return $customer;
 		}else{
-			return false;	
+			return false;
 		}
 	}
-	
+
 	function generate_session_vars($customer)
 	{
 		if(!$customer){
@@ -110,26 +110,29 @@ class Auth extends MX_Controller {
 		$this->session->set_userdata('customer_loggedin',TRUE);
 		return true;
 	}
-	
+
 	function logout_customer()
 	{
 		$this->session->unset_userdata('customer_id');
 		$this->session->unset_userdata('user_id');
 		$this->session->unset_userdata('customer_loggedin');
+		$this->session->unset_userdata('coupon');
+		$this->load->library('cart');
+		$this->cart->destroy();
 	}
-	
+
 	function is_customer_logged_in($return = false)
 	{
 		if(!$this->session->userdata('customer_loggedin')){
 			if($return){
-				return false;	
+				return false;
 			}else{
-				redirect('customer/sign_up');	
+				redirect('customer/sign_up');
 			}
 		}else{
 			return true;
 		}
 	}
-	
-	
+
+
 }

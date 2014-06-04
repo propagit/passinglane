@@ -24,6 +24,12 @@ class Promotion_model extends CI_Model {
     }
 
     function search_promotions($params) {
+        if (isset($params['keyword']) && $params['keyword'] != '') {
+            $this->db->like('name', $params['keyword']);
+        }
+        if (isset($params['status']) && $params['status'] != '') {
+            $this->db->like('status', $params['status']);
+        }
         $query = $this->db->get('promotions');
         return $query->result_array();
     }

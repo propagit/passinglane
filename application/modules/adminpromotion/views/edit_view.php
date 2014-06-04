@@ -53,11 +53,11 @@
                     <div class="form-common-input">
                         <div class="input-group" id="discount_fixed">
                             <span class="input-group-addon">$</span>
-                            <input type="text" class="form-control" name="discount_value[fixed]" value="<?=($promotion['discount_type'] == 'fixed') ? $promotion['discount_value'] : ''; ?>" />
+                            <input type="text" class="form-control" name="discount_value[fixed]" value="<?=($promotion['discount_type'] == 'fixed') ? $promotion['discount_value'] : ''; ?>" onkeypress="return help.check_numeric(this, event,'nd');" />
 
                         </div>
                         <div class="input-group" id="discount_percentage">
-                            <input type="text" class="form-control" name="discount_value[percentage]" value="<?=($promotion['discount_type'] == 'percentage') ? $promotion['discount_value'] : ''; ?>" />
+                            <input type="text" class="form-control" name="discount_value[percentage]" value="<?=($promotion['discount_type'] == 'percentage') ? $promotion['discount_value'] : ''; ?>" onkeypress="return help.check_numeric(this, event,'nd');" />
                             <span class="input-group-addon">%</span>
                         </div>
                     </div>
@@ -127,7 +127,7 @@
                         <select name="condition_type" class="custom-select">
                         <? if($promotion['promotion_type'] == 'catalog') { ?>
                             <option value="product">Products</option>
-                            <option value="customer">Customer</option>
+                            <!-- <option value="customer">Customer</option> -->
                         <? } else { ?>
                             <option value="order">Order Subtotal</option>
                             <option value="coupon">Coupon code</option>
@@ -224,6 +224,7 @@ function add_condition() {
         url: "<?=base_url();?>admin/promotion/ajax/add_condition",
         data: {promotion_id: promotion_id, condition_type: condition_type},
         success: function(html) {
+            update_promotion();
             list_conditions();
         }
     })
