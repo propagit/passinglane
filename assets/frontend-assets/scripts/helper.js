@@ -106,8 +106,47 @@ var help = {
 				$j(this).find('i').replaceWith('<i class="fa fa-minus pull-right"></i>');
 			}
 		});
+	},
+	
+	/* *
+	
+	--> loading function needs these css rules
+	
+	#loading{
+	background-color:rgba(0,0,0,0.8);
+	position:absolute;
+	top:0;
+	z-index:2000;
 	}
-
+	
+	#loading .loading-inner-box{
+		background-color:#fff;
+		border-radius:6px;
+		width:100px;
+		height:80px;
+		margin:auto;
+	}
+	
+	#loading .loading-inner-box .fa{
+		position: relative;
+		float: left;
+		margin: 25px 0 0 38px;
+		font-size: 30px;
+	}
+	
+	*/
+	
+	loading:function(){
+		var h = $j(document).height();
+		var mt = $j(window).scrollTop() + 300;
+		var w = $j(document).width();
+		$j('body').append('<div id="loading" style="height:' + h + 'px;width:' + w + 'px;line-height:' + h + 'px;"><div style="margin-top:'+mt+'px" class="loading-inner-box"><i class="fa fa-spinner fa-spin"></i></div></div>');
+	},
+	
+	remove_loading:function(){
+		$j('#loading').remove();
+	}
+	
 	
 
 };

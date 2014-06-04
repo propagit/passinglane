@@ -13,7 +13,7 @@ class Adminorder extends MX_Controller {
 		$this->load->model('order_model');
 	}
 	
-	public function index($method='', $param='')
+	public function index($method='', $param='' ,$param2='')
 	{
 		switch($method)
 		{	
@@ -80,7 +80,7 @@ class Adminorder extends MX_Controller {
 	{
 		$message = $this->load->view('email/order_notification', isset($data) ? $data : NULL, true);
 		modules::run('email/send_email', array(
-			'to' => 'nam@propagate.com.au',
+			'to' => 'kaushtuvgurung@gmail.com.au',
 			'from' => 'webmaster@passinglane.com',
 			'from_text' => 'Passing Lane',
 			'subject' => 'Order Notification',
@@ -88,13 +88,13 @@ class Adminorder extends MX_Controller {
 		));
 	}
 	
-	function download($order_id)
+	function download($order_id,$return_path = false)
 	{
 		# As PDF creation takes a bit of memory, we're saving the created file in /uploads/pdf/
 		$filename = "order_" . $order_id;
 		$site_path = './';
 		$upload_path = $site_path . 'uploads';
-		#if(!file_exists($upload_path .'/orders/'.$filename.'.pdf')){
+		if(!file_exists($upload_path .'/orders/'.$filename.'.pdf')){
 			$pdfFilePath = $upload_path ."/orders/$filename.pdf";
 			
 			$dir = $upload_path .'/orders/';
@@ -116,18 +116,19 @@ class Adminorder extends MX_Controller {
 					
 			$this->load->library('pdf');
 			$pdf = $this->pdf->load(); 			
-			$stylesheet = file_get_contents($site_path . '/assets/backend-assets/css/backend.css');
-			
-			$custom_styles = '<style></style>';
-			//echo $custom_styles;exit();
+			$stylesheet = file_get_contents('./assets/backend-assets/css/backend.css');
+			//echo $html;exit();
 			$pdf->WriteHTML($stylesheet,1);
-			$pdf->WriteHTML($custom_styles,1);
 			$pdf->WriteHTML($html,2);
 			$pdf->Output($pdfFilePath, 'F'); // save to file 
 			
 			#var_dump($html); die();
-		#}
-		redirect($upload_path . "/orders/$filename.pdf"); 
+		}
+		if($return_path){
+			return $upload_path . "/orders/$filename.pdf";
+		}else{
+			redirect($upload_path . "/orders/$filename.pdf"); 
+		}
 	}
 	
 }

@@ -11,6 +11,7 @@ class Email extends MX_Controller {
 		parent::__construct();
 	}
 	
+	
 	/**
 	*	@name: send_email
 	*	@desc: A central function to send email
@@ -119,12 +120,22 @@ class Email extends MX_Controller {
 		  'protocol' => 'smtp',
 		  'smtp_host' => 'ssl://smtp.googlemail.com',
 		  'smtp_port' => 465,
-		  'smtp_user' => '', // change it to yours
-		  'smtp_pass' => '', // change it to yours
+		  'smtp_user' => 'propagate.au@gmail.com', // change it to yours
+		  'smtp_pass' => 'morem0n3y', // change it to yours
 		  'mailtype' => 'html',
 		  'charset' => 'iso-8859-1',
 		  'wordwrap' => TRUE
 		);
+		
+		$to = '';
+		$from = '';
+		$cc = '';
+		$bcc = '';
+		$from_text = '';
+		$subject = ''; 
+		$message = ''; 
+		$attachment = ''; 
+		$bcc = '';
 		
 		if($data){
 		foreach($data as $key=>$val){
@@ -172,11 +183,14 @@ class Email extends MX_Controller {
 		$this->email->from('propagate.au@gmail.com',$from_text); // change it to yours
 		$this->email->to($to);// change it to yours
 		$this->email->subject($subject);
-		#$company_logo = modules::run('setting/company_logo');
-		#$email_signature = modules::run('setting/get_email_footer');
-		#$this->email->message($company_logo . '<br />'.$message . $email_signature);
+		
+		$this->email->subject($subject);
 		$this->email->message($message);
-		#$this->email->attach($attachment);
+			
+			
+		if($attachment){
+			$this->email->attach($attachment);
+		}
 		if($this->email->send()){
 		  	echo 'Email sent.';
 		}else{

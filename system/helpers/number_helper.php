@@ -70,6 +70,19 @@ if ( ! function_exists('byte_format'))
 		return number_format($num, $precision).' '.$unit;
 	}
 }
+/**  
+	if money_format is not supported by the localhost 
+	fall back to number format 
+*/
+
+if ( ! function_exists('money_format'))
+{
+	function money_format($format='%i', $number)
+	{
+		setlocale(LC_MONETARY, "en_US");
+		echo number_format($number, 2);
+	}
+}
 
 
 /* End of file number_helper.php */

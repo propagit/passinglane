@@ -153,10 +153,7 @@ class Dispatcher extends MX_Controller {
 		$keywords = $meta_data['keywords'];
 		$description = $meta_data['description'];
 
-
-
 		$content = modules::run($controller, $method, $param1, $param2, $param3, $param4);
-
 
 		$this->template->set_template('passing');
 
