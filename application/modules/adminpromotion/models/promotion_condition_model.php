@@ -39,4 +39,8 @@ class Promotion_condition_model extends CI_Model {
         return $this->db->delete('promotion_conditions');
     }
 
+    function increase_coupon_usages($condition_id) {
+        $condition = $this->get_promotion_condition($condition_id);
+        return $this->update_promotion_condition($condition_id, array('actual_usages' => $condition['actual_usages'] + 1));
+    }
 }

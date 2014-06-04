@@ -11,7 +11,7 @@
             <input type="text" class="form-control" name="conditions[<?=$condition['condition_id'];?>]" value="<?=$condition['value'];?>" />
         </div>
         <div class="input-group">
-            <span class="input-group-addon">Usage</span>
+            <span class="input-group-addon">Usage: <?=$condition['actual_usages'];?> /</span>
             <input type="text" class="form-control" name="usages[<?=$condition['condition_id'];?>]" value="<?=$condition['allowed_usages'];?>" onkeypress="return help.check_numeric(this, event,'nd');" />
         </div>
     </div>

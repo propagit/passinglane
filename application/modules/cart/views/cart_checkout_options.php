@@ -23,10 +23,11 @@
         <td>
         <?php if($enable_inputs){ ?>
         <span class="cart-options-label push">Enter Discount Coupon Code</span>
-        <div class="input-group coupon-input-group">
+        <div class="input-group coupon-input-group pull-left">
           <input type="text" class="form-control no-border-radius" name="coupon">
           <span id="btn-add-coupon" class="input-group-addon custom-addon no-border-radius" style="cursor:pointer;"><i class="fa fa-plus-circle"></i> ADD</span>
         </div>
+        <div id="invalid_coupon" class="pull-left red-text" style="margin-left:10px; width:200px;"></div>
         <?php }else{ echo '&nbsp;'; }?>
         </td>
         <td class="right"></td>
@@ -74,7 +75,11 @@ $j(function(){
             url: "<?=base_url();?>cart/ajax/add_coupon",
             data: {coupon: coupon},
             success: function(html) {
-                location.reload();
+                if (html == 'true') {
+                    location.reload();
+                } else {
+                    $j('#invalid_coupon').html('Invalid coupon code');
+                }
             }
         })
     })

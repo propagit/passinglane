@@ -11,10 +11,11 @@ class Order extends MX_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		modules::run('auth/is_customer_logged_in');	
+		modules::run('auth/is_customer_logged_in');
 		$this->load->model('adminorder/order_model');
+		$this->load->model('adminpromotion/promotion_condition_model');
 	}
-	
+
 	function index($method='', $param1='', $param2="")
 	{
 		switch($method)
@@ -36,12 +37,12 @@ class Order extends MX_Controller {
 			break;
 		}
 	}
-	
+
 	function payment()
 	{
-		$this->load->view('payment', isset($data) ? $data : NULL);	
+		$this->load->view('payment', isset($data) ? $data : NULL);
 	}
-	
+
 	function load_delivery_details_form($pre_filled = false)
 	{
 		$data['states'] = modules::run('system/get_states');
@@ -50,16 +51,16 @@ class Order extends MX_Controller {
 			$customer_id = $this->session->userdata('customer_id');
 			$data['customer'] = modules::run('customer/get_customer',$customer_id);
 		}
-		$this->load->view('delivery_details_form', isset($data) ? $data : NULL);	
+		$this->load->view('delivery_details_form', isset($data) ? $data : NULL);
 	}
-	
+
 	function load_payment_details_form()
 	{
 		$customer_id = $this->session->userdata('customer_id');
 		$data['customer'] = modules::run('customer/get_customer',$customer_id);
-		$this->load->view('payment_details_form', isset($data) ? $data : NULL);		
+		$this->load->view('payment_details_form', isset($data) ? $data : NULL);
 	}
-	
+
 	/* *
 		Payment process control flow and logic
 			-> frontend gets directed to this controller process_payment
@@ -74,37 +75,39 @@ class Order extends MX_Controller {
 	function process_order()
 	{
 		if(modules::run('cart/is_cart_empty')){
-			redirect('cart');	
+			redirect('cart');
 		}
 		$order_id = modules::run('order/add_order');
 		$order_successful = false;
 		if($order_id){
-			//process payment	
+			//process payment
 			#$payment = modules::run('order/process_payment');
 			$payment_type = $this->input->post('payment_type',true);
-			
+
 			if ($payment_type == 'trading') {
 				$this->order_model->update_order($order_id,array('order_status' => 'not paid'));
+				$this->promotion_condition_model->increase_coupon_usages($this->session->userdata('condition_id'));
 				modules::run('cart/destroy_cart');
-				redirect('order/successful');	
+				redirect('order/successful');
 			}
-			
+
 			$customer_id = $this->session->userdata('customer_id');
 			$customer = modules::run('customer/get_customer',$customer_id);
-		
+
 			$card_name = $this->input->post('ccname',true);
 			$card_number = $this->input->post('ccnumber',true);
 			$expiry_month = $this->input->post('expiry_month',true);
 			$expiry_year = $this->input->post('expiry_year',true);
 			$cvv = $this->input->post('cvv',true);
-		
-		
+
+
 			$total = modules::run('cart/get_cart_real_total');
 			$payment = $this->process_eWay($order_id,$customer['firstname'],$customer['lastname'],$customer['email'],$customer['address'],$customer['postcode'],$card_name,$card_number,$expiry_month,$expiry_year,$cvv,$total);
 			if($payment){
 				$this->order_model->update_order($order_id,array('order_status' => 'success'));
+				$this->promotion_condition_model->increase_coupon_usages($this->session->userdata('condition_id'));
 				modules::run('cart/destroy_cart');
-				$order_successful = true;	
+				$order_successful = true;
 			} else {
 				$this->order_model->update_order($order_id,array('order_status' => 'failed'));
 			}
@@ -119,7 +122,7 @@ class Order extends MX_Controller {
 			redirect('order/failed');
 		}
 	}
-	
+
 	function process_eWay($order_id,$firstname,$lastname,$email,$address,$postcode,$cardname,$cardnumber,$expmonth,$expyear,$cvv,$total) {
 		# Payment config
 		$total = 1000;
@@ -127,10 +130,10 @@ class Order extends MX_Controller {
 		#$eWAY_CustomerID = "12229578"; // eWAY Propagate
 		$eWAY_PaymentMethod = 'REAL_TIME_CVN'; // payment gatway to use (REAL_TIME, REAL_TIME_CVN or GEO_IP_ANTI_FRAUD)
 		$eWAY_UseLive = false; // true to use the live gateway
-		
-		$this->load->model('Eway_model');			
+
+		$this->load->model('Eway_model');
 		$this->Eway_model->init($eWAY_CustomerID, $eWAY_PaymentMethod, $eWAY_UseLive);
-		
+
 		# Set the payment details
 		$this->Eway_model->setTransactionData("TotalAmount", $total); //mandatory field
 		$this->Eway_model->setTransactionData("CustomerFirstName", $firstname);
@@ -144,52 +147,53 @@ class Order extends MX_Controller {
 		$this->Eway_model->setTransactionData("CardNumber", $cardnumber); # mandatory field
 		$this->Eway_model->setTransactionData("CardExpiryMonth", $expmonth); # mandatory field
 		$this->Eway_model->setTransactionData("CardExpiryYear", $expyear); # mandatory field
-		$this->Eway_model->setTransactionData("TrxnNumber", "TRXN".$order_id); 
+		$this->Eway_model->setTransactionData("TrxnNumber", "TRXN".$order_id);
 		$this->Eway_model->setTransactionData("Option1", "");
 		$this->Eway_model->setTransactionData("Option2", "");
 		$this->Eway_model->setTransactionData("Option3", "");
 		$this->Eway_model->setTransactionData("CVN", $cvv);
 		$this->Eway_model->setCurlPreferences(CURLOPT_SSL_VERIFYPEER, 0); // Require for Windows hosting
-						
+
 		$ewayResponseFields = $this->Eway_model->doPayment();
-		
-			
+
+
 		if (strtolower($ewayResponseFields["EWAYTRXNSTATUS"])=="false") {
 			$this->session->set_userdata('eway_msg', $ewayResponseFields["EWAYTRXNERROR"]);
 			return false;
 		}
-		
+
 		else if (strtolower($ewayResponseFields["EWAYTRXNSTATUS"])=="true") {
 			return true;
 		}
 		else {
 			print "Error: An invalid response was recieved from the payment gateway.";
 			return false;
-		}		
+		}
 	}
-	
+
 	function successful()
 	{
-		$this->load->view('successful', isset($data) ? $data : NULL);		
+		$this->load->view('successful', isset($data) ? $data : NULL);
 	}
-	
+
 	function failed()
 	{
 		$this->load->view('failed', isset($data) ? $data : NULL);
 	}
-	
+
 	function add_order()
 	{
 		$shipping = modules::run('cart/get_shipping_info');
 		$discount = modules::run('cart/get_discount_info');
+		$discount_amount = modules::run('cart/get_discount_amount');
 		$tax = modules::run('cart/get_cart_gst');
 		$subtotal = modules::run('cart/get_cart_subtotal');
 		$total = modules::run('cart/get_cart_real_total');
-		
-		
+
+
 		$customer_id = $this->session->userdata('customer_id');
 		$customer = modules::run('customer/get_customer',$customer_id);
-		
+
 		$delivery_name = $this->input->post('delivery_name',true);
 		$telephone = $this->input->post('telephone',true);
 		$address1 = $this->input->post('address1',true);
@@ -198,9 +202,9 @@ class Order extends MX_Controller {
 		$state_id = $this->input->post('state',true);
 		$suburb = $this->input->post('suburb',true);
 		$postcode = $this->input->post('postcode',true);
-		
-		
-		
+
+
+
 		$card_name = '';
 		$card_number = '';
 		$expiry_month = '';
@@ -217,10 +221,10 @@ class Order extends MX_Controller {
 			$cvv = $this->input->post('cvv',true);
 			$cc_lastfour = '****'.substr($card_number,-4,4);
 		}
-		
-		
-		
-		
+
+
+
+
 		$order_data = array(
 							'customer_id' => $customer['id'],
 							'firstname' => $customer['firstname'],
@@ -244,17 +248,18 @@ class Order extends MX_Controller {
 							'subtotal' => $subtotal,
 							'total' => $total,
 							'tax' => $tax,
-							'discount' => (isset($discount) ? $discount['price'] : 0),
+							'discount' => $discount_amount,
+							'coupon_code' => $this->session->userdata('coupon'),
 							'shipping_cost' => (isset($shipping) ? $shipping['price'] : 0)
 							);
 		$order_id = $this->order_model->add_order($order_data);
 		if(modules::run('order/add_order_items',$order_id)){
-			return $order_id;	
+			return $order_id;
 		}else{
-			return false;	
+			return false;
 		}
 	}
-	
+
 	function add_order_items($order_id)
 	{
 		$count = 0;
@@ -274,14 +279,14 @@ class Order extends MX_Controller {
 										'reg_expiry' => date('Y-m-d',strtotime('+3 years',$today))
 										);
 					if($this->order_model->add_order_items($order_items)){
-						$count++;	
+						$count++;
 					}
 				}
 			}
 		}
 		return $count;
 	}
-	
+
 	function process_payment()
 	{
 		$card_name = $this->input->post('ccname',true);
@@ -289,15 +294,15 @@ class Order extends MX_Controller {
 		$expiry_month = $this->input->post('expiry_month',true);
 		$expiry_year = $this->input->post('expiry_year',true);
 		$cvv = $this->input->post('cvv',true);
-		
-		return true;	
+
+		return true;
 	}
-	
+
 	function send_order_notification($order_id)
 	{
 		$order = $this->order_model->get_order($order_id);
 		$data['order'] = $order;
-		$message = $this->load->view('emails/order_notification', isset($data) ? $data : NULL, true);	
+		$message = $this->load->view('emails/order_notification', isset($data) ? $data : NULL, true);
 		modules::run('email/send_email', array(
 			'to' => 'team@propagate.com.au',
 			'cc' => 'robintl@bigpond.com',
@@ -309,12 +314,12 @@ class Order extends MX_Controller {
 			'attachment' => modules::run('adminorder/download',$order_id,true)
 		));
 	}
-	
+
 	function send_order_confirmation($order_id)
 	{
 		$order = $this->order_model->get_order($order_id);
 		$data['order'] = $order;
-		$message = $this->load->view('emails/order_confirmation', isset($data) ? $data : NULL, true);	
+		$message = $this->load->view('emails/order_confirmation', isset($data) ? $data : NULL, true);
 		modules::run('email/send_email', array(
 			'to' => $order->email,
 			#'to' => 'kaushtuvgurung@gmail.com',
@@ -325,14 +330,14 @@ class Order extends MX_Controller {
 			'attachment' => modules::run('adminorder/download',$order_id,true)
 		));
 	}
-	
+
 	function test()
 	{
-		echo $this->send_order_confirmation(28);	
+		echo $this->send_order_confirmation(28);
 	}
 
-	
 
-	
-	
+
+
+
 }

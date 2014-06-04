@@ -30,6 +30,16 @@ class Promotion_model extends CI_Model {
         if (isset($params['status']) && $params['status'] != '') {
             $this->db->like('status', $params['status']);
         }
+        if (isset($params['date_from']) && $params['date_from'] != '') {
+            $date_from = date('Y-m-d', strtotime($params['date_from']));
+            $where = "(valid_period = 0 OR (valid_period = 1 AND (date_from >= '$date_from' OR date_to >= '$date_from')))";
+            $this->db->where($where);
+        }
+        if (isset($params['date_to']) && $params['date_to'] != '') {
+            $date_to = date('Y-m-d', strtotime($params['date_to']));
+            $where = "(valid_period = 0 OR (valid_period = 1 AND (date_from <= '$date_to' OR date_to <= '$date_to')))";
+            $this->db->where($where);
+        }
         $query = $this->db->get('promotions');
         return $query->result_array();
     }

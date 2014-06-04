@@ -116,7 +116,7 @@ class Auth extends MX_Controller {
 		$this->session->unset_userdata('customer_id');
 		$this->session->unset_userdata('user_id');
 		$this->session->unset_userdata('customer_loggedin');
-		$this->session->unset_userdata('coupon');
+		$this->session->sess_destroy();
 		$this->load->library('cart');
 		$this->cart->destroy();
 	}

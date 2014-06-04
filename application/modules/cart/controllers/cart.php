@@ -430,6 +430,8 @@ class Cart extends MX_Controller {
 
 	function destroy_cart()
 	{
+		$this->session->unset_userdata('coupon');
+		$this->session->unset_userdata('condition_id');
 		$this->cart->destroy();
 	}
 

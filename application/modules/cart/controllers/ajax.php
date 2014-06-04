@@ -12,6 +12,8 @@ class Ajax extends MX_Controller {
 		parent::__construct();
 		$this->load->library('cart');
 		$this->load->model('adminproduct/product_model');
+		$this->load->model('adminpromotion/promotion_model');
+		$this->load->model('adminpromotion/promotion_condition_model');
 	}
 
 	function add_to_cart()
@@ -84,7 +86,29 @@ class Ajax extends MX_Controller {
 
 	function add_coupon()
 	{
-		$this->session->set_userdata('coupon', $this->input->post('coupon'));
+		$coupon = $this->input->post('coupon');
+		$promotions = $this->promotion_model->get_cart_promotions();
+		foreach($promotions as $promotion)
+		{
+			$conditions = $this->promotion_condition_model->get_promotion_conditions($promotion['promotion_id']);
+			if (count($conditions) > 0)
+			{
+				foreach($conditions as $condition)
+				{
+					if ($condition['condition_type'] == 'coupon')
+					{
+						if ($condition['value'] == $coupon)
+						{
+							$this->session->set_userdata('coupon', $this->input->post('coupon'));
+							$this->session->set_userdata('condition_id', $condition['condition_id']);
+							echo 'true';
+							return;
+						}
+					}
+				}
+			}
+		}
+		echo 'false';
 	}
 
 	function get_cart_checkout_options()
