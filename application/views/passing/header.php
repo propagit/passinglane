@@ -22,8 +22,8 @@
         <div class="row nav-wrap nomarginleft">
 
             <div class="col-xs-12 addpadding">
-                <ul class="nav nav-pills fullwidth">                	
-                    
+                <ul class="nav nav-pills fullwidth">
+
                     <?php
                 	foreach($nav as $n)
 					{
@@ -33,24 +33,24 @@
 							$id_title = $this->nav_model->get_page_id_title_by_id($n['page']);
 							$nurl = base_url().'page/'.$id_title;
 						}
-						else 
+						else
 						{
 							if($n['url'] != '')
 							{
 								$nurl = $n['url'];
 							}
 						}
-						
+
 						$links = $this->nav_model->get_all_links($n['id']);
                     ?>
-                    
+
                     <li>
 						<?php
                         if($links)
                         {
                         ?>
                             <a <? if($n['id'] == 1) {echo "href='".base_url()."'";}else{echo "href='".$nurl."'";}?> ><?=strtoupper($n['name'])?></a>
-                            <ul class="dropdown-menu desktop-menu">                                
+                            <ul class="dropdown-menu desktop-menu">
                                 <?php
                                 $ttl = count($links) - 1;
                                 $i = 0;
@@ -60,40 +60,40 @@
                                     if($l['page'] != 0 )
                                     {
                                         $id_title = $this->nav_model->get_page_id_title_by_id($l['page']);
-                                        $url = base_url().'page/'.$id_title;                                       
+                                        $url = base_url().'page/'.$id_title;
                                     }
                                     else
                                     {
                                         $url = $l['url'];
                                     }
-                                    
+
                                     ?>
                                             <li>
                                                 <a href="<?=$url?>"><?=$l['name']?></a>
                                             </li>
                                         <?
-                                    	
-    
+
+
                                     $i++;
                                 }
                                 ?>
                             </ul>
                         <?
                         }
-                        else 
+                        else
                         {
                         ?>
                             <a <? if($n['id'] == 1) {echo "href='".base_url()."'";}else{echo "href='".$nurl."'";}?> ><?=strtoupper($n['name'])?></a>
-                        <?	
+                        <?
                         }
                         ?>
                     </li>
                 <? } ?>
                 </ul>
             </div>
-            
-            
-            
+
+
+
         </div>
     </div>
 </div>
@@ -103,7 +103,7 @@ $j(document).ready(function() {
 			{placement:'bottom',placeholder:'Search...'}
 	);
 	$j.fn.editableform.buttons ='<button type="submit" class="btn editable-submit btn-primary btn-sm"><i class="fa fa-search"></i> </button>';
-	
+
 	cart.update_item_count();
 });
 </script>

@@ -15,32 +15,69 @@
     </tr>
 	<tr>
     	<td colspan="2">SUBTOTAL</td>
-        <td class="right grey-text">$<?=money_format('%i',$cart_subtotal);?></td>
+        <td class="right grey-text">$<?=money_format('%i',$cart_total);?></td>
     </tr>
-	<tr>
-    	<td colspan="2">GST</td>
-        <td class="right grey-text">$<?=money_format('%i',$cart_gst);?></td>
-    </tr>
+    <? if ($has_coupon) { ?>
     <tr class="discount-tr">
-    	<td>DISCOUNT</td>
+        <td>COUPON</td>
         <td>
         <?php if($enable_inputs){ ?>
         <span class="cart-options-label push">Enter Discount Coupon Code</span>
         <div class="input-group coupon-input-group">
-          <input type="text" class="form-control no-border-radius">
-          <span class="input-group-addon custom-addon no-border-radius"><i class="fa fa-plus-circle"></i> ADD</span>
+          <input type="text" class="form-control no-border-radius" name="coupon">
+          <span id="btn-add-coupon" class="input-group-addon custom-addon no-border-radius" style="cursor:pointer;"><i class="fa fa-plus-circle"></i> ADD</span>
         </div>
         <?php }else{ echo '&nbsp;'; }?>
-		</td>
-        <td class="right"><span class="cart-options-label">(10% Discount)</span><span class="red-text f20"> -$<?=money_format('%i',$discount_amount);?></span></td>
+        </td>
+        <td class="right"></td>
     </tr>
+    <? } ?>
+    <?
+    $total_discount = 0;
+    foreach($promotions as $promotion) {
+            $discount_value = $promotion['discount_value'];
+            $discount_text = '';
+            if ($promotion['discount_type'] == 'percentage') {
+                $discount_text = '(' . $discount_value .'%)';
+                $discount_value = $discount_value * $cart_total / 100;
+            }
+            $total_discount += $discount_value;
+        ?>
+    <tr>
+        <td colspan="2">
+            <?=$promotion['name'];?>
+            <? if ($this->session->userdata('coupon')) {
+                echo '- Coupon Code: ' . $this->session->userdata('coupon');
+            } ?>
+             <?=$discount_text;?>
+        </td>
+        <td class="right red-text f20">
+            - $<?=money_format('%i',$discount_value);?>
+        </td>
+    </tr>
+    <? } ?>
+	<tr>
+    	<td colspan="2">GST</td>
+        <td class="right grey-text">$<?=money_format('%i',$cart_total - $total_discount) / 10;?></td>
+    </tr>
+
 </table>
 <script>
 $j(function(){
 	$j('.update-shipping-info').on('click',function(){
 		update_shipping();
 	});
-	
+    $j('#btn-add-coupon').click(function(){
+        var coupon = $j('input[name="coupon"]').val();
+        $j.ajax({
+            type: "POST",
+            url: "<?=base_url();?>cart/ajax/add_coupon",
+            data: {coupon: coupon},
+            success: function(html) {
+                location.reload();
+            }
+        })
+    })
 });
 
 function update_shipping()

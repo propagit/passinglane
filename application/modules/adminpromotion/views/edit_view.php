@@ -78,7 +78,7 @@
                             <span class="input-group-addon">
                                <i class="fa fa-calendar"></i>
                             </span>
-                            <input type="text" class="form-control date-picker" name="date_from" value="<?=($promotion['valid_period']) ? $promotion['date_from'] : ''; ?>" style="width:auto;" />
+                            <input type="text" class="form-control date-picker" name="date_from" value="<?=($promotion['valid_period']) ? date('m/d/Y', strtotime($promotion['date_from'])) : ''; ?>" style="width:auto;" />
 
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             <span class="input-group-addon">
                                <i class="fa fa-calendar"></i>
                             </span>
-                            <input type="text" class="form-control date-picker" name="date_to" value="<?=($promotion['valid_period']) ? $promotion['date_to'] : ''; ?>" style="width:auto;">
+                            <input type="text" class="form-control date-picker" name="date_to" value="<?=($promotion['valid_period']) ? date('m/d/Y', strtotime($promotion['date_to'])) : ''; ?>" style="width:auto;">
 
                         </div>
                     </div>
@@ -156,7 +156,7 @@ $j(function () {
 
     //init datepicker
     $j('.date-picker').datepicker({
-        format: 'dd/mm/yyyy'
+        format: 'mm/dd/yyyy'
     });
     $j('.custom-select').selectpicker();
     check_discount_type();
@@ -209,6 +209,10 @@ function update_promotion() {
             } else {
                 $j('#update-msg').html('<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> ' + html + '</span>');
             }
+            list_conditions();
+            setTimeout(function(){
+                $j('#update-msg').html('');
+            }, 2000);
         }
     })
 }
