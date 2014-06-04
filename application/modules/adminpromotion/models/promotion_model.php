@@ -32,4 +32,18 @@ class Promotion_model extends CI_Model {
         $this->db->where('promotion_id', $promotion_id);
         return $this->db->delete('promotions');
     }
+
+
+
+    function get_cart_promotions() {
+        $today = date('Y-m-d');
+        $sql = "SELECT *
+                FROM promotions
+                WHERE status = 1
+                AND promotion_type = 'cart'
+                AND (valid_period = 0 OR (valid_period = 1 AND
+                    date_from <= '$today' AND date_to >= '$today'))";
+        $query = $this->db->query($sql);
+        return $query->result_array();
+    }
 }

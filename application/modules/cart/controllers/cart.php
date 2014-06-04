@@ -3,12 +3,12 @@
 /**
  * Controller: Cart
  * @author: propagate dev team
- *  
+ *
  */
 
 
 // few things to take into consideration before using this class
-// the CI default $this->cart->contents() to get all contents is replace by $this->get_cart_contents() to accomodate discount and shipping 
+// the CI default $this->cart->contents() to get all contents is replace by $this->get_cart_contents() to accomodate discount and shipping
 // which is added as cart items
 
 
@@ -18,31 +18,33 @@ class Cart extends MX_Controller {
 	{
 		parent::__construct();
 		$this->load->library('cart');
+		$this->load->model('adminpromotion/promotion_model');
+		$this->load->model('adminpromotion/promotion_condition_model');
 	}
-	
+
 	function index($method='', $param1='', $param2="")
 	{
 		switch($method)
-		{		
+		{
 			case 'checkout':
 				$this->checkout();
 			break;
-			
+
 			default:
 				$this->main_view();
 			break;
 		}
 	}
-	
+
 	function main_view()
 	{
 		$data['cart_items'] = $this->get_cart_contents();
-		$this->load->view('main_view', isset($data) ? $data : NULL);		
+		$this->load->view('main_view', isset($data) ? $data : NULL);
 	}
-	
+
 	function checkout()
 	{
-		modules::run('auth/is_customer_logged_in');	
+		modules::run('auth/is_customer_logged_in');
 		$cart_items = $this->get_cart_contents();
 		if(count($cart_items) <= 0){
 			redirect('cart');
@@ -50,25 +52,25 @@ class Cart extends MX_Controller {
 		$data['cart_items'] = $cart_items;
 		$data['total'] = $this->cart->total();
 
-		$this->load->view('checkout', isset($data) ? $data : NULL);	
+		$this->load->view('checkout', isset($data) ? $data : NULL);
 	}
-	
+
 	function cart_contents($quantity_box_enabled = true)
 	{
 		$data['quantity_box_enabled'] = $quantity_box_enabled;
 		$data['cart_items'] = $this->get_cart_contents();
 		$data['total'] = $this->cart->total();
-		$this->load->view('cart_contents', isset($data) ? $data : NULL);		
+		$this->load->view('cart_contents', isset($data) ? $data : NULL);
 	}
-	
+
 	function insert_to_cart()
 	{
 		$product_id = $this->input->post('product_id');
 		$quantity = $this->input->post('quantity');
-		
+
 		//the discount_coupon key is set as true if a discount coupon is added
-		//the coupon is simply treated as a another cart item  
-		
+		//the coupon is simply treated as a another cart item
+
 		$product = modules::run('product/get_product',$product_id);
 		$data = array(
 				 	'id' => $product['id'],
@@ -79,7 +81,7 @@ class Cart extends MX_Controller {
 					'discount_coupon' => false,
 					'shipping' => false,
 					'options' => array()
-					); 
+					);
 		//this returns rowid
 		return $this->cart->insert($data);
 	}
@@ -91,14 +93,14 @@ class Cart extends MX_Controller {
 		if($cart_items){
 			foreach($cart_items as $item){
 				if($item['id'] == $product_id){
-					return true;	
+					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
-	
+
+
 	function increment_item_quantity($id)
 	{
 		$product_id = $this->input->post('product_id');
@@ -113,28 +115,28 @@ class Cart extends MX_Controller {
               			 'rowid' => $rowid,
                			 'qty'   => $cur_quantity+$quantity,
            		 	);
-					return $this->cart->update($data); 
+					return $this->cart->update($data);
 				}
 			}
 		}
-		return false;	
+		return false;
 
 	}
-	
-	
+
+
 	/* *
 		shipping
 	*/
 	function add_shipping()
 	{
 		//shipping is just a new item that has the key shipping set as true
-		
+
 		//when a customer has shipping moudles get shipping details from shipping id and get shipping info else use the default setting or hard coded value
 		//IMP => the shipping id should have a prefix such as SHP like in the default shipping so that it won't have any conflict with the product id
 		$shipping_id = $this->input->post('shipping_id');
-		
+
 		$shipping = $this->get_default_shippings($shipping_id);
-		
+
 		if($shipping){
 			$data = array(
 						'id' => $shipping['shipping_id'],
@@ -145,24 +147,24 @@ class Cart extends MX_Controller {
 						'discount_coupon' => false,
 						'shipping' => true,
 						'options' => array()
-						); 
+						);
 			//this returns rowid
 			return $this->cart->insert($data);
 		}else{
-			return false;	
+			return false;
 		}
 	}
-	
+
 	function update_shipping()
 	{
 		$shipping_id = $this->input->post('shipping_id');
 		//get current shipping info that is in the cart
-		$shipping = $this->get_shipping_info();	
+		$shipping = $this->get_shipping_info();
 		//get new shipping info
 		$new_shipping = $this->get_default_shippings($shipping_id);
-		if($new_shipping){	
+		if($new_shipping){
 			$rowid = $shipping['rowid'];
-			
+
 			//if new price is not zero update the shipping
 			//else remove shipping by marking the qty as zero
 			//since CI does not allow item with zero price to be added to the cart we have to remove the shipping
@@ -180,10 +182,10 @@ class Cart extends MX_Controller {
 			}
 			return $this->cart->update($data);
 		}else{
-			return false;	
+			return false;
 		}
 	}
-	
+
 	function get_default_shippings($shipping_id = '')
 	{
 		$shippings[1] = array(
@@ -203,57 +205,98 @@ class Cart extends MX_Controller {
 		if($shipping_id){
 			foreach($shippings as $shipping){
 				if($shipping['shipping_id'] == $shipping_id){
-					return $shipping;	
+					return $shipping;
 				}
 			}
 		}else{
-			return $shippings;	
+			return $shippings;
 		}
-			
+
 	}
-	
+
 	function remove_shipping()
 	{
-		$shipping = $this->get_shipping_info();	
+		$shipping = $this->get_shipping_info();
 		$rowid = $shipping['rowid'];
 		$data = array(
 					'rowid' => $rowid,
 					'qty' => 0
-					);	
+					);
 		return $this->cart->update($data);
 	}
-	
+
 	/* *
-		loads cart total in a table row 
+		loads cart total in a table row
 	*/
 	function cart_total_table_row()
 	{
 		$data['total'] = $this->get_cart_real_total();
 		$this->load->view('cart_total_table_row', isset($data) ? $data : NULL);
 	}
-	
+
 	function get_cart_checkout_options($enable_inputs,$return = true)
 	{
 		//if enable_inputs is true it shows the input field to add coupon code to get a discount
 		//and show the delivery or shipping input
 		$data['enable_inputs'] = $enable_inputs;
-		$data['discount_amount'] = $this->get_discount_amount();
-		$data['cart_gst'] = $this->get_cart_gst();
-		$data['cart_subtotal'] = $this->get_cart_subtotal();
-		
+
+		$cart_total = $this->cart->total();
+		$data['cart_total'] = $cart_total;
 		//popupate shipping data from backend modules if the system have a shipping modules
 		//else load the default one from this class (get_default_shippings())
 		$data['shippings'] = $this->get_default_shippings();
 		$data['current_shipping'] = $this->get_shipping_info();
-		
+
+		# Promotions
+		$promotions = $this->promotion_model->get_cart_promotions();
+		$applied_promotions = array();
+		$has_coupon = false;
+		$coupon = $this->session->userdata('coupon');
+		foreach($promotions as $promotion)
+		{
+			$conditions = $this->promotion_condition_model->get_promotion_conditions($promotion['promotion_id']);
+			if (count($conditions) == 0)
+			{
+				$applied_promotions[] = $promotion;
+			}
+			else
+			{
+				$satisfied = 0;
+				foreach($conditions as $condition)
+				{
+					if ($condition['condition_type'] == 'order'
+						&& $condition['value'] <= $cart_total)
+					{
+						$satisfied++;
+					}
+					if ($condition['condition_type'] == 'coupon')
+					{
+						if ($condition['value'] == $coupon)
+						{
+							$satisfied++;
+						}
+						else
+						{
+							$has_coupon = true;
+						}
+					}
+				}
+				if ($satisfied == count($conditions))
+				{
+					$applied_promotions[] = $promotion;
+				}
+			}
+		}
+		$data['has_coupon'] = $has_coupon;
+		$data['promotions'] = $applied_promotions;
 		if(!$return){
 			$this->load->view('cart_checkout_options', isset($data) ? $data : NULL);
 		}else{
 			return $this->load->view('cart_checkout_options', isset($data) ? $data : NULL);
 		}
 	}
-	
-	
+
+
 	function get_cart_real_total()
 	{
 		$total = $this->cart->total();
@@ -261,30 +304,73 @@ class Cart extends MX_Controller {
 		$shipping = $this->get_shipping_amount();
 		return $total - ($discount + $shipping);
 	}
-	
+
 	function get_cart_subtotal()
 	{
 		$cart_total = $this->get_cart_real_total();
 		$cart_gst = $this->get_cart_gst();
 		return $cart_total - $cart_gst;
 	}
-	
+
 	function get_cart_gst()
 	{
 		$cart_total = $this->get_cart_real_total();
-		return round($cart_total * GST,2);	
+		return round($cart_total * GST,2);
 	}
-	
-	
+
+
 	function get_discount_amount()
 	{
-		$discount_item = $this->get_discount_info();
-		if($discount_item){
-			return $discount_item['price'];	
+		$cart_total = $this->cart->total();
+
+		# Promotions
+		$promotions = $this->promotion_model->get_cart_promotions();
+		$applied_promotions = array();
+		foreach($promotions as $promotion)
+		{
+			$conditions = $this->promotion_condition_model->get_promotion_conditions($promotion['promotion_id']);
+			if (count($conditions) == 0)
+			{
+				$applied_promotions[] = $promotion;
+			}
+			else
+			{
+				$satisfied = 0;
+				foreach($conditions as $condition)
+				{
+					if ($condition['condition_type'] == 'order'
+						&& $condition['value'] <= $cart_total)
+					{
+						$satisfied++;
+					}
+					if ($condition['condition_type'] == 'coupon')
+					{
+						if ($condition['value'] == $this->session->userdata('coupon'))
+						{
+							$satisfied++;
+						}
+					}
+				}
+				if ($satisfied == count($conditions))
+				{
+					$applied_promotions[] = $promotion;
+				}
+			}
 		}
-		return 0;
+		$total_discount = 0;
+		foreach($applied_promotions as $promotion)
+		{
+            $discount_value = $promotion['discount_value'];
+            if ($promotion['discount_type'] == 'percentage')
+            {
+                $discount_value = $discount_value * $cart_total / 100;
+            }
+            $total_discount += $discount_value;
+        }
+
+		return $total_discount;
 	}
-	
+
 	function get_discount_info()
 	{
 		$cart_items = $this->cart->contents();
@@ -294,19 +380,19 @@ class Cart extends MX_Controller {
 					return $item;
 				}
 			}
-		}	
-		return false;	
+		}
+		return false;
 	}
-	
+
 	function get_shipping_amount()
 	{
 		$shipping_item = $this->get_shipping_info();
 		if($shipping_item){
-			return $shipping_item['price'];	
+			return $shipping_item['price'];
 		}
 		return 0;
 	}
-	
+
 	function get_shipping_info()
 	{
 		$cart_items = $this->cart->contents();
@@ -316,45 +402,45 @@ class Cart extends MX_Controller {
 					return $item;
 				}
 			}
-		}	
-		return false;	
+		}
+		return false;
 	}
-	
+
 	function is_cart_empty()
 	{
 		if($this->get_cart_contents()){
-			return false;	
+			return false;
 		}
 		return true;
 	}
-	
+
 	function get_cart_contents()
 	{
 		$cart_items = $this->cart->contents();
 		if($cart_items){
 			foreach($cart_items as $key => $val){
 				if( (isset($val['discount_coupon']) && $val['discount_coupon']) || (isset($val['shipping']) && $val['shipping'])){
-					unset($cart_items[$key]);	
+					unset($cart_items[$key]);
 				}
 			}
 		}
 		return $cart_items;
-	}	
-	
+	}
+
 	function destroy_cart()
 	{
-		$this->cart->destroy();	
+		$this->cart->destroy();
 	}
 
 	function checkout_stage($checkout_state = checkout_stage_signin)
 	{
 		$data['checkout_state'] = $checkout_state;
-		$this->load->view('checkout_stage', isset($data) ? $data : NULL);			
+		$this->load->view('checkout_stage', isset($data) ? $data : NULL);
 	}
-	
-	
-	
 
-	
-	
+
+
+
+
+
 }

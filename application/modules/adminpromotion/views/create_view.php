@@ -123,7 +123,7 @@
 $j(function () {
     //init datepicker
     $j('.date-picker').datepicker({
-        format: 'dd/mm/yyyy'
+        format: 'mm/dd/yyyy'
     });
     $j('.custom-select').selectpicker();
     check_discount_type();

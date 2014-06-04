@@ -11,6 +11,7 @@ class Ajax_product extends MX_Controller {
     {
         parent::__construct();
         $this->load->model('product_model');
+        $this->load->model('promotion_model');
         $this->load->model('promotion_condition_model');
     }
 
@@ -20,6 +21,7 @@ class Ajax_product extends MX_Controller {
         $condition = $this->promotion_condition_model->get_promotion_condition($condition_id);
         $data['products'] = $this->product_model->search_products();
         $data['condition'] = $condition;
+        $data['promotion'] = $this->promotion_model->get_promotion($condition['promotion_id']);
         $this->load->view('condition/product/list_view', isset($data) ? $data : NULL);
     }
 

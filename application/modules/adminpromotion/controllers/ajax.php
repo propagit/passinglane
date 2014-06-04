@@ -10,6 +10,7 @@ class Ajax extends MX_Controller {
     function __construct()
     {
         parent::__construct();
+        $this->load->model('product_model');
         $this->load->model('promotion_model');
         $this->load->model('promotion_condition_model');
     }
@@ -65,14 +66,26 @@ class Ajax extends MX_Controller {
             $data['date_from'] = date('Y-m-d', strtotime($input['date_from']));
             $data['date_to'] = date('Y-m-d', strtotime($input['date_to']));
         }
-
+        $this->product_model->reset_product_sale_price();
         if (isset($input['conditions']))
         {
             $conditions = $input['conditions'];
             foreach($conditions as $condition_id => $value)
             {
-                if (is_array($value))
+                if (is_array($value)) # condition_type: product
                 {
+                    foreach($value as $product_id)
+                    {
+                        $product = $this->product_model->get_product($product_id);
+                        $price = $product['price'];
+                        $discount_value = $data['discount_value'];
+                        if ($data['discount_type'] == 'percentage')
+                        {
+                            $discount_value = $product['price'] * $discount_value / 100;
+                        }
+                        $sale_price = $product['price'] - $discount_value;
+                        $this->product_model->update_product($product_id, array('sale_price' => $sale_price));
+                    }
                     $value = serialize($value);
                 }
                 $this->promotion_condition_model->update_promotion_condition($condition_id, array('value' => $value));
