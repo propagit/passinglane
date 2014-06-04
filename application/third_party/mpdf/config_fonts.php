@@ -198,6 +198,9 @@ $this->fontdata = array(
 		'BI' => "XB Zar BdIt.ttf",
 		'unAGlyphs' => true,
 		),
+	"raleway" => array(
+		'B' => "Raleway-ExtraBold.ttf"
+	),
 
 
 
