@@ -36,7 +36,7 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-/* 
+/*
 |--------------------------------------------------------------------------
 | Custom Constant Variables
 |--------------------------------------------------------------------------
@@ -56,7 +56,8 @@ define('checkout_stage_download', 4);
 define('GST',0.1);
 define('records_per_page',25);
 
-
+define('PROMOTION_DISABLED', 0);
+define('PROMOTION_ACTIVED', 1);
 
 
 /* End of file constants.php */

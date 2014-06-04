@@ -12,34 +12,34 @@ class Dispatcher extends MX_Controller {
 		$this->load->model('meta_data_model');
 
 	}
-	
-	
-	
+
+
+
 	public function index()
 	{
 		$this->user_dispatcher('passing');
 	}
-	
+
 	function user_passing_dispatcher($controller='', $method='', $param1='',$param2='',$param3='',$param4='')
 	{
 		if ($method == 'ajax')
 		{
 			echo modules::run($controller . '/ajax/' . $param1); exit();
 		}
-		
-		
+
+
 		$meta_data = $this->meta_data_model->get_meta_data($controller, $method, $param1, $param2, $param3, $param4);
 		$title = $meta_data['title'];
 		$keywords = $meta_data['keywords'];
 		$description = $meta_data['description'];
-		
-		
+
+
 
 		$content = modules::run($controller, $method, $param1, $param2, $param3, $param4);
-		
-		
+
+
 		$this->template->set_template('user');
-		
+
 		$this->template->write('title', $title);
 		$this->template->write('keywords', $keywords);
 		$this->template->write('description', $description);
@@ -51,11 +51,11 @@ class Dispatcher extends MX_Controller {
 		$this->template->write('content', $content);
 		$this->template->write_view('footer', 'user/footer');
 		$this->template->render();
-		
+
 	}
-	
-	
-	
+
+
+
 	function admin_dispatcher($controller='dashboard', $method='', $param='',$param2='')
 	{
 		if($controller=='cron')
@@ -67,16 +67,16 @@ class Dispatcher extends MX_Controller {
 			$is_admin_logged_in = modules::run('auth/is_admin_logged_in');
 			if (!$is_admin_logged_in)
 			{
-				
+
 					redirect('admin/login');
-				
+
 			}
-			
-			if ($method == 'ajax')
+
+			if (strpos($method, 'ajax') !== false)
 			{
-				echo modules::run('admin'.$controller . '/' . $method . '/' . $param, $param2); exit();	
+				echo modules::run('admin'.$controller . '/' . $method . '/' . $param, $param2); exit();
 			}
-	
+
 			switch($controller)
 			{
 				case 'product':
@@ -117,7 +117,9 @@ class Dispatcher extends MX_Controller {
 				case 'news':
 						$title = 'Manage News Articles';
 					break;
-				
+				case 'promotion':
+						$title = 'Promotions';
+					break;
 				case 'dashboard':
 				default:
 						$title = 'Dashboard';
@@ -129,34 +131,35 @@ class Dispatcher extends MX_Controller {
 				$this->template->set_template('admin');
 				$this->template->write_view('menu', 'admin/menu');
 			}
-			$content = modules::run('admin'.$controller, $method, $param,$param2);
+			$content = modules::run('admin' . $controller, $method, $param,$param2);
+
 			$this->template->write('title', $title);
 			$this->template->write('content', $content);
 			$this->template->render();
 		}
-		
+
 	}
-	
+
 	function user_dispatcher($controller='', $method='', $param1='',$param2='',$param3='',$param4='')
 	{
 		if ($method == 'ajax')
 		{
 			echo modules::run($controller . '/ajax/' . $param1); exit();
 		}
-		
-		
+
+
 		$meta_data = $this->meta_data_model->get_meta_data($controller, $method, $param1, $param2, $param3, $param4);
 		$title = $meta_data['title'];
 		$keywords = $meta_data['keywords'];
 		$description = $meta_data['description'];
-		
-		
+
+
 
 		$content = modules::run($controller, $method, $param1, $param2, $param3, $param4);
-		
-		
+
+
 		$this->template->set_template('passing');
-		
+
 		$this->template->write('title', $title);
 		$this->template->write('keywords', $keywords);
 		$this->template->write('description', $description);
@@ -168,7 +171,7 @@ class Dispatcher extends MX_Controller {
 		$this->template->write('content', $content);
 		$this->template->write_view('footer', 'passing/footer');
 		$this->template->render();
-		
+
 	}
 }
 /* End of file dispatcher.php */
