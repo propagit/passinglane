@@ -530,6 +530,7 @@ body:first-of-type .nav-pills > li > a{border-radius:0px;  border-top-left-radiu
 	float:left;
 	padding-left:15px;
 	width:100%;	
+	min-height:500px;
 }
 .content-wrap h1{
 	font-size:35px;
@@ -989,7 +990,7 @@ span.cart-terms{
 }
 /* helpers */
 #loading{
-	background-color:rgba(0,0,0,0.8);
+	background-color:rgba(216,216,216,0.5);
 	position:absolute;
 	top:0;
 	z-index:2000;
