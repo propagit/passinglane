@@ -202,14 +202,20 @@ header .menu-wrap {	font-family: 'Raleway', sans-serif;	font-weight:700;letter-s
 .navbar-header{	background:#302F2F;	}
 .navbar-collapse ul	{	background:#302F2F;	margin: 0 -15px;}
 #dynamic .center{text-align:center;}
+#content-menu{ left:0;}
+#product-menu{ left:-14px;}
+#customer-menu{ left:-10px;}
+#marketing-menu{ left:-14px;}
+#web-stats-menu{left:-32px;}
+#order-menu{ left:0;}
 /* firefox css */
 @-moz-document url-prefix() {
-	#content-menu{ left:12%;}
-	#product-menu{ left:23%;}
-	#customer-menu{ left:48%;}
-	#marketing-menu{ left:63%;}
-	#web-stats-menu{ left:76%;}
-	#order-menu{ left:38%;}
+	#content-menu{ left:14%;}
+	#product-menu{ left:24.5%;}
+	#customer-menu{ left:50.2%;}
+	#marketing-menu{ left:64%;}
+	#web-stats-menu{ left:74%;}
+	#order-menu{ left:38.3%;}
 }
 /* end - header */
 
@@ -1710,7 +1716,9 @@ td.remove-left-padding{ padding-left:0 !important; text-transform:none !importan
 .tr-action-delete{ width:6%; text-align:center; float:left;}
 .tr-action-edit i, .tr-action-delete i{ font-size:14px;}
 
-header .menu-wrap .dropdown-menu{ left:-20px;}
+header .menu-wrap .dropdown-menu{  left:-20px; }
+
+
 #go-to-top{ color: #fff;font-size: 13px;font-weight: 600 !important;font-family: 'Raleway', sans-serif !important;letter-spacing: 2px; /*position: fixed;*/ position:absolute; right: 24px;/* top: 3px; */ cursor:pointer; bottom:0;}
 #go-to-top .fa{margin: 14px 7px 0 10px;position: absolute;color: #fff;}
 

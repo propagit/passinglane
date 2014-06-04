@@ -91,11 +91,13 @@ class Email extends MX_Controller {
 			$this->email->cc($cc);
 			$this->email->bcc($bcc);
 			#$company_logo = modules::run('setting/company_logo');
-			#$email_signature = modules::run('setting/ajax/get_template_footer');
+			$email_signature = $this->load->view('email_signature', isset($data) ? $data : NULL,true);
 			$this->email->subject($subject);
 			#$this->email->message($company_logo . '<br />'.$message . $email_signature);
-			$this->email->message($message);
-			#$this->email->attach($attachment);
+			$this->email->message($message .'<br />' . $email_signature);
+			if($attachment){
+				$this->email->attach($attachment);
+			}
 			$this->email->send();
 			$this->email->clear(true);	
 			return true;
@@ -183,9 +185,8 @@ class Email extends MX_Controller {
 		$this->email->from('propagate.au@gmail.com',$from_text); // change it to yours
 		$this->email->to($to);// change it to yours
 		$this->email->subject($subject);
-		
-		$this->email->subject($subject);
-		$this->email->message($message);
+		$email_signature = $this->load->view('email_signature', isset($data) ? $data : NULL,true);
+		$this->email->message($message .'<br />' . $email_signature);
 			
 			
 		if($attachment){

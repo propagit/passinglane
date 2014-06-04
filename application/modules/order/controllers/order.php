@@ -110,7 +110,10 @@ class Order extends MX_Controller {
 			}
 		}
 		if($order_successful){
+			//send order confirmation to customer
 			$this->send_order_confirmation($order_id);
+			//send order notification to admin
+			$this->send_order_notification($order_id);
 			redirect('order/successful');
 		}else{
 			redirect('order/failed');
@@ -292,7 +295,19 @@ class Order extends MX_Controller {
 	
 	function send_order_notification($order_id)
 	{
-		
+		$order = $this->order_model->get_order($order_id);
+		$data['order'] = $order;
+		$message = $this->load->view('emails/order_notification', isset($data) ? $data : NULL, true);	
+		modules::run('email/send_email', array(
+			'to' => 'team@propagate.com.au',
+			'cc' => 'robintl@bigpond.com',
+			#'to' => 'kaushtuvgurung@gmail.com',
+			'from' => 'webmaster@passinglane.com',
+			'from_text' => 'Passing Lane',
+			'subject' => 'Order Notification',
+			'message' => $message,
+			'attachment' => modules::run('adminorder/download',$order_id,true)
+		));
 	}
 	
 	function send_order_confirmation($order_id)
@@ -302,6 +317,7 @@ class Order extends MX_Controller {
 		$message = $this->load->view('emails/order_confirmation', isset($data) ? $data : NULL, true);	
 		modules::run('email/send_email', array(
 			'to' => $order->email,
+			#'to' => 'kaushtuvgurung@gmail.com',
 			'from' => 'webmaster@passinglane.com',
 			'from_text' => 'Passing Lane',
 			'subject' => 'Order Confirmation',
@@ -312,7 +328,7 @@ class Order extends MX_Controller {
 	
 	function test()
 	{
-		echo $this->send_order_confirmation(7);	
+		echo $this->send_order_confirmation(28);	
 	}
 
 	
