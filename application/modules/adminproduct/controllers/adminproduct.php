@@ -1689,5 +1689,10 @@ class Adminproduct extends MX_Controller {
 		}
 	}
 	
+	function get_product($product_id)
+	{
+		return $this->product_model->identify($product_id);	
+	}
+	
 
 }
