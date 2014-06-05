@@ -830,6 +830,11 @@ span.mandatory-label{
 	padding-left: 96px;
 	font-weight: 500;
 }
+.subscription-msg-alert{
+	margin-top: 0px;
+	margin-right: 95px;
+	margin-bottom: 0;
+}
 
 /* customers */
 

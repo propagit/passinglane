@@ -1,9 +1,9 @@
 <table class="table table-striped cart-table">
 	<thead>
     	<tr>
-        	<th class="left" colspan="2">PRODUCT <i class="fa fa-sort-alpha-asc blue-text sort-list"></i></th>
-            <th class="center">REG START <i class="fa fa-sort-numeric-asc blue-text sort-list"></i></th>
-            <th class="center">REG FINISH <i class="fa fa-sort-numeric-asc blue-text sort-list"></i></th>
+        	<th class="left" colspan="2">PRODUCT <i class="fa <?=($sort_by == 'product_name' ? 'fa-sort-alpha-'.$sort_order : 'fa-sort-alpha-asc');?> blue-text sort-list pointer" sort-by="product_name"></i></th>
+            <th class="center">REG START <i class="fa <?=($sort_by == 'created' ? 'fa-sort-numeric-'.$sort_order : 'fa-sort-numeric-asc');?> blue-text sort-list pointer" sort-by="created"></i></th>
+            <th class="center">REG FINISH <i class="fa <?=($sort_by == 'reg_expiry' ? 'fa-sort-numeric-'.$sort_order : 'fa-sort-numeric-asc');?> blue-text sort-list pointer" sort-by="reg_expiry"></i></th>
             <th class="center">DOWNLOAD</th>
         </tr>
     </thead>

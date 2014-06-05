@@ -100,11 +100,14 @@ class Customer extends MX_Controller {
 		$this->load->view('orders/main_view', isset($data) ? $data : NULL);
 	}
 
-	function purchased_items()
+	function purchased_items($params = array())
 	{
 		modules::run('auth/is_customer_logged_in');
 		$customer_id = $this->session->userdata('customer_id');
-		$data['orders'] = $this->customer_model->get_customer_orders($customer_id);
+		$params['customer_id'] = $customer_id;
+		$data['orders'] = $this->customer_model->get_customer_orders($params);
+		$data['sort_order'] = isset($params['sort_order']) ? strtolower($params['sort_order']) : 'asc';
+		$data['sort_by'] = isset($params['sort_by']) ? strtolower($params['sort_by']) : 'product_name';
 		$this->load->view('orders/purchased_items', isset($data) ? $data : NULL);
 	}
 

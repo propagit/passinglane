@@ -266,13 +266,18 @@ class Customer_model extends CI_Model {
 
 	}
 	
-	function get_customer_orders($customer_id)
+	function get_customer_orders($params)
 	{
+		$today = date('Y-m-d');
 		$sql = "SELECT order_items.*  
 				FROM order_items, orders   
 				WHERE order_items.order_id = orders.order_id 
 				AND orders.order_status = 'success' 
-				AND orders.customer_id = ".$customer_id;
+				AND orders.customer_id = ".$params['customer_id']." 
+				AND order_items.reg_expiry >= '".$today."'";
+		if(isset($params['sort_by']) && $params['sort_by']){
+			$sql .= " ORDER BY `".$params['sort_by']."` ".$params['sort_order'];	
+		}
 		return $this->db->query($sql)->result();
 	}
 	
@@ -285,7 +290,7 @@ class Customer_model extends CI_Model {
 				AND orders.order_status = 'success' 
 				AND orders.customer_id = ".$customer_id."
 				AND order_items.order_item_id = ".$order_item_id." 
-				AND order_items.reg_expiry >= ".$today;	
+				AND order_items.reg_expiry >= '".$today."'";	
 		return $this->db->query($sql)->first_row('array');
 	}
 	
