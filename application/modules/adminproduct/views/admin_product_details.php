@@ -54,27 +54,27 @@
 			<div class="form-common-gap">&nbsp;</div>
 			<div>
 				<div class="form-common-label">Long Description</div>
-				<div class="form-common-input">		
+				<div class="form-common-input">
 					<textarea class="form-control input-text" id="long_desc" name="long_desc" rows="6"><?=$product['long_desc']?></textarea>
 				</div>
 			</div>
 			<div class="form-common-gap">&nbsp;</div>
-			
+
 			<div>
 				<div class="form-common-label">Modules</div>
 				<div class="form-common-input">
 					<textarea class="form-control input-text" id="modules" name="modules" rows="6"><?=$product['modules']?></textarea>
 				</div>
 			</div>
-			<div class="form-common-gap">&nbsp;</div>   
+			<div class="form-common-gap">&nbsp;</div>
             <div class="grey-box">
 				<div class="title-page">Product Specification</div>
-       		</div> 
+       		</div>
             <div class="sub-title add-bottom-margin">
             	Specify the product delivery type such as the product will be downloaded or delivered by post.<br />
-            	File types accepted: (PDF, DOC, DOCX, PPT, MP4, AVI)<br /> 
-				File size restriction: (None)	    
-            </div>    
+            	File types accepted: (PDF, DOC, DOCX, PPT, MP4, AVI)<br />
+				File size restriction: (None)
+            </div>
 			<div>
 				<div class="form-common-label">Delivery Method</div>
 				<div class="form-common-input">
@@ -83,11 +83,11 @@
                         <option value="postal" <?=$product['product_collection'] == 'postal' ? 'selected="selected"' : '';?>>Postal Delivery</option>
                     </select>
 				</div>
-			</div>       
+			</div>
             <div class="form-common-gap">&nbsp;</div>
             <div id="product-file-upload-wrap">
                 <div>
-                	
+
                     <div class="form-common-label"><?=$product['product_file_name'] ? 'Replace' : 'Upload';?> Product File</div>
                     <div class="form-common-input">
                     	<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
@@ -97,7 +97,7 @@
 						  </div>
 						</div>
 
-                    	
+
                         <div id="upload_container">
 						    <button id="pickfiles" href="javascript:;" class="btn btn-info">Select files</button>
 						    <button id="uploadfiles" href="javascript:;" class="btn btn-info">Upload files</button>
@@ -112,14 +112,16 @@
                         </div>
 -->
                     </div>
-                </div>  
+                </div>
                 <div class="form-common-gap">&nbsp;</div>
-				<?php if($product['product_file_name']){ ?>
+				<?php if(count($files) > 0){ ?>
                 <div>
                     <div class="form-common-label">Current Product File</div>
-                    <div class="form-common-input">	
-                        <a target="_blank" href="<?=$dir;?>/product_file/<?=$product['product_file_name'];?>"><?=$product['product_file_name'];?></a>
-                        <a class="delete-product-file pointer"><i class="fa fa-times"></i></a>
+                    <div class="form-common-input">
+                        <? foreach($files as $file) { ?>
+                        <a target="_blank" href="<?=base_url();?><?=$file['file_path'];?>"><?=$file['file_name'];?></a>
+                        <a class="delete-product-file pointer" delete-data-id="<?=$file['file_id'];?>"><i class="fa fa-times"></i></a><br />
+                        <? } ?>
                     </div>
                 </div>
                 <?php } ?>
@@ -146,12 +148,12 @@
 			<div class="form-common-gap">&nbsp;</div>
              <div class="grey-box">
 				<div class="title-page">Product Brochure</div>
-       		</div>   
+       		</div>
             <div class="sub-title add-bottom-margin">
             	Add a downloadable PDF document that your customers will be able to download.<br />
-            	File types accepted: (PDF, DOC, DOCX, PPT, MP4, AVI, JPG, PNG, GIF)<br /> 
+            	File types accepted: (PDF, DOC, DOCX, PPT, MP4, AVI, JPG, PNG, GIF)<br />
 				File size restriction: (None)
-            </div>        
+            </div>
             <div>
 				<div class="form-common-label"><?=$product['product_brochure'] ? 'Replace' : 'Upload';?> Product Brochure</div>
 				<div class="form-common-input">
@@ -163,13 +165,13 @@
                     </div>
                     </div>
 				</div>
-			</div>  
+			</div>
             <div class="form-common-gap">&nbsp;</div>
             <?php if($product['product_brochure']){ ?>
             <div>
 				<div class="form-common-label">Current Product Brochure</div>
 				<div class="form-common-input">
-                	<a target="_blank" href="<?=$dir;?>/doc/<?=$product['product_brochure'];?>"><?=$product['product_brochure'];?></a>	
+                	<a target="_blank" href="<?=$dir;?>/doc/<?=$product['product_brochure'];?>"><?=$product['product_brochure'];?></a>
                     <a class="delete-brochure pointer"><i class="fa fa-times"></i></a>
 				</div>
 			</div>
@@ -177,9 +179,9 @@
             <?php } ?>
             <button class="btn btn-info" type="submit">Update</button>
 		</form>
-        
-        
-        
+
+
+
 	</div>
 </div>
 
@@ -208,7 +210,7 @@ var uploader = new plupload.Uploader({
 
 	init: {
 		PostInit: function() {
-			document.getElementById('filelist').innerHTML = '';			
+			document.getElementById('filelist').innerHTML = '';
 			document.getElementById('uploadfiles').onclick = function() {
 				uploader.start();
 				return false;
@@ -217,7 +219,7 @@ var uploader = new plupload.Uploader({
 
 		FilesAdded: function(up, files) {
 			$('#upload-progress').parent().css("visibility", "visible");
-			
+
 			plupload.each(files, function(file) {
 				document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
 			});
@@ -243,13 +245,13 @@ uploader.init();
 
 $j(function(){
 	$j('.custom-select').selectpicker();
-	
+
 	toggle_product_collection();
-	
+
 	$j('#product_collection').on('change',function(){
 		toggle_product_collection();
-	});	
-	
+	});
+
 	//delete brochure
 	$j('.delete-brochure').on('click',function(){
 		var title = 'Delete Brochure';
@@ -261,29 +263,29 @@ $j(function(){
 			 }
 		});
 	});
-	
+
 	//delete product file
 	$j('.delete-product-file').on('click',function(){
 		var title = 'Delete Product File';
 		var message ='Are you sure you would like to delete this "Product File"';
-		var group_id = $(this).attr('delete-data-id');
+		var file_id = $(this).attr('delete-data-id');
 		help.confirm_delete(title,message,function(confirmed){
 			 if(confirmed){
-				window.location.href = "<?=base_url();?>admin/product/delete_product_file/<?=$product['id'];?>"
+                window.location.href = "<?=base_url();?>admin/product/delete_product_file/" + file_id;
 			 }
 		});
 	});
-	
-	
+
+
 });
 
 function toggle_product_collection()
 {
-	var cur_val = $j('#product_collection').val();	
+	var cur_val = $j('#product_collection').val();
 	if(cur_val == 'download'){
-		$j('#product-file-upload-wrap').show();	
+		$j('#product-file-upload-wrap').show();
 	}else{
-		$j('#product-file-upload-wrap').hide();		
+		$j('#product-file-upload-wrap').hide();
 	}
 }
 </script>

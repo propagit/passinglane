@@ -1,13 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Product_model extends CI_Model {
-	
-	
+
+
 	function check_price($prod_id)
 	{
 		$this->db->where('id',$prod_id);
-		$query = $this->db->get('products');		
-		return $query->first_row('array');	
+		$query = $this->db->get('products');
+		return $query->first_row('array');
 	}
 	function check_fluctuative_price($prod_id,$last_change)
 	{
@@ -20,13 +20,13 @@ class Product_model extends CI_Model {
 		{
 			$change = 1;
 		}
-		else 
+		else
 		{
 			$change = 0;
 		}
 		return $change;
 	}
-	
+
 	function add($data) {
 		$this->db->insert('products',$data);
 		return $this->db->insert_id();
@@ -35,92 +35,92 @@ class Product_model extends CI_Model {
 	{
 		$sql = "SELECT * FROM products ORDER BY RAND() LIMIT 12";
 		$query = $this->db->query($sql);
-		return $query->result_array();		
+		return $query->result_array();
 	}
 	function all_product() {
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_in_stock() {
 		$this->db->where('stock >',0);
 		$this->db->where('deleted',0);
 		$this->db->where('status',1);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_out_of_stock() {
 		$this->db->where('stock',0);
 		$this->db->where('deleted',0);
 		$this->db->where('status',1);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_active() {
 		$this->db->where('deleted',0);
 		$this->db->where('status',1);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_on_sale() {
 		$this->db->where('deleted',0);
 		$this->db->where('status',1);
 		$this->db->where('(sale_price < price OR sale_price_trade < price_trade)');
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_disable() {
 		$this->db->where('deleted',0);
 		$this->db->where('status',0);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all_hidden() {
 		$this->db->where('deleted',1);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function all() {
 		$this->db->where('deleted',0);
 		$this->db->order_by('title','asc');
-		
+
 		$query = $this->db->get('products');
 		//echo $this->db->last_query();
-		return $query->result_array();		
+		return $query->result_array();
 	}
 	function all_byid() {
 		$this->db->where('deleted',0);
 		$this->db->order_by('id','asc');
-		
+
 		$query = $this->db->get('products');
-		return $query->result_array();		
+		return $query->result_array();
 	}
 	function group($row) {
 		$sql = "SELECT * FROM `products` where deleted = 0 ORDER BY `title` ASC LIMIT $row,10";
@@ -132,24 +132,24 @@ class Product_model extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function groupq2($row) {
-		$sql = "SELECT * FROM `products` where deleted = 0  ORDER BY `title` ASC LIMIT $row,50";		
+		$sql = "SELECT * FROM `products` where deleted = 0  ORDER BY `title` ASC LIMIT $row,50";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 	function group_product_list($row) {
-		$sql = "SELECT * FROM `products` where deleted = 0  ORDER BY `title` ASC LIMIT $row,50";		
+		$sql = "SELECT * FROM `products` where deleted = 0  ORDER BY `title` ASC LIMIT $row,50";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 
-	
-	function search($keyword,$category,$status) {	
+
+	function search($keyword,$category,$status) {
 		if ($category == 0) {
 			$sql = "SELECT * FROM `products` WHERE (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%')";
-		} 
-		else 
+		}
+		else
 		{
 			if($category != 4)
 			{
@@ -158,7 +158,7 @@ class Product_model extends CI_Model {
 					AND `products_categories`.`product_id` = `products`.`id`
 					AND (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%' )";
 			}
-			else 
+			else
 			{
 				$sql = "SELECT distinct `products`.* FROM `products`,`products_categories`
 					WHERE (`products_categories`.`category_id` = $category
@@ -166,22 +166,22 @@ class Product_model extends CI_Model {
 					 `products`.`price` > `products`.`sale_price` OR `products`.`price_trade` > `products`.`sale_price_trade`)
 					AND (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%' )";
 			}
-			
+
 		}
-		if ($status == 'active') 
+		if ($status == 'active')
 		{
 			$sql .= " AND `products`.`status` = 1";
 		}
-		elseif ($status == 'inactive') 
+		elseif ($status == 'inactive')
 		{
 			$sql .= " AND `products`.`status` = 0";
 		}
 		$sql .= " AND `products`.`deleted` = 0";
 		//echo $sql;
 		$query = $this->db->query($sql);
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	function search_group($row,$per_page,$keyword,$category,$sort_type,$status) {	
+	function search_group($row,$per_page,$keyword,$category,$sort_type,$status) {
 		if ($category == 0) {
 			$sql = "SELECT * FROM `products` WHERE (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%')";
 		} else {
@@ -192,7 +192,7 @@ class Product_model extends CI_Model {
 					AND `products_categories`.`product_id` = `products`.`id`
 					AND (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%' )";
 			}
-			else 
+			else
 			{
 				$sql = "SELECT distinct `products`.* FROM `products`,`products_categories`
 					WHERE (`products_categories`.`category_id` = $category OR
@@ -201,11 +201,11 @@ class Product_model extends CI_Model {
 					AND (`products`.`title` LIKE '%$keyword%' OR `products`.`short_desc` LIKE '%$keyword%' OR `products`.`long_desc` LIKE '%$keyword%' )";
 			}
 		}
-		if ($status == 'active') 
+		if ($status == 'active')
 		{
 			$sql .= " AND `products`.`status` = 1";
 		}
-		elseif ($status == 'inactive') 
+		elseif ($status == 'inactive')
 		{
 			$sql .= " AND `products`.`status` = 0";
 		}
@@ -220,24 +220,24 @@ class Product_model extends CI_Model {
 		$sql .= " LIMIT $row,$per_page";
 		$query = $this->db->query($sql);
 		//echo $sql;
-		return $query->result_array();		
+		return $query->result_array();
 	}
 
-	function search_groupq($row,$per_page,$keyword,$category,$sort_type,$status) {	
+	function search_groupq($row,$per_page,$keyword,$category,$sort_type,$status) {
 		if ($category == 0) {
 			$sql = "SELECT * FROM `products` WHERE `products`.`title` LIKE '%$keyword%' and deleted = 0 ";}
 		$sql .= " group by `products`.`id` LIMIT $row,$per_page ";
 		$query = $this->db->query($sql);
 		//echo $sql;
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	function search_groupq_no_limit($keyword,$category,$sort_type,$status) {	
+	function search_groupq_no_limit($keyword,$category,$sort_type,$status) {
 		if ($category == 0) {
 			$sql = "SELECT * FROM `products` WHERE `products`.`title` LIKE '%$keyword%' and deleted = 0 ";}
 		$sql .= " group by `products`.`id`";
 		$query = $this->db->query($sql);
 		//echo $sql;
-		return $query->result_array();		
+		return $query->result_array();
 	}
 	function identify($id) {
 		$this->db->where('id',$id);
@@ -262,7 +262,7 @@ class Product_model extends CI_Model {
 		$this->db->where('id',$id);
 		$this->db->delete('products');
 	}
-	
+
 	function remove_categories($product_id) {
 		$this->db->where('product_id',$product_id);
 		$this->db->delete('products_categories');
@@ -273,7 +273,7 @@ class Product_model extends CI_Model {
 		$this->db->delete('products_categories');
 	}
 	function add_category($data) {
-		$this->db->insert('products_categories',$data);		
+		$this->db->insert('products_categories',$data);
 	}
 	function get_categories($product_id) {
 		$this->db->where('product_id',$product_id);
@@ -294,20 +294,20 @@ class Product_model extends CI_Model {
 		}
 		return false;
 	}
-	
+
 	function update_category_menu($id,$data)
 	{
 		$this->db->where('id',$id);
 		$this->db->update('category_menu',$data);
 	}
-	
+
 	function get_name_keyword($title)
 	{
 		$this->db->where('name',$title);
 		$query = $this->db->get('category_menu');
 		return $query->first_row('array');
 	}
-	
+
 	function get_product_by_category($category_id)
 	{
 		$this->db->where('category_id',$category_id);
@@ -316,41 +316,41 @@ class Product_model extends CI_Model {
 	}
 	function get_product_by_category_shopby($cat_id,$order_by='',$mcat='')
 	{
-		
+
 		$this->db->where('category_id',$mcat);
 		$query = $this->db->get('products_categories');
 		$all_prod = $query->result_array();
-		
+
 		$all_prod_id = Array();
 		$cc=0;
 		foreach($all_prod as $ap)
 		{
-			$prod_status=$this->identify($ap['product_id']); 
+			$prod_status=$this->identify($ap['product_id']);
 
 			if($prod_status['status']==1 && $prod_status['deleted']==0){
 				$all_prod_id[$cc] = $ap['product_id'];
 				$cc++;
 			};
 		}
-		
+
 		//echo "<pre>".print_r($all_prod,true)."</pre>";
-		
+
 		//return $query->result_array();
-		
+
 		$this->db->where('id',$cat_id);
-		
+
 		$query = $this->db->get('category_menu');
 		$cat2 = $query->first_row('array');
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
-		
+
 		if(count($cat2)>0)
 		{
 			$keyword= explode(",",$cat2['keywords']);
 			//$this->db->where('status',1);
 			foreach($keyword as $key)
 			{
-				
+
 				/*$this->db->or_like('short_desc',trim($key));
 				$this->db->or_like('long_desc',trim($key));
 				*/
@@ -371,82 +371,82 @@ class Product_model extends CI_Model {
 			}
 			$this->db->where('main_category',$mcat);
 		}
-		
-		
+
+
 		if($mcat == 6)
 		{
 			$this->db->or_where('sale_price < price');
 		}
-		
-		
-		
+
+
+
 		if($order_by == 'name')
 		{
-			$this->db->order_by("title", "asc"); 
+			$this->db->order_by("title", "asc");
 		}
 		if($order_by == 'price')
 		{
-			$this->db->order_by("price", "asc"); 
+			$this->db->order_by("price", "asc");
 		}
 		if($order_by == 'latest')
 		{
-			$this->db->order_by("id", "asc"); 
+			$this->db->order_by("id", "asc");
 		}
-		
+
 		$query = $this->db->get('products');
 		if(count($all_prod_id)>0)
 		{
 			//$lq = $this->db->last_query();
-			
+
 			//$nlq = str_replace("AND","OR",$lq);
-			
+
 			//$query = $this->db->query($nlq);
 		}
-		
+
 		//echo $this->db->last_query();
-		
+
 		return $query->result_array();
-		
+
 		//echo $this->db->last_query();
 	}
 	function get_product_by_category_shopby_pagination($row,$limit,$cat_id,$order_by='',$mcat='')
 	{
-		
+
 		$this->db->where('category_id',$mcat);
 		$query = $this->db->get('products_categories');
 		$all_prod = $query->result_array();
-		
+
 		$all_prod_id = Array();
 		$cc=0;
 		foreach($all_prod as $ap)
 		{
-			$prod_status=$this->identify($ap['product_id']); 
+			$prod_status=$this->identify($ap['product_id']);
 
 			if($prod_status['status']==1 && $prod_status['deleted']==0){
 				$all_prod_id[$cc] = $ap['product_id'];
 				$cc++;
 			}
 		}
-		
+
 		//echo "<pre>".print_r($all_prod_id,true)."</pre>";
-		
-		
+
+
 		//return $query->result_array();
-		
+
 		$this->db->where('id',$cat_id);
-		
+
 		$query = $this->db->get('category_menu');
 		$cat2 = $query->first_row('array');
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
-		
+
 		if(count($cat2)>0)
 		{
 			$keyword= explode(",",$cat2['keywords']);
 			//$this->db->where('status',1);
 			foreach($keyword as $key)
 			{
-				
+
 				/*$this->db->or_like('short_desc',trim($key));
 				$this->db->or_like('long_desc',trim($key));
 				*/
@@ -467,56 +467,56 @@ class Product_model extends CI_Model {
 			}
 			$this->db->where('main_category',$mcat);
 		}
-		
-		
+
+
 		if($mcat == 6)
 		{
 			$this->db->or_where('sale_price < price');
 		}
-		
-		
+
+
 
 		if($order_by == 'name')
 		{
-			$this->db->order_by("title", "asc"); 
+			$this->db->order_by("title", "asc");
 		}
 		if($order_by == 'price')
 		{
-			$this->db->order_by("price", "asc"); 
+			$this->db->order_by("price", "asc");
 		}
 		if($order_by == 'latest')
 		{
-			$this->db->order_by("id", "asc"); 
+			$this->db->order_by("id", "asc");
 		}
-		
-		
-		
+
+
+
 		if($limit>0)
 		{
-			$this->db->limit($limit, $row);	
+			$this->db->limit($limit, $row);
 		}
 		$query = $this->db->get('products');
 		if(count($all_prod_id)>0)
 		{
 			//$lq = $this->db->last_query();
-			
+
 			//$nlq = str_replace("AND","OR",$lq);
-				
-			
-			
+
+
+
 			//$query = $this->db->query($nlq);
 		}
-		
+
 		//echo $this->db->last_query();
-		
+
 		return $query->result_array();
-		
+
 		//echo $this->db->last_query();
 	}
 	function get_product_by_category_shopby2($cat_id,$order_by='',$scat='')
 	{
 		$this->db->where('id',$cat_id);
-		
+
 		$query = $this->db->get('category_menu');
 		$cat2 = $query->first_row('array');
 		if(count($cat2)>0)
@@ -530,31 +530,31 @@ class Product_model extends CI_Model {
 			}
 		}
 		$this->db->or_like('main_category',$mcat);
-		
+
 		if($order_by == 'name')
 		{
-			$this->db->order_by("title", "asc"); 
+			$this->db->order_by("title", "asc");
 		}
 		if($order_by == 'price')
 		{
-			$this->db->order_by("price", "asc"); 
+			$this->db->order_by("price", "asc");
 		}
 		if($order_by == 'latest')
 		{
-			$this->db->order_by("id", "asc"); 
+			$this->db->order_by("id", "asc");
 		}
-		
+
 		$query = $this->db->get('products');
 		return $query->result_array();
 	}
-	
+
 	function get($cat_id)
 	{
 		$this->db->where('category_id',$cat_id);
 		$query = $this->db->get('category_menu');
 		return $query->result_array();
 	}
-	
+
 	function get_product_by_category_style($row,$limit,$cat_id,$text,$order_by)
 	{
 		// $this->db->where('id',$cat_id);
@@ -566,7 +566,7 @@ class Product_model extends CI_Model {
 			$keyword2= str_replace("_"," ",$text);
 			$sql="select * from products where status=1 and deleted=0 and (short_desc like '%".trim($keyword2)."%' or long_desc like '%".trim($text)."%') and main_category = $cat_id";
 		}
-		else 
+		else
 		{
 			//$keyword2= str_replace("_"," ",$text);
 			$sql="select * from products where status=1 and deleted=0 and  (first_edition = 'Y' or first_edition = 'y') and main_category = $cat_id";
@@ -578,7 +578,7 @@ class Product_model extends CI_Model {
 			// $sql.=" short_desc like '%".trim($key)."%' or long_desc like '%".trim($key)."%'";
 			// $i++;
 			// if($i<>$tot){ $sql.=" or ";}
-		// }				 
+		// }
 		// $sql.=")";
 		if($order_by == 'name')
 		{
@@ -601,8 +601,8 @@ class Product_model extends CI_Model {
 		foreach($keyword as $key)
 		{
 			$this->db->or_like('short_desc',trim($key));
-			
-		}				
+
+		}
 		$query = $this->db->get('products');*/
 		return $query->result_array();
 	}
@@ -612,7 +612,7 @@ class Product_model extends CI_Model {
 		// $query = $this->db->get('category_menu');
 		// $cat2 = $query->first_row('array');
 		// $keyword= explode(",",$cat2['keywords']);
-		
+
 		//$keyword2= str_replace("_"," ",$text);
 		//if($text=='small'){$size="'S'";$size =$size.", 'XS'";}
 		//if($text=='medium'){$size="'M'";}
@@ -623,8 +623,8 @@ class Product_model extends CI_Model {
 		/*foreach($keyword as $key)
 		{
 			$this->db->or_like('short_desc',trim($key));
-			
-		}				
+
+		}
 		$this->db->where_in('size',$size);
 		$query = $this->db->get('products');*/
 		$sql="select * from products where ".$size." and main_category = $cat_id";
@@ -635,7 +635,7 @@ class Product_model extends CI_Model {
 			// $sql.=" short_desc like '%".trim($key)."%' or long_desc like '%".trim($key)."%'";
 			// $i++;
 			// if($i<>$tot){ $sql.=" or ";}
-		// }				 
+		// }
 		// $sql.=")";
 		if($order_by == 'name')
 		{
@@ -659,13 +659,13 @@ class Product_model extends CI_Model {
 
 	function get_product_by_search($text,$order_by='')
 	{
-		
-				
-		
+
+
+
 		/*foreach($keyword as $key)
 		{
-			$this->db->or_like('short_desc',trim($key));			
-		}				
+			$this->db->or_like('short_desc',trim($key));
+		}
 		$this->db->where('colour',$text);
 		$query = $this->db->get('products');
 		return $query->result_array();*/
@@ -679,10 +679,10 @@ class Product_model extends CI_Model {
 					$sql.=" short_desc like '%".trim($text)."%' or long_desc like '%".trim($text)."%'";
 					$i++;
 					if($i<>$tot){ $sql.=" or ";}
-				}				 
+				}
 				$sql.=")";*/
-		
-		
+
+
 		if($order_by == 'name')
 		{
 			$sql .= ' order by title';
@@ -695,9 +695,9 @@ class Product_model extends CI_Model {
 		{
 			$sql .= ' order by id';
 		}
-		
+
 		//echo $sql;
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -708,12 +708,12 @@ class Product_model extends CI_Model {
 		// $query = $this->db->get('category_menu');
 		// $cat2 = $query->first_row('array');
 		// $keyword= explode(",",$cat2['keywords']);
-				
-		
+
+
 		/*foreach($keyword as $key)
 		{
-			$this->db->or_like('short_desc',trim($key));			
-		}				
+			$this->db->or_like('short_desc',trim($key));
+		}
 		$this->db->where('colour',$text);
 		$query = $this->db->get('products');
 		return $query->result_array();*/
@@ -726,9 +726,9 @@ class Product_model extends CI_Model {
 			// $sql.=" short_desc like '%".trim($key)."%' or long_desc like '%".trim($key)."%'";
 			// $i++;
 			// if($i<>$tot){ $sql.=" or ";}
-		// }				 
+		// }
 		// $sql.="";
-		
+
 		if($order_by == 'name')
 		{
 			$sql .= ' order by title';
@@ -749,14 +749,14 @@ class Product_model extends CI_Model {
 		//echo $this->db->last_query();
 		return $query->result_array();
 	}
-	
+
 	function get_product_by_category_price($row,$limit,$cat_id,$text,$order_by='')
 	{
 		// $this->db->where('id',$cat_id);
 		// $query = $this->db->get('category_menu');
 		// $cat2 = $query->first_row('array');
 		// $keyword= explode(",",$cat2['keywords']);
-				
+
 		$price = explode("-",$text);
 		/*$this->db->select()
 			->from('users')
@@ -764,14 +764,14 @@ class Product_model extends CI_Model {
 			*/
 		/*foreach($keyword as $key)
 		{
-			$this->db->or_like('short_desc',trim($key));			
+			$this->db->or_like('short_desc',trim($key));
 			//$sqls.=" short_desc like '%'".trim($key)."'%' ";
-		}				
+		}
 		$this->db->where('price >=',$price[0]);
 		if(isset($price[1])){$this->db->where('price <=',$price[1]);}
 		$query = $this->db->get('products');
 		return $query->result_array();*/
-		$sql="select * from products where price >=".$price[0]." and main_category = $cat_id"; 
+		$sql="select * from products where price >=".$price[0]." and main_category = $cat_id";
 		if(isset($price[1])){$sql.=" and price <=".$price[1];}
 		// $sql.=" and (";
 		// $tot=count($keyword);
@@ -781,7 +781,7 @@ class Product_model extends CI_Model {
 			// $sql.=" short_desc like '%".trim($key)."%' or long_desc like '%".trim($key)."%'";
 			// $i++;
 			// if($i<>$tot){ $sql.=" or ";}
-		// }				 
+		// }
 		// $sql.=")";
 		if($order_by == 'name')
 		{
@@ -802,7 +802,7 @@ class Product_model extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function random_new12($title,$other)
 	{
 		/*$sql = "SELECT * FROM products where ORDER BY RAND() LIMIT 12";
@@ -815,27 +815,27 @@ class Product_model extends CI_Model {
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
 		//$this->db->where('stock >',0);
-		$this->db->order_by('id','random');		
+		$this->db->order_by('id','random');
 		$query = $this->db->get('products');
-		return $query->result_array();		
+		return $query->result_array();
 	}
-	
+
 	function get_other_title_product($title,$title2,$product_id)
 	{
-		$this->db->like('title', trim($title),'after'); 
-		//$this->db->or_like('title', trim($title2),'before'); 
+		$this->db->like('title', trim($title),'after');
+		//$this->db->or_like('title', trim($title2),'before');
 		$this->db->where('id !=',$product_id);
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
 		$this->db->where('gift_card',0);
 		//$this->db->where('stock >',0);
 		$query = $this->db->get('products');
-		
+
 		return  $query->result_array();
 	}
 	function get_other_product($title,$product_id)
 	{
-		$this->db->like('title', $title); 
+		$this->db->like('title', $title);
 		$this->db->where('id !=',$product_id);
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
@@ -843,11 +843,11 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('products');
 		return  $query->result_array();
 	}
-	
+
 	function get_other_product_same_cat($title,$product_id,$cat)
 	{
-		$this->db->where('title', $title); 
-		//$this->db->like('title', trim($title),'after'); 
+		$this->db->where('title', $title);
+		//$this->db->like('title', trim($title),'after');
 		$this->db->where('id !=',$product_id);
 		//$this->db->where('short_desc =',$cat);
 		$this->db->where('status',1);
@@ -857,35 +857,35 @@ class Product_model extends CI_Model {
 		//print_r($this->db->last_query());
 		return  $query->result_array();
 	}
-	
+
 	function get_new_product_list_all($cat_id,$scat_id,$text,$by,$look_by)
 	{
-		
+
 		$sql = "update products set new_ar = 0";
 		$query = $this->db->query($sql);
-		
+
 		$sql = "select * from products a where deleted = 0 and status = 1 order by id desc limit 0,25";
 		$query = $this->db->query($sql);
 		$new_ar = $query->result_array();
-		
+
 		foreach($new_ar as $na)
 		{
 			$sql = "update products set new_ar = 1 where id = ".$na['id'];
 			$query = $this->db->query($sql);
 		}
-		
+
 		if($scat_id != 'all')
 		{
 			if($cat_id != 4)
 			{
 				$sql = "select * from products a
-					where a.main_category = $cat_id 
+					where a.main_category = $cat_id
 					and a.id in (select product_id from products_categories where category_id = $scat_id) and deleted = 0 and status = 1 ";
 			}
 			else
 			{
 				$sql = "select * from products a
-					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade) 
+					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade)
 					and a.id in (select product_id from products_categories where category_id = $scat_id) and deleted = 0 and status = 1 ";
 			}
 		}
@@ -896,42 +896,42 @@ class Product_model extends CI_Model {
 				if($cat_id == 1)
 				{
 					$sql = "select * from products a
-					where deleted = 0 and status = 1 and id in (select product_id from products_categories where category_id = 171)"; 
+					where deleted = 0 and status = 1 and id in (select product_id from products_categories where category_id = 171)";
 					//where deleted = 0 and status = 1 and new_ar = 1";
 				}
-				else 
+				else
 				{
 					if($cat_id == 2)
 					{
-						$sql = "select * from products a 
+						$sql = "select * from products a
 						where (a.main_category = $cat_id or id in (select product_id from products_categories where category_id = 9)) and deleted = 0 and status = 1";
 					}
 					if($cat_id == 3)
 					{
-						$sql = "select * from products a 
+						$sql = "select * from products a
 						where (a.main_category = $cat_id or id in (select product_id from products_categories where category_id = 21)) and deleted = 0 and status = 1";
 					}
 					if($cat_id == 4)
 					{
-						$sql = "select * from products a 
+						$sql = "select * from products a
 						where (a.main_category = $cat_id or id in (select product_id from products_categories where category_id = 29)) and deleted = 0 and status = 1";
 					}
 					if($cat_id == 5)
 					{
-						$sql = "select * from products a 
+						$sql = "select * from products a
 						where (a.main_category = $cat_id or id in (select product_id from products_categories where category_id = 35)) and deleted = 0 and status = 1";
 					}
-					
+
 				}
-				
+
 			}
-			else 
+			else
 			{
-				$sql = "select * from products a 
+				$sql = "select * from products a
 					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade) and deleted = 0 and status = 1";
 			}
 		}
-		
+
 		if($look_by != '' && $look_by != '0')
 		{
 			if($text == 'first_edition')
@@ -946,18 +946,18 @@ class Product_model extends CI_Model {
 				{
 					$high_price = $price[1];
 				}
-				else 
+				else
 				{
 					$high_price = 0;
 				}
-				
+
 				$sql .= " and price >= $low_price";
 				if($high_price != 0)
 				{
 					$sql .= " and price <= $high_price";
 				}
 			}
-			else 
+			else
 			{
 				$text = str_replace("_", " ", $text);
 				if($text=='leather')
@@ -980,7 +980,7 @@ class Product_model extends CI_Model {
 								{
 									$tcolour .=" a.features like '%$lt%'";
 								}
-								else 
+								else
 								{
 									$tcolour .=" or a.features like '%$lt%'";
 								}
@@ -993,14 +993,14 @@ class Product_model extends CI_Model {
 							$sql .= " and (a.features like '%$text%')";
 						}
 					}
-					else 
+					else
 					{
 						$sql .= " and (a.features like '%$text%')";
 					}
 				}
 			}
 		}
-		
+
 		if($by == 'name')
 		{
 			$sql .= ' order by title';
@@ -1013,40 +1013,40 @@ class Product_model extends CI_Model {
 		{
 			$sql .= ' order by id desc';
 		}
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function get_new_product_list($cat_id,$scat_id,$text,$by,$look_by,$row,$limit)
 	{
 		$sql = "update products set new_ar = 0";
 		$query = $this->db->query($sql);
-		
+
 		$sql = "select * from products a where deleted = 0 and status = 1 order by id desc limit 0,25";
 		$query = $this->db->query($sql);
 		$new_ar = $query->result_array();
-		
+
 		foreach($new_ar as $na)
 		{
 			$sql = "update products set new_ar = 1 where id = ".$na['id'];
 			$query = $this->db->query($sql);
 		}
-		
-		
-		
+
+
+
 		if($scat_id != 'all')
 		{
 			if($cat_id != 4)
 			{
 				$sql = "select * from products a
-					where a.main_category = $cat_id 
+					where a.main_category = $cat_id
 					and a.id in (select product_id from products_categories where category_id = $scat_id) and deleted = 0 and status = 1 ";
 			}
 			else
 			{
 				$sql = "select * from products a
-					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade) 
+					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade)
 					and a.id in (select product_id from products_categories where category_id = $scat_id) and deleted = 0 and status = 1 ";
 			}
 		}
@@ -1056,22 +1056,22 @@ class Product_model extends CI_Model {
 			{
 				if($cat_id == 1)
 				{
-					$sql = "select * from products a 
+					$sql = "select * from products a
 					where deleted = 0 and status = 1 and id in (select product_id from products_categories where category_id = 171)";
 				}
-				else 
+				else
 				{
-					$sql = "select * from products a 
+					$sql = "select * from products a
 					where (a.main_category = $cat_id) and deleted = 0 and status = 1 and gift_card = 0";
 				}
 			}
-			else 
+			else
 			{
-				$sql = "select * from products a 
+				$sql = "select * from products a
 					where (a.sale_price < a.price or a.sale_price_trade < a.price_trade) and deleted = 0 and status = 1";
 			}
 		}
-		
+
 		if($look_by != '' && $look_by != '0')
 		{
 			if($text == 'first_edition')
@@ -1086,18 +1086,18 @@ class Product_model extends CI_Model {
 				{
 					$high_price = $price[1];
 				}
-				else 
+				else
 				{
 					$high_price = 0;
 				}
-				
+
 				$sql .= " and price >= $low_price";
 				if($high_price != 0)
 				{
 					$sql .= " and price <= $high_price";
 				}
 			}
-			else 
+			else
 			{
 				$text = str_replace("_", " ", $text);
 				if($text=='leather')
@@ -1120,7 +1120,7 @@ class Product_model extends CI_Model {
 								{
 									$tcolour .=" a.features like '%$lt%'";
 								}
-								else 
+								else
 								{
 									$tcolour .=" or a.features like '%$lt%'";
 								}
@@ -1133,15 +1133,15 @@ class Product_model extends CI_Model {
 							$sql .= " and (a.features like '%$text%')";
 						}
 					}
-					else 
+					else
 					{
 						$sql .= " and (a.features like '%$text%')";
 					}
-					
+
 				}
 			}
 		}
-		
+
 		if($by == 'name')
 		{
 			$sql .= ' order by title';
@@ -1154,19 +1154,19 @@ class Product_model extends CI_Model {
 		{
 			$sql .= ' order by id desc';
 		}
-		
+
 		$sql .= ' Limit '.$row.','.$limit;
-		
+
 		//echo $sql;
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function get_new_search_product_list_all($keyword,$text,$by,$look_by)
 	{
 		$lk = explode(' ', $keyword);
-		
+
 		$cc = 0;
 		$ttile = ' ';
 		foreach ($lk as $l) {
@@ -1180,7 +1180,7 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
+
 		$cc = 0;
 		$tsd = ' ';
 		foreach ($lk as $l) {
@@ -1194,7 +1194,7 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
+
 		$cc = 0;
 		$tld = ' ';
 		foreach ($lk as $l) {
@@ -1208,10 +1208,10 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
-		$sql = "select * from products a 
+
+		$sql = "select * from products a
 					where ($ttile or $tsd or $tld) and deleted = 0 and status = 1 ";
-		
+
 		if($look_by != '' && $look_by != 0)
 		{
 			if($look_by == 'price')
@@ -1222,18 +1222,18 @@ class Product_model extends CI_Model {
 				{
 					$high_price = $price[1];
 				}
-				else 
+				else
 				{
 					$high_price = 0;
 				}
-				
+
 				$sql .= " and price >= $low_price";
 				if($high_price != 0)
 				{
 					$sql .= " and price <= $high_price";
 				}
 			}
-			else 
+			else
 			{
 				$text = str_replace("_", " ", $text);
 				$sql = "select * from ($sql) as b where (b.features like '%$text%')";
@@ -1241,9 +1241,9 @@ class Product_model extends CI_Model {
 				//$sql .= " or (a.short_desc like '%$text%' or a.long_desc like '%$text%')";
 			}
 		}
-		
+
 		//echo $sql;
-		
+
 		if($by == 'name')
 		{
 			$sql .= ' order by title';
@@ -1256,15 +1256,15 @@ class Product_model extends CI_Model {
 		{
 			$sql .= ' order by id desc';
 		}
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function get_new_search_product_list($keyword,$text,$by,$look_by,$row,$limit)
 	{
 		$lk = explode(' ', $keyword);
-		
+
 		$cc = 0;
 		$ttile = ' ';
 		foreach ($lk as $l) {
@@ -1278,7 +1278,7 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
+
 		$cc = 0;
 		$tsd = ' ';
 		foreach ($lk as $l) {
@@ -1292,7 +1292,7 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
+
 		$cc = 0;
 		$tld = ' ';
 		foreach ($lk as $l) {
@@ -1306,10 +1306,10 @@ class Product_model extends CI_Model {
 			}
 			$cc++;
 		}
-		
-		$sql = "select * from products a 
+
+		$sql = "select * from products a
 					where ($ttile or $tsd or $tld) and deleted = 0 and status = 1 ";
-		
+
 		if($look_by != '' && $look_by != 0)
 		{
 			if($look_by == 'price')
@@ -1320,27 +1320,27 @@ class Product_model extends CI_Model {
 				{
 					$high_price = $price[1];
 				}
-				else 
+				else
 				{
 					$high_price = 0;
 				}
-				
+
 				$sql .= " and price >= $low_price";
 				if($high_price != 0)
 				{
 					$sql .= " and price <= $high_price";
 				}
 			}
-			else 
+			else
 			{
 				$text = str_replace("_", " ", $text);
 				$sql = "select * from ($sql) as b where (b.features like '%$text%')";
 				//$sql .= " or (a.short_desc like '%$text%' or a.long_desc like '%$text%')";
 			}
 		}
-		
+
 		//echo $sql;
-		
+
 		if($by == 'name')
 		{
 			$sql .= ' order by title';
@@ -1353,13 +1353,13 @@ class Product_model extends CI_Model {
 		{
 			$sql .= ' order by id desc';
 		}
-		
+
 		$sql .= ' Limit '.$row.','.$limit;
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function add_attribute($data) {
 		$this->db->insert('products_attributes',$data);
 	}
@@ -1377,17 +1377,17 @@ class Product_model extends CI_Model {
 		$result = $query->result_array();
 		foreach($result as $row)
 	    {
-			
+
 			$options = array();
 			if($row['value'] != '')
 			{
 				$options = json_decode($row['value'], true);
 			}
 			$attributes[] = array(
-				
+
 				'name' => $row['name'],
 				'options' => $options
-			);			
+			);
 		}
 		return $attributes;
 		*/
@@ -1397,7 +1397,7 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('products_attributes');
 		$result = $query->first_row('array');
 		//$value = explode("~",$result['value']);
-		
+
 		$options = array();
 		$options = json_decode($result['value'],true);
 		/*
@@ -1406,7 +1406,7 @@ class Product_model extends CI_Model {
 		}
 		*/
 		return $options;
-		
+
 	}
 	function add_photo($data) {
 		$this->db->insert('products_photos',$data);
@@ -1484,13 +1484,13 @@ class Product_model extends CI_Model {
 		return $query->first_row('array');
 	}
 
-	
-	
+
+
 	function purchased_time($product_id) {
-		$sql = "SELECT sum(`carts`.`quantity`) as `total` 
-				FROM `carts`,`orders` 
-				WHERE `carts`.`product_id` = ".$product_id." 
-				AND `carts`.`session_id` = `orders`.`session_id` 
+		$sql = "SELECT sum(`carts`.`quantity`) as `total`
+				FROM `carts`,`orders`
+				WHERE `carts`.`product_id` = ".$product_id."
+				AND `carts`.`session_id` = `orders`.`session_id`
 				AND `orders`.`status` = 'successful'";
 		$query = $this->db->query($sql);
 		$row = $query->first_row('array');
@@ -1498,8 +1498,8 @@ class Product_model extends CI_Model {
 		if ($row['total'] != NULL) { $times = $row['total']; }
 		return $times;
 	}
-	
-	
+
+
 	function get_first_edition($name)
 	{
 		$this->db->like('title',$name,'after');
@@ -1509,13 +1509,13 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('products');
 		return $query->first_row('array');
 	}
-	
+
 	function get_product_per_story($id)
 	{
 		$this->db->where('story_id',$id);
 		$query = $this->db->get('story_products');
 		$all_prod = $query->result_array();
-		
+
 		$cc = 0;
 		$prod = Array();
 		foreach($all_prod as $ap)
@@ -1524,47 +1524,47 @@ class Product_model extends CI_Model {
 			$cc++;
 		}
 		if(count($prod)==0){$prod[]=0;}
-			
+
 		$this->db->where_in('id',$prod);
 		$query = $this->db->get('products');
 		return $query->result_array();
-		
+
 	}
 	function get_product_story($cat,$id,$sort,$limit,$row,$by)
 	{
-		
+
 		if($cat=='single' || $cat=='single_all')
 		{
 			$this->db->where('story_id',$id);
 			$query = $this->db->get('story_products');
-			$all_prod = $query->result_array();					
+			$all_prod = $query->result_array();
 		}
-		if($cat=='all')		
+		if($cat=='all')
 		{
 			$sql = "SELECT story_products.*
-				FROM story,story_products 
+				FROM story,story_products
 				where story_products.story_id = story.id and story.status = 1 and story.archive_id = 0";
 			$query = $this->db->query($sql);
-			$all_prod = $query->result_array();		
+			$all_prod = $query->result_array();
 		}
-		
-		if($cat=='archive')		
+
+		if($cat=='archive')
 		{
 			$sql = "SELECT story_products.*
-				FROM story,story_archive,story_products 
+				FROM story,story_archive,story_products
 				where story_archive.id= story.archive_id and story_products.story_id = story.id and story.status = 1 and story.archive_id = $id";
 			$query = $this->db->query($sql);
-			$all_prod = $query->result_array();		
+			$all_prod = $query->result_array();
 		}
-		
-		if($cat!='all' && $cat!='archive' && $cat!='single' && $cat!='single_all')		
+
+		if($cat!='all' && $cat!='archive' && $cat!='single' && $cat!='single_all')
 		{
 			$cat=strtoupper($cat);
 			$sql = "SELECT story_products.*
-				FROM story,story_products 
+				FROM story,story_products
 				where story_products.story_id = story.id and story.status = 1 and story.archive_id = 0 and story.category='$cat'";
 			$query = $this->db->query($sql);
-			$all_prod = $query->result_array();		
+			$all_prod = $query->result_array();
 		}
 		$cc = 0;
 		$prod = Array();
@@ -1581,7 +1581,7 @@ class Product_model extends CI_Model {
 		{
 			$sql = "SELECT products.*
 				FROM products where id in ($prods_arr) and status= 1 and deleted = 0 ";
-				
+
 			if($by == 'first_edition')
 			{
 				$sql .= " and (first_edition = 'Y' or first_edition = 'y')";
@@ -1594,18 +1594,18 @@ class Product_model extends CI_Model {
 				{
 					$high_price = $price[1];
 				}
-				else 
+				else
 				{
 					$high_price = 0;
 				}
-				
+
 				$sql .= " and price >= $low_price";
 				if($high_price != 0)
 				{
 					$sql .= " and price <= $high_price";
 				}
 			}
-			else 
+			else
 			{
 				if($by=='leather')
 				{
@@ -1618,11 +1618,11 @@ class Product_model extends CI_Model {
 				}
 			}
 			//echo $sql;
-			
+
 			$query = $this->db->query($sql);
 
 		}
-		else{								
+		else{
 			$this->db->where_in('id',$prod);
 			$this->db->where('status',1);
 			$this->db->where('deleted',0);
@@ -1639,15 +1639,15 @@ class Product_model extends CI_Model {
 			$query = $this->db->get('products');
 		}
 		return $query->result_array();
-		
+
 	}
-	
+
 	function get_product_promotion($cat,$id,$sort,$limit,$row)
 	{
 		$this->db->where('promotion_id',$id);
 		$query = $this->db->get('promotions_product');
-		$all_prod = $query->result_array();	
-		
+		$all_prod = $query->result_array();
+
 		$cc = 0;
 		$prod = Array();
 		foreach($all_prod as $ap)
@@ -1656,7 +1656,7 @@ class Product_model extends CI_Model {
 			$cc++;
 		}
 		if(count($prod)==0){$prod[]=0;}
-		
+
 		$this->db->where_in('id',$prod);
 		$this->db->where('status',1);
 		$this->db->where('deleted',0);
@@ -1671,15 +1671,15 @@ class Product_model extends CI_Model {
 		else
 		{$this->db->limit($row,$limit);	}
 		$query = $this->db->get('products');
-		
+
 		return $query->result_array();
-		
+
 	}
 	function get_new_category()
 	{
 	}
-	
-	
+
+
 	/* cross sales */
 	function is_cross_sale_already_assigned($main_product_id,$product_id)
 	{
@@ -1688,44 +1688,44 @@ class Product_model extends CI_Model {
 							   ->get('cross_sale_products')
 							   ->row();
 		if($cross_sale){
-			return true;	
+			return true;
 		}else{
-			return false;	
-		}	
+			return false;
+		}
 	}
-	
-	function insert_cross_sale($data) 
+
+	function insert_cross_sale($data)
 	{
 		$this->db->insert('cross_sale_products',$data);
 		return $this->db->insert_id();
 	}
-	
+
 	function get_product_cross_sales($main_product_id)
 	{
-		$sql = "SELECT p.* FROM products p 
-				WHERE p.id 
-				IN (SELECT csp.product_id  
+		$sql = "SELECT p.* FROM products p
+				WHERE p.id
+				IN (SELECT csp.product_id
 					FROM cross_sale_products csp
 					WHERE csp.main_product_id = ".$main_product_id.")";
 		return $this->db->query($sql)->result();
 	}
-	
+
 	function delete_product_cross_sale($main_product_id,$product_id)
 	{
 		return $this->db->where('main_product_id',$main_product_id)
 						->where('product_id',$product_id)
-					    ->delete('cross_sale_products');	
+					    ->delete('cross_sale_products');
 	}
-	
+
 	/* feature products */
 	function insert_feature_product($data) {
 		$this->db->insert('feature_products',$data);
 		return $this->db->insert_id();
 	}
 	function get_feature_products() {
-		$sql = "SELECT `products`.* FROM `products`,`feature_products` 
+		$sql = "SELECT `products`.* FROM `products`,`feature_products`
 				WHERE `products`.`id` = `feature_products`.`product_id`
-				AND `products`.`deleted` = 0  
+				AND `products`.`deleted` = 0
 				ORDER  BY `feature_products`.`display_order` ASC";
 		$query = $this->db->query($sql);
 		return $query->result();
@@ -1757,54 +1757,54 @@ class Product_model extends CI_Model {
 		$this->db->where('product_id',$product_id);
 		$this->db->delete('feature_products');
 	}
-	
+
 	/*function get_brands()
 	{
 		$query = $this->db->get('brands');
 		return $query->result_array();
 	}
-	
+
 	function get_brands_by_category($category_id)
 	{
-		$sql = "SELECT DISTINCT b.* FROM brands b, products p 
+		$sql = "SELECT DISTINCT b.* FROM brands b, products p
 				WHERE p.category_id = '" . $category_id . "'
 				AND p.brand_id = b.reference_id ";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function get_brand($brand_id)
 	{
 		$this->db->where('reference_id', $brand_id);
 		$query = $this->db->get('brands');
 		return $query->first_row('array');
 	}
-	
+
 	function get_categories()
 	{
 		$query = $this->db->get('categories');
 		return $query->result_array();
 	}
-	
+
 	function get_category($category_id)
 	{
 		$this->db->where('reference_id', $category_id);
 		$query = $this->db->get('categories');
 		return $query->first_row('array');
 	}
-	
+
 	function insert_category($data)
 	{
 		$this->db->insert('categories', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	function insert_brand($data)
 	{
 		$this->db->insert('brands', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	function get_total_products($keywords = '')
 	{
 		if ($keywords != '')
@@ -1815,24 +1815,24 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('products');
 		return $query->num_rows();
 	}
-	
+
 	function get_product($product_id)
 	{
 		$this->db->where('product_id', $product_id);
 		$query = $this->db->get('products');
 		return $query->first_row('array');
 	}
-	
+
 	function get_similar_products($product_id, $category_id)
 	{
-		$sql = "SELECT * FROM products 
+		$sql = "SELECT * FROM products
 				WHERE product_id != '" . $product_id . "'
 				AND category_id = '" . $category_id . "'
 				ORDER BY part_no ASC LIMIT 4";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function search_products($category_id, $brand_id, $keywords, $per_page = NULL, $offset = NULL)
 	{
 		if($category_id)
@@ -1858,7 +1858,7 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('products');
 		return $query->result_array();
 	}
-	
+
 	function get_products($per_page = NULL, $offset = NULL, $keywords = '')
 	{
 		$offset = ($offset) ? $offset : 0;
@@ -1877,30 +1877,30 @@ class Product_model extends CI_Model {
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
-	
+
 	function prepare_product_data($data)
 	{
 		if (isset($data['visible']))
 		{
 			$data['visible'] = ($data['visible']) ? 1 : 0;
-		}		
-		return $data;	
+		}
+		return $data;
 	}
-	
+
 	function insert_product($data)
 	{
 		$data = $this->prepare_product_data($data);
 		$this->db->insert('products', $data);
 		return $this->db->insert_id();
 	}
-	
+
 	function update_product($product_id, $data)
 	{
 		$data = $this->prepare_product_data($data);
 		$this->db->where('product_id', $product_id);
 		return $this->db->update('products', $data);
 	}
-	
+
 	function get_product_stock($part_no, $company_name)
 	{
 		$this->db->where('product_part_no', $part_no);
@@ -1910,44 +1910,44 @@ class Product_model extends CI_Model {
 		$query = $this->db->get('orders');
 		return $query->num_rows();
 	}*/
-	
+
 	/* front end functions */
 	/**
 	*	@desc Gets product by category id title or perma link
-	*	
+	*
 	*	@name get_products_by_category
 	*	@access public
-	*	@param 
-	*	@return 
-	* 
+	*	@param
+	*	@return
+	*
 	*/
 	function get_products_by_category($id_title = "",$status = 1)
 	{
 		$category_info = $this->category_model->get_category_by_link($id_title);
 
-		$sql = "SELECT products.*  
-				FROM products,products_categories  
-				WHERE products.id = products_categories.product_id  
-				AND products_categories.category_id = ".$category_info->id."  
-				AND status = ".$status." 
-				ORDER BY products.title";	
+		$sql = "SELECT products.*
+				FROM products,products_categories
+				WHERE products.id = products_categories.product_id
+				AND products_categories.category_id = ".$category_info->id."
+				AND status = ".$status."
+				ORDER BY products.title";
 		$products = $this->db->query($sql)->result();
 		if($products){
-			return $products;	
+			return $products;
 		}
 
 		return false;
-		
+
 	}
-	
+
 	/**
 	*	@desc Gets product hero image
-	*	
+	*
 	*	@name get_product_hero_image
 	*	@access public
-	*	@param 
-	*	@return 
-	* 
+	*	@param
+	*	@return
+	*
 	*/
 	function get_product_hero_image($product_id)
 	{
@@ -1957,21 +1957,21 @@ class Product_model extends CI_Model {
 						 ->get('products_photos')
 						 ->row();
 		if($hero){
-			return $hero->name;	
+			return $hero->name;
 		}
 		return false;
 	}
-	
+
 	/**
 	*	@desc Gets product by its link
-	*	
+	*
 	*	@name get_product_by_link
 	*	@access public
-	*	@param 
-	*	@return 
-	* 
+	*	@param
+	*	@return
+	*
 	*/
-	
+
 	function get_product_by_link($id_title)
 	{
 		$product = $this->db->where('id_title',$id_title)
@@ -1979,62 +1979,62 @@ class Product_model extends CI_Model {
 							->get('products')
 							->row();
 		if($product){
-			return $product;	
+			return $product;
 		}else{
-			return false;	
+			return false;
 		}
 	}
-	
-	
+
+
 	/**
 	*	@desc Gets product by its link for preview
-	*	
+	*
 	*	@name get_product_for_preview
 	*	@access public
-	*	@param 
-	*	@return 
-	* 
+	*	@param
+	*	@return
+	*
 	*/
-	
+
 	function get_product_for_preview($id_title)
 	{
 		$product = $this->db->where('id_title',$id_title)
 							->get('products')
 							->row();
 		if($product){
-			return $product;	
+			return $product;
 		}
 	}
 	/**
 	*	@desc Gets product by its id
-	*	
+	*
 	*	@name get_product_by_id
 	*	@access public
-	*	@param 
-	*	@return 
-	* 
+	*	@param
+	*	@return
+	*
 	*/
-	
+
 	function get_product_by_id($id)
 	{
 		$product = $this->db->where('id',$id)->get('products')->row();
 		if($product){
-			return $product;	
+			return $product;
 		}
 		return false;
 	}
-	
+
 	/**
 	*	@desc Gets Similar products - this is mostly for you may also like section
-	*	
+	*
 	*	@name get_similar_products
 	*	@access public
-	*	@param 
-	*	@return 
-	* 	
+	*	@param
+	*	@return
+	*
 	*/
-	
-	function get_similar_products($product_type = 'written') 
+
+	function get_similar_products($product_type = 'written')
 	{
 		$products = $this->db->where('product_type',$product_type)
 							 ->where('status',1)
@@ -2042,8 +2042,40 @@ class Product_model extends CI_Model {
 							 ->order_by('title','asc')
 							 ->get('products')
 							 ->result();
-		return $products;	
+		return $products;
 	}
-	
-	
+
+
+	function add_file($data)
+	{
+		$this->db->where('product_id', $data['product_id']);
+		$this->db->where('file_name', $data['file_name']);
+		$this->db->where('file_path', $data['file_path']);
+		$query = $this->db->get('product_files');
+		if ($query->num_rows() == 0) {
+			$this->db->insert('product_files', $data);
+			return $this->insert_id();
+		}
+	}
+
+	function get_files($product_id)
+	{
+		$this->db->where('product_id', $product_id);
+		$query = $this->db->get('product_files');
+		return $query->result_array();
+	}
+
+	function get_file($file_id)
+	{
+		$this->db->where('file_id', $file_id);
+		$query = $this->db->get('product_files');
+		return $query->first_row('array');
+	}
+
+	function delete_file($file_id)
+	{
+		$this->db->where('file_id', $file_id);
+		return $this->db->delete('product_files');
+	}
+
 }

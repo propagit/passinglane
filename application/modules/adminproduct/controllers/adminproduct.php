@@ -10,16 +10,16 @@ class Adminproduct extends MX_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->load->model('product_model');
 		$this->load->model('category_model');
 	}
-	
+
 	public function index($method='', $param='',$param2='')
 	{
 		switch($method)
 		{
-			
+
 			case 'category':
 					$this->product_category($param);
 				break;
@@ -35,15 +35,15 @@ class Adminproduct extends MX_Controller {
 			case 'categoryactive':
 					$this->active_category($param);
 				break;
-			
-			
+
+
 			case 'search':
 					$this->product_search($param);
 				break;
 			case 'active':
 					$this->product_search_status('active');
 				break;
-			
+
 			case 'inactive':
 					$this->product_search_status('inactive');
 				break;
@@ -67,7 +67,7 @@ class Adminproduct extends MX_Controller {
 				break;
 			case 'makeheroimage':
 					$this->makeheroimage($param);
-				break;	
+				break;
 			case 'movephoto':
 					$this->movephoto($param,$param2);
 				break;
@@ -77,14 +77,14 @@ class Adminproduct extends MX_Controller {
 			case 'deletephoto':
 					$this->deletephoto($param);
 				break;
-				
-						
+
+
 			case 'switch':
 					$this->switch_products($param);
-				break;	
+				break;
 			case 'switch_trade':
 					$this->switch_trade_products($param);
-				break;										 
+				break;
 			case 'exportstock':
 					$this->exportstock();
 				break;
@@ -94,27 +94,27 @@ class Adminproduct extends MX_Controller {
 			case 'updatecategories':
 					$this->updatecategories();
 				break;
-			
-			
-			
+
+
+
 			case 'feature_products':
 					$this->feature_products();
 				break;
-			
+
 			case 'delete_product_brochure':
 					$this->delete_product_brochure($param);
 				break;
-				
+
 			case 'delete_product_file':
 					$this->delete_product_file($param);
-				break;	
-			
+				break;
+
 			default:
 					$this->products_list($method);
 				break;
 		}
 	}
-	
+
 	function add_category()
 	{
 		$id_title = $this->input->post('name_category');
@@ -143,24 +143,24 @@ class Adminproduct extends MX_Controller {
 	{
 		if($this->input->post())
 		{
-			$id=$this->input->post('id');			
+			$id=$this->input->post('id');
 			$this->category_model->delete_productcategory($id);
 		}
 	}
-	
+
 	function active_category($id)
 	{
 		if($id)
-		{			
+		{
 			$cat_active=$this->category_model->get_detail_productcategory($id);
 			if($cat_active['active']==1){$active=0;}
 			if($cat_active['active']==0){$active=1;}
 			$data = array('active' => $active,'created'=>date('Y-m-d H:i:s'));
 			$this->category_model->update_productcategory($id,$data);
 		}
-		redirect('admin/product/category');	
+		redirect('admin/product/category');
 	}
-	
+
 	function product_category()
 	{
 		$data['categories'] = $this->category_model->any_productcategory();
@@ -170,9 +170,9 @@ class Adminproduct extends MX_Controller {
 	function feature_products()
 	{
 		$data['products'] = $this->product_model->all_active();
-		$this->load->view('feature/main_view', isset($data) ? $data : NULL);	
+		$this->load->view('feature/main_view', isset($data) ? $data : NULL);
 	}
-	
+
 	function feature_products_list()
 	{
 		$data['feature_products'] = $this->product_model->get_feature_products();
@@ -183,9 +183,9 @@ class Adminproduct extends MX_Controller {
 	{
 		$list = $_POST['check_ed'];
 		$action = $_POST['action'];
-		
+
 		//echo "<pre>".print_r($list,true)."</pre>";
-		
+
 		if($action == 1)
 		{
 			//active
@@ -212,7 +212,7 @@ class Adminproduct extends MX_Controller {
 			foreach($list as $l)
 			{
 				$prod = $this->product_model->identify($l);
-		
+
 				$data = Array();
 				$data['deleted']=1;
 				$data['id_title']=$prod['id_title'] . '_discontinued';
@@ -221,19 +221,19 @@ class Adminproduct extends MX_Controller {
 				$this->product_model->update($l,$data);
 			}
 		}
-		
+
 		redirect('admin/product');
 	}
 	function product_delete($product_id)
 	{
 		$prod = $this->product_model->identify($product_id);
-		
+
 		$data = Array();
 		$data['deleted']=1;
 		$data['id_title']=$prod['id_title'] . '_discontinued';
-				
+
 		$this->product_model->update($product_id,$data);
-		
+
 		// $this->product_model->remove_related($id);
 		// $this->product_model->remove_attributes($id);
 		// $this->product_model->remove_categories($id);
@@ -242,11 +242,11 @@ class Adminproduct extends MX_Controller {
 		// $this->delete_directory('./uploads/products/'.md5('mbb'.$id));
 		redirect('admin/product');
 	}
-	
+
 	function product_add()
-	{		
+	{
 		if ($this->input->post())
-		{		
+		{
 			$title = $this->input->post('title');
 			$subtitle = $this->input->post('subtitle');
 			$price = $this->input->post('price');
@@ -257,10 +257,10 @@ class Adminproduct extends MX_Controller {
 			$product_collection = $this->input->post('product_collection');
 			$product_type = $this->input->post('product_type');
 			$status = $this->input->post('status');
-			
+
 			$slug_txt = $title.'-'.$subtitle;
 			$id_title = modules::run('helpers/slugify',$slug_txt);
-			
+
 			$data = array(
 						'title' => $title,
 						'subtitle' => $subtitle,
@@ -274,19 +274,19 @@ class Adminproduct extends MX_Controller {
 						'product_collection' => $product_collection,
 						'product_type' => $product_type
 						);
-			
+
 			#insert product
 			$product_id = $this->product_model->add($data);
-			
-			
-			
+
+
+
 			# Create dir for storing file related to the product
 			$path = "./uploads/products";
 			$salt = 'mbb'.$product_id;
 			$subfolders = array('thumb1','thumb2','thumb3','thumb4','thumb5','thumb6','thumb7','thumb8','doc','product_file');
 			//create folders
 			$folder_name = modules::run('helpers/create_folders',$path,$salt,$subfolders);
-			
+
 			//if product brochure has been uploaded
 			if($_FILES['product_brochure']){
 				$product_brochure_path = $path.'/'.$folder_name."/doc";
@@ -297,21 +297,21 @@ class Adminproduct extends MX_Controller {
 				$config['overwrite'] = FALSE;
 				$config['remove_space'] = TRUE;
 				$this->upload->initialize($config);
-			
+
 				if (!$this->upload->do_upload('product_brochure')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());	
+					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
 					echo $this->upload->display_errors();exit();
 				}else{
 					$data = array('upload_data' => $this->upload->data());
 					$product_brochure_name = $data['upload_data']['file_name'];
-					# Add details to database			
+					# Add details to database
 					$product_update_data = array(
 						'product_brochure' => $product_brochure_name
 					);
-					$this->product_model->update($product_id,$product_update_data);					
+					$this->product_model->update($product_id,$product_update_data);
 				}
 			}
-			
+
 			//if product file has been uploaded
 			if($_FILES['product_file']){
 				$product_file_path = $path.'/'.$folder_name."/product_file";
@@ -322,31 +322,31 @@ class Adminproduct extends MX_Controller {
 				$config['overwrite'] = FALSE;
 				$config['remove_space'] = TRUE;
 				$this->upload->initialize($config);
-			
+
 				if (!$this->upload->do_upload('product_file')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());	
+					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
 				}else{
 					$data = array('upload_data' => $this->upload->data());
 					$product_file_name = $data['upload_data']['file_name'];
-					# Add details to database			
+					# Add details to database
 					$product_update_data = array(
 						'product_file_name' => $product_file_name
 					);
-					$this->product_model->update($product_id,$product_update_data);					
+					$this->product_model->update($product_id,$product_update_data);
 				}
 			}
-			
-			
+
+
 			redirect('admin/product');
 		}
 		else
 		{
 			$this->load->view('admin_product_add');
 		}
-		
+
 	}
-	
-	
+
+
 	function product_details($product_id)
 	{
 		$product = $this->product_model->identify($product_id);
@@ -354,7 +354,7 @@ class Adminproduct extends MX_Controller {
 		{
 			redirect('admin/product');
 		}
-		
+
 		if ($this->input->post())
 		{
 			$update_id = $this->input->post('update_id');
@@ -368,10 +368,10 @@ class Adminproduct extends MX_Controller {
 			$product_collection = $this->input->post('product_collection');
 			$product_type = $this->input->post('product_type');
 			$status = $this->input->post('status');
-			
+
 			$slug_txt = $title.'-'.$subtitle;
 			$id_title = modules::run('helpers/slugify',$slug_txt);
-			
+
 			$data = array(
 						'title' => $title,
 						'subtitle' => $subtitle,
@@ -386,24 +386,24 @@ class Adminproduct extends MX_Controller {
 						'product_type' => $product_type,
 						'modified' => date('Y-m-d H:i:s')
 						);
-			
+
 			#update product
 			$this->product_model->update($update_id,$data);
 
 			#get product info - this is to use when old file is being deleted or replaced by a new one
 			$product_info = $this->product_model->identify($update_id);
-			
+
 			$path = "./uploads/products";
 			$salt = md5('mbb'.$product_id);
 			$prod_folder_path = $path.'/'.$salt;
 			//if product brochure has been uploaded
 			if($_FILES['product_brochure']){
-							
+
 				$product_brochure_path = $prod_folder_path."/doc";
 				//delete old file
 				$product_brochure_full_path = $product_brochure_path."/".$product_info['product_brochure'];
-				modules::run('helpers/delete_file',$product_brochure_full_path);	
-	
+				modules::run('helpers/delete_file',$product_brochure_full_path);
+
 				$this->load->library('upload');
 				$config['upload_path'] = $product_brochure_path;
 				$config['allowed_types'] = 'pdf|doc|docx|ppt|mp4|avi|jpg|jpeg|png|gif';
@@ -411,26 +411,26 @@ class Adminproduct extends MX_Controller {
 				$config['overwrite'] = FALSE;
 				$config['remove_space'] = TRUE;
 				$this->upload->initialize($config);
-			
+
 				if (!$this->upload->do_upload('product_brochure')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());	
+					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
 				}else{
 					$data = array('upload_data' => $this->upload->data());
 					$product_brochure_name = $data['upload_data']['file_name'];
-					# Add details to database			
+					# Add details to database
 					$product_update_data = array(
 						'product_brochure' => $product_brochure_name
 					);
-					$this->product_model->update($update_id,$product_update_data);				
+					$this->product_model->update($update_id,$product_update_data);
 				}
 			}
-			
+
 			//if product file has been uploaded
 			if($_FILES['product_file']){
 				//delete old file
 				$product_file_full_path = $product_file_path."/".$product_info['product_file_name'];
 				modules::run('helpers/delete_file',$product_file_full_path);
-				
+
 				$product_file_path = $prod_folder_path."/product_file";
 				$this->load->library('upload');
 				$config['upload_path'] = $product_file_path;
@@ -439,43 +439,41 @@ class Adminproduct extends MX_Controller {
 				$config['overwrite'] = FALSE;
 				$config['remove_space'] = TRUE;
 				$this->upload->initialize($config);
-			
+
 				if (!$this->upload->do_upload('product_file')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());	
+					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
 				}else{
 					$data = array('upload_data' => $this->upload->data());
 					$product_file_name = $data['upload_data']['file_name'];
-					# Add details to database			
+					# Add details to database
 					$product_update_data = array(
 						'product_file_name' => $product_file_name
 					);
-					$this->product_model->update($update_id,$product_update_data);	
-										
+					$this->product_model->update($update_id,$product_update_data);
+
 				}
-			
+
 			}
 			redirect('admin/product/details/'.$product_id);
-			
+
 		}
 		$data['product'] = $this->product_model->identify($product_id);
-		$data['dir'] = base_url().'uploads/products/'.md5('mbb'.$product_id);	
+		$data['files'] = $this->product_model->get_files($product_id);
+		$data['dir'] = base_url().'uploads/products/'.md5('mbb'.$product_id);
 		$this->load->view('admin_product_details',$data);
 	}
-	
-	function delete_product_file($product_id)
+
+	function delete_product_file($file_id)
 	{
-		$product = $this->product_model->identify($product_id);	
-		if($product){
-			$path = "./uploads/products/".md5('mbb'.$product_id)."/product_file/".$product['product_file_name'];
-			modules::run('helpers/delete_file',$path);
-			$product_update_data = array(
-						'product_file_name' => ''
-					);
-			$this->product_model->update($product_id,$product_update_data);
+		$file = $this->product_model->get_file($file_id);
+
+		if($file){
+			modules::run('helpers/delete_file',$file['file_path']);
+			$this->product_model->delete_file($file_id);
 		}
-		redirect('admin/product/details/'.$product_id);
+		redirect('admin/product/details/'.$file['product_id']);
 	}
-	
+
 	function delete_product_brochure($product_id)
 	{
 		$product = $this->product_model->identify($product_id);
@@ -489,7 +487,7 @@ class Adminproduct extends MX_Controller {
 		}
 		redirect('admin/product/details/'.$product_id);
 	}
-	
+
 	function product_search() {
 		$keyword = $_POST['keyword'];
 		$status = $_POST['status'];
@@ -501,20 +499,20 @@ class Adminproduct extends MX_Controller {
 		$this->session->set_userdata('category',$_POST['category']);
 		redirect('admin/product/searchproduct');
 	}
-	
+
 	function product_search_status($param) {
 		$status = $param;
 		$this->session->set_userdata('status',$status);
-		
+
 		redirect('admin/product/searchproduct');
 	}
-	
-	
+
+
 	function products_list($offset='')
-	{		
+	{
 		$action=$offset;
 		$product_id='';
-		$data['main'] = $this->category_model->get_main_productcategory();		
+		$data['main'] = $this->category_model->get_main_productcategory();
 		if($action == "searchproduct") {
 			$this->load->library('pagination');
 			$config['base_url'] = base_url()."admin/product/search/";
@@ -528,12 +526,12 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
 			if ($product_id!="") { $row = $product_id; }
-			$data['products'] = $this->product_model->search_group($row,50,$this->session->userdata('keyword'),$this->session->userdata('category'),$this->session->userdata('sort'),$this->session->userdata('status'));		
+			$data['products'] = $this->product_model->search_group($row,50,$this->session->userdata('keyword'),$this->session->userdata('category'),$this->session->userdata('sort'),$this->session->userdata('status'));
 			$this->load->view('admin_products_list', isset($data) ? $data : NULL);
 		}
  		else if($action == "in_stock")
@@ -550,7 +548,7 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
@@ -572,7 +570,7 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
@@ -594,7 +592,7 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
@@ -616,7 +614,7 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
@@ -624,7 +622,7 @@ class Adminproduct extends MX_Controller {
 			$data['products'] = $this->product_model->all_on_sale();
 			$this->load->view('admin/product/list',$data);
  		}
-		else 
+		else
 		{
 			$this->load->library('pagination');
 			$config['base_url'] = base_url()."admin/product/";
@@ -636,23 +634,23 @@ class Adminproduct extends MX_Controller {
 			$config['tag_close'] = '</li>';
 			$config['full_tag_open'] = '<ul>';
 			$config['full_tag_close'] = '</ul>';
-			
+
 			$this->pagination->initialize($config);
-			
+
 			$data['links'] = $this->pagination->create_links();
 			$row = 0;
 			if ($action!="" && $action > 0) { $row = $action; }
-			$data['products'] = $this->product_model->group_product_list($row);			
+			$data['products'] = $this->product_model->group_product_list($row);
 			$this->load->view('admin_products_list', isset($data) ? $data : NULL);
 		}
 	}
 	function product_gallery($product_id)
-	{		
+	{
 		$data['product'] = $this->product_model->identify($product_id);
 		$data['hero'] = $this->product_model->get_hero($product_id);
 		$data['photos'] = $this->product_model->get_photos($product_id);
-		
-		$this->load->view('admin_product_gallery',$data);		
+
+		$this->load->view('admin_product_gallery',$data);
 	}
 	function product_gallery_upload_image($param)
 	{
@@ -665,12 +663,12 @@ class Adminproduct extends MX_Controller {
 		$config['max_height']  = '4000';
 		$config['overwrite'] = FALSE;
 		$config['remove_space'] = TRUE;
-		
+
 		$this->load->library('upload', $config);
-	
+
 		if ( ! $this->upload->do_upload()) {
 			$this->session->set_flashdata('error_upload',$this->upload->display_errors());
-			redirect('admin/product/gallery/'.$product_id);		
+			redirect('admin/product/gallery/'.$product_id);
 		}
 		else
 		{
@@ -678,25 +676,25 @@ class Adminproduct extends MX_Controller {
 			$name = $data['upload_data']['file_name'];
 			$width = $data['upload_data']['image_width'];
 			$height = $data['upload_data']['image_height'];
-			# Add details to database			
+			# Add details to database
 			$photo = array(
 				'product_id' => $product_id,
 				'name' => $name,
 				'created' => date('Y-m-d H:i:s')
 			);
 			$photo_id = $this->product_model->add_photo($photo);
-			$this->product_model->update_photo($photo_id,array('order' => $photo_id));					
-						
+			$this->product_model->update_photo($photo_id,array('order' => $photo_id));
+
 			$this->resizephoto($data,"./uploads/products/".$directory,"thumb1",$width,$height,472,515,1);
 			$this->resizephoto($data,"./uploads/products/".$directory,"thumb2",$width,$height,110,120,2);
 			$this->resizephoto($data,"./uploads/products/".$directory,"thumb3",$width,$height,89,97,3);
 			$this->resizephoto($data,"./uploads/products/".$directory,"thumb4",$width,$height,66,73,4);
 			$this->resizephoto($data,"./uploads/products/".$directory,"thumb5",$width,$height,240,262,5);
-			
+
 		}
 		redirect('admin/product/gallery/'.$product_id);
 	}
-	
+
 	function resizephoto($data,$directory,$sub,$owidth,$oheight,$width,$height,$no) {
 		//$this->load->helper("thumbnail.class");
 		$name = $data['upload_data']['file_name'];
@@ -709,22 +707,22 @@ class Adminproduct extends MX_Controller {
 
 	 	$config['width'] = $width;
 		$config['height'] = $height;
-		if ($owidth*$width < $oheight*$height) {		
-				$config['width'] = $width+$no;				
-			} else {								
+		if ($owidth*$width < $oheight*$height) {
+				$config['width'] = $width+$no;
+			} else {
 				$config['height'] = $height+$no;
 			}
 		$this->load->library('image_lib');
 		$this->image_lib->initialize($config);
-		$this->image_lib->resize();		
-		$this->image_lib->clear();							
+		$this->image_lib->resize();
+		$this->image_lib->clear();
 	}
 	function makeheroimage($photo_id) {
 		$photo = $this->product_model->get_photo($photo_id);
 		$this->product_model->hero_photo($photo['product_id'],$photo_id);
 		redirect('admin/product/gallery/'.$photo['product_id']);
 	}
-	
+
 	function movephoto($photo_id,$step) {
 		$photo = $this->product_model->get_photo($photo_id);
 		if($step == 1) {
@@ -734,7 +732,7 @@ class Adminproduct extends MX_Controller {
 			$prev = $this->product_model->get_prev_photo($photo['product_id'],$photo['order']);
 			$this->swap_photo($photo,$prev);
 		}
-		redirect('admin/product/gallery/'.$photo['product_id']);		
+		redirect('admin/product/gallery/'.$photo['product_id']);
 	}
 	function swap_photo($one,$two) {
 		$this->product_model->update_photo($one['id'],array('order' => $two['order']));
@@ -751,31 +749,31 @@ class Adminproduct extends MX_Controller {
 		$this->product_model->delete_photo($photo_id);
 		redirect('admin/product/gallery/'.$photo['product_id']);
 	}
-	
+
 	function switch_products($product_id)
 	{
 		$product = $this->product_model->identify($product_id);
 		$out = '';
 		if ($product['status'] == 0) {
-			$this->product_model->update($product_id,array('status' => 1));			
+			$this->product_model->update($product_id,array('status' => 1));
 		} else if($product['status'] == 1) {
 			$this->product_model->update($product_id,array('status' => 0));
 		}
 		redirect('admin/product');
 	}
-	
+
 	function switch_trade_products($product_id) {
-		
+
 		$product = $this->product_model->identify($product_id);
 		$out = '';
 		if ($product['status_trade'] == 0) {
-			$this->product_model->update($product_id,array('status_trade' => 1));			
+			$this->product_model->update($product_id,array('status_trade' => 1));
 		} else if($product['status_trade'] == 1) {
-			$this->product_model->update($product_id,array('status_trade' => 0));			
+			$this->product_model->update($product_id,array('status_trade' => 0));
 		}
 		redirect('admin/product');
 	}
-	
+
 	function updatecategories() {
 		$product_id = $_POST['product_id'];
 		$this->product_model->remove_categories($product_id);
@@ -793,29 +791,29 @@ class Adminproduct extends MX_Controller {
 		$this->session->set_flashdata('update',true);
 		redirect('admin/product');
 	}
-	
+
 	function exportstock()
 	{
 		/*error_reporting(E_ALL);
-		$csvdir = getcwd();		
+		$csvdir = getcwd();
 		$csvname = 'Product_Stock_'.date('d-m-Y');
-		$csvname = $csvname.'.csv';		
+		$csvname = $csvname.'.csv';
 		header('Content-type: application/csv; charset=utf-8;');
         header("Content-Disposition: attachment; filename=$csvname");
-		$fp = fopen("php://output", 'w');	
+		$fp = fopen("php://output", 'w');
 		$stocks=$this->product_model->all();
 		$headings = array('Product ID','Product Name','Unit Of Sale','Pack','Short Description','Category','Available','Price A','Sale Price A','Last Price A','Price B','Sale Price B','Last Price B','Price C','Sale Price C','Last Price C','Price D',' Sale Price D','Last Price D','Price E','Sale Price E','Last Price E','Price F','Sale Price F','Last Price F','Stock ID','Stock');
 		fputcsv($fp,$headings);
-		foreach($stocks as $stock) 
+		foreach($stocks as $stock)
 		{
-			$cat = $this->category_model->identify($stock['main_category']);						
+			$cat = $this->category_model->identify($stock['main_category']);
 			fputcsv($fp,array($stock['id'],$stock['title'],$stock['unit_of_sale'],$stock['pack'],$stock['short_desc'],$cat['title'],$stock['status'],$stock['price'],$stock['sale_price'],$stock['last_price'],$stock['price_b'],$stock['sale_price_b'],$stock['last_price_b'],$stock['price_c'],$stock['sale_price_c'],$stock['last_price_c'],$stock['price_d'],$stock['sale_price_d'],$stock['last_price_d'],$stock['price_e'],$stock['sale_price_e'],$stock['last_price_e'],$stock['price_f'],$stock['sale_price_f'],$stock['last_price_f'],$stock['stock_id'],$stock['stock']));
 		}
-        fclose($fp);		
+        fclose($fp);
 		*/
 		ini_set('memory_limit', '128M');
 		ini_set('max_execution_time', 3600); //300 seconds = 5 minutes
-		
+
 		$this->load->library('excel');
 		$objPHPExcel = new PHPExcel();
 		$objPHPExcel->getProperties()->setCreator("Admin Portal");
@@ -823,7 +821,7 @@ class Adminproduct extends MX_Controller {
 		$objPHPExcel->getProperties()->setTitle("Products");
 		$objPHPExcel->getProperties()->setSubject("Products");
 		$objPHPExcel->getProperties()->setDescription("Products Excel file, generated from Admin Portal.");
-		
+
 		$objPHPExcel->setActiveSheetIndex(0);
 		$objPHPExcel->getActiveSheet()->SetCellValue('A1', 'Product ID');
 		$objPHPExcel->getActiveSheet()->SetCellValue('B1', 'Product Name');
@@ -852,18 +850,18 @@ class Adminproduct extends MX_Controller {
 		$objPHPExcel->getActiveSheet()->SetCellValue('Y1', 'Last Price F');
 		$objPHPExcel->getActiveSheet()->SetCellValue('Z1', 'Stock ID');
 		$objPHPExcel->getActiveSheet()->SetCellValue('AA1', 'Stock');
-		
+
 		//$products = $this->product_model->get_products();
 		$stocks=$this->product_model->all();
 		for($i=0; $i<count($stocks); $i++)
-		{			
-			$cat = $this->category_model->identify($stocks[$i]['main_category']);	
+		{
+			$cat = $this->category_model->identify($stocks[$i]['main_category']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('A' . ($i+2), $stocks[$i]['id']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('B' . ($i+2), $stocks[$i]['title']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('C' . ($i+2), $stocks[$i]['unit_of_sale']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('D' . ($i+2), $stocks[$i]['pack']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('E' . ($i+2), $stocks[$i]['short_desc']);
-			$objPHPExcel->getActiveSheet()->SetCellValue('F' . ($i+2), $cat['title']);			
+			$objPHPExcel->getActiveSheet()->SetCellValue('F' . ($i+2), $cat['title']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('G' . ($i+2), $stocks[$i]['status']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('H' . ($i+2), $stocks[$i]['price']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('I' . ($i+2), $stocks[$i]['sale_price']);
@@ -886,7 +884,7 @@ class Adminproduct extends MX_Controller {
 			$objPHPExcel->getActiveSheet()->SetCellValue('Z' . ($i+2), $stocks[$i]['stock_id']);
 			$objPHPExcel->getActiveSheet()->SetCellValue('AA' . ($i+2), $stocks[$i]['stock']);
 		}
-		
+
 		$objPHPExcel->getActiveSheet()->setTitle('product');
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "CSV");
 		$file_name = "products_" . time() . ".csv";
@@ -909,17 +907,17 @@ class Adminproduct extends MX_Controller {
 		if ($this->upload->do_upload())
 	    {
 	      	//echo "good";
-	      	
+
 	      	$upload_data = array('upload_data' => $this->upload->data());
       		$file_name = $upload_data['upload_data']['file_name'];
 			$error_list='';
 			$err_count = 0;
-			
+
 			//validation
 			$handle1 = fopen(base_url().'uploads/docs_raw/'.$file_name, "r");
-			$cc = 0; 
+			$cc = 0;
 			$line = 1;
-			while (($data = fgetcsv($handle1, 5000, ","))!== FALSE) 
+			while (($data = fgetcsv($handle1, 5000, ","))!== FALSE)
 			{
 				$tempdata = array();
 				$tempdata = $data;
@@ -927,12 +925,12 @@ class Adminproduct extends MX_Controller {
 				$data = $tempdata;
 				//print_r($data);
 				//echo "<br/>";
-				
+
 				if($cc != 0)
 				{
 					$status = 'new';
 					$new_prodid = $data[0];
-					
+
 					if($new_prodid != '')
 					{
 						$check_current = $this->product_model->identify($new_prodid);
@@ -950,23 +948,23 @@ class Adminproduct extends MX_Controller {
 					{
 						$status = 'new';
 					}
-					
-					
-					$new_id_title = $data[1].'-'.$data[4];					
+
+
+					$new_id_title = $data[1].'-'.$data[4];
 					$new_id_title = str_replace(' ','-',$new_id_title);
 					$new_id_title = str_replace("/","-",$new_id_title);
 					$new_id_title = str_replace("'","",$new_id_title);
 					$new_id_title = str_replace("&","and",$new_id_title);
 					$new_id_title = str_replace("+","and",$new_id_title);
-					
+
 					if(trim($new_id_title) == '')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#B - Product title cannot blank<br/>";
 					}
-					
+
 					// $check_d = $this->product_model->identify2($new_id_title);
-// 					
+//
 					// if(count($check_d)>0)
 					// {
 						// if($check_d['deleted'] == 0)
@@ -975,105 +973,105 @@ class Adminproduct extends MX_Controller {
 							// $error_list .= "row#$line col#A - A product with this product name already exists in the system<br/>";
 						// }
 					// }
-					
+
 					$temp = trim($data[4]);
 					if($temp == '')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#E - Invalid input, short description cannot empty<br/>";
 					}
-					
+
 					$temp = trim($data[2]);
 					if($temp == '')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#C - Invalid input, short description cannot empty<br/>";
 					}
-					
+
 					$temp = trim($data[3]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#D - Invalid input, should be numeric<br/>";
 					}
-					
+
 					// if(strlen($temp)>15)
 					// {
 						// $err_count++;
 						// $error_list .= "row#$line col#C - Invalid input, short description must be less than 16 character<br/>";
 					// }
-					
+
 					$temp = trim($data[6]);
 					if($temp!=1 && $temp!=0)
 					{
 						$err_count++;
 						$error_list .= "row#$line col#D - Invalid input, should be 1 or 0<br/>";
 					}
-					
-					
+
+
 					$temp = trim($data[7]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#H - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = trim($data[8]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#I - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = trim($data[9]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#J - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = trim($data[10]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#K - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = trim($data[11]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#L - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = trim($data[12]);
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#M - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = strtolower(trim($data[5]));
 					$new_cat = $this->category_model->identify_by_name($temp);
-					
+
 					if(count($new_cat) > 0)
 					{
-						
+
 					}
-					else 
+					else
 					{
 						$err_count++;
 						$error_list .= "row#$line col#F - Invalid input, This category doesn't exist in our category list<br/>";
 					}
-					
-					
-					
-					
-					
+
+
+
+
+
 				}
-				
-				
-				
+
+
+
 				$data = array();
 				//echo '<br/><br/>cleared'.$line.'<br/><br/>';
 				$cc++;
@@ -1087,37 +1085,37 @@ class Adminproduct extends MX_Controller {
 			{
 			//save it
 		      	$handle = fopen(base_url().'uploads/docs_raw/'.$file_name, "r");
-				$cc = 0; 
-				while (($data = fgetcsv($handle, 5000, ","))!== FALSE) 
+				$cc = 0;
+				while (($data = fgetcsv($handle, 5000, ","))!== FALSE)
 				{
 					if($cc != 0)
 					{
 						//echo '<pre>'.print_r($data,true).'</pre>';
-						
-						
+
+
 						$status = 'new';
 						$new_prodid = $data[0];
-						
+
 						if($new_prodid != '')
 						{
 							//echo $new_prodid.'<br/>';
 							$status = 'update';
-							
+
 						}
 						else
 						{
 							$status = 'new';
 						}
 						//echo $status.'<br/>';
-						
-						
-						$new_id_title = $data[1].'-'.$data[4];					
+
+
+						$new_id_title = $data[1].'-'.$data[4];
 						$new_id_title = str_replace(' ','-',$new_id_title);
 						$new_id_title = str_replace("/","-",$new_id_title);
 						$new_id_title = str_replace("'","",$new_id_title);
 						$new_id_title = str_replace("&","and",$new_id_title);
 						$new_id_title = str_replace("+","and",$new_id_title);
-						
+
 						$ndata = Array();
 						$ndata['id_title'] = $new_id_title;
 						//$ndata['title'] = $data[1];
@@ -1135,11 +1133,11 @@ class Adminproduct extends MX_Controller {
 						$ndata['price_d'] = $data[10];
 						$ndata['price_e'] = $data[11];
 						$ndata['price_f'] = $data[12];
-						
+
 						$cat = trim($data[5]);
-						
+
 						$new_cat = $this->category_model->identify_by_name($cat);
-						
+
 						/*
 						$category_id=0;
 												if($cat == 'new arrivals') {$category_id = 1;}
@@ -1150,14 +1148,14 @@ class Adminproduct extends MX_Controller {
 												if($cat == 'sale') {$category_id = 6;}
 												if($cat == 'stylefile') {$category_id = 7;}
 												if($cat == 'news') {$category_id = 8;}*/
-						
+
 						$mcat = $new_cat['id'];
 						//$ndata['main_category'] = $new_cat['id'];
-						
-						
-						
-						
-						
+
+
+
+
+
 						if($status == 'new')
 						{
 							//echo "new<br/>";
@@ -1171,33 +1169,33 @@ class Adminproduct extends MX_Controller {
 							$ndata['sale_price_f'] = $data[12];
 							$product_id = $this->product_model->add($ndata);
 							//echo $status.'<br/>';
-							
+
 							//$sql = 'update products set title ="'.$ntitle.'" where id = '.$product_id;
 							//$sql = "";
 							//$query = $this->db->query($sql);
 						}
 						else
 						{
-							
+
 							//print_r($data);
 							//exit;
 							$product_id = $new_prodid;
 							$this->product_model->update($product_id,$ndata);
-							
+
 							$sql = "delete from products_categories where product_id = $product_id";
 							$query = $this->db->query($sql);
 							//main category
 							$mcatdata['product_id'] = $product_id;
 							$mcatdata['category_id'] = $mcat;
 							$this->product_model->add_category($mcatdata);
-							
-							
+
+
 							//sub categories
-							
+
 
 						}
-						
-						
+
+
 						if($status == 'new')
 						{
 							$nprod = $this->product_model->identify($product_id);
@@ -1210,19 +1208,19 @@ class Adminproduct extends MX_Controller {
 							$mcatdata['category_id'] = $mcat;
 							$this->product_model->add_category($mcatdata);
 						}
-						
-						
-						
-						
-						
-						
+
+
+
+
+
+
 						# Create dir for storing file related to the product
 						if($status == 'new')
 						{
 							$path = "./uploads/products";
 							$newfolder = md5('mbb'.$product_id);
 							$dir = $path."/".$newfolder;
-							
+
 							mkdir($dir,0777);
 							chmod($dir,0777);
 							$thumb1 = $dir."/thumb1";
@@ -1254,7 +1252,7 @@ class Adminproduct extends MX_Controller {
 					}
 					$cc++;
 				}
-				
+
 				//$this->session->set_flashdata('upload_csv_sc','your csv has been successfully Uploaded');
 				$cc--;
 				$this->session->set_flashdata('upload_csv_sc',"$cc data from your csv has been successfully Uploaded");
@@ -1294,17 +1292,17 @@ class Adminproduct extends MX_Controller {
 		if ($this->upload->do_upload())
 	    {
 	      	//echo "good";
-	      	
+
 	      	$upload_data = array('upload_data' => $this->upload->data());
       		$file_name = $upload_data['upload_data']['file_name'];
 			$error_list='';
 			$err_count = 0;
-			
+
 			//validation
 			$handle1 = fopen(base_url().'uploads/docs_raw/'.$file_name, "r");
-			$cc = 0; 
+			$cc = 0;
 			$line = 1;
-			while (($data = fgetcsv($handle1, 5000, ","))!== FALSE) 
+			while (($data = fgetcsv($handle1, 5000, ","))!== FALSE)
 			{
 				$tempdata = array();
 				$tempdata = $data;
@@ -1312,12 +1310,12 @@ class Adminproduct extends MX_Controller {
 				$data = $tempdata;
 				//print_r($data);
 				//echo "<br/>";
-				
+
 				if($cc != 0)
 				{
 					$status = 'new';
 					$new_prodid = $data[0];
-					
+
 					if($new_prodid != '')
 					{
 						$check_current = $this->product_model->identify($new_prodid);
@@ -1335,23 +1333,23 @@ class Adminproduct extends MX_Controller {
 					{
 						$status = 'new';
 					}
-					
-					
-					$new_id_title = $data[1].'-'.$data[2];					
+
+
+					$new_id_title = $data[1].'-'.$data[2];
 					$new_id_title = str_replace(' ','-',$new_id_title);
 					$new_id_title = str_replace("/","-",$new_id_title);
 					$new_id_title = str_replace("'","",$new_id_title);
 					$new_id_title = str_replace("&","and",$new_id_title);
 					$new_id_title = str_replace("+","and",$new_id_title);
-					
+
 					if(trim($new_id_title) == '')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#B - Product title cannot blank<br/>";
 					}
-					
+
 					// $check_d = $this->product_model->identify2($new_id_title);
-// 					
+//
 					// if(count($check_d)>0)
 					// {
 						// if($check_d['deleted'] == 0)
@@ -1360,58 +1358,58 @@ class Adminproduct extends MX_Controller {
 							// $error_list .= "row#$line col#A - A product with this product name already exists in the system<br/>";
 						// }
 					// }
-					
+
 					$temp = trim($data[2]);
 					if($temp == '')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#C - Invalid input, short description cannot empty<br/>";
 					}
-					
+
 					// if(strlen($temp)>15)
 					// {
 						// $err_count++;
 						// $error_list .= "row#$line col#C - Invalid input, short description must be less than 16 character<br/>";
 					// }
-					
+
 					$temp = trim($data[3]);
 					if($temp!='Y' && $temp!='y' && $temp!='N' && $temp!='n')
 					{
 						$err_count++;
 						$error_list .= "row#$line col#D - Invalid input, should be 'Y'or'y'or'N'or'n'<br/>";
 					}
-					
-					
+
+
 					$temp = $data[4];
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#E - Invalid input, should be numeric<br/>";
 					}
-					
+
 					$temp = $data[7];
 					if(!is_numeric($temp))
 					{
 						$err_count++;
 						$error_list .= "row#$line col#H - Invalid input, should be nummeric<br/>";
 					}
-					
+
 					$temp = strtolower(trim($data[8]));
 					$new_cat = $this->category_model->identify_by_title($temp);
-					
+
 					if(count($new_cat) > 0)
 					{
-						
+
 					}
-					else 
+					else
 					{
 						$err_count++;
 						$error_list .= "row#$line col#I - Invalid input, This category doesn't exist in our category list<br/>";
 					}
-					
-					
-					
-					
+
+
+
+
 					$temp = strtolower(trim($data[9]));
 					$nscat = explode(';', $temp);
 					$new_cat = 1;
@@ -1420,19 +1418,19 @@ class Adminproduct extends MX_Controller {
 						$res = $this->category_model->identify_by_title(trim($nsc));
 						if(count($res) > 0)
 						{
-							
+
 						}
 						else
 						{
 							$new_cat = 0;
 						}
 					}
-					
+
 					if(count($new_cat) > 0)
 					{
-						
+
 					}
-					else 
+					else
 					{
 						if($temp != '')
 						{
@@ -1447,7 +1445,7 @@ class Adminproduct extends MX_Controller {
 						$err_count++;
 						$error_list .= "row#$line col#K - Invalid input, should be nummeric<br/>";
 					}
-					
+
 					$temp = $data[11];
 					if(trim($temp) == '')
 					{
@@ -1455,9 +1453,9 @@ class Adminproduct extends MX_Controller {
 						$error_list .= "row#$line col#L - Stock ID cannot blank<br/>";
 					}
 				}
-				
-				
-				
+
+
+
 				$data = array();
 				//echo '<br/><br/>cleared'.$line.'<br/><br/>';
 				$cc++;
@@ -1471,37 +1469,37 @@ class Adminproduct extends MX_Controller {
 			{
 			//save it
 		      	$handle = fopen(base_url().'uploads/docs_raw/'.$file_name, "r");
-				$cc = 0; 
-				while (($data = fgetcsv($handle, 5000, ","))!== FALSE) 
+				$cc = 0;
+				while (($data = fgetcsv($handle, 5000, ","))!== FALSE)
 				{
 					if($cc != 0)
 					{
 						//echo '<pre>'.print_r($data,true).'</pre>';
-						
-						
+
+
 						$status = 'new';
 						$new_prodid = $data[0];
-						
+
 						if($new_prodid != '')
 						{
 							//echo $new_prodid.'<br/>';
 							$status = 'update';
-							
+
 						}
 						else
 						{
 							$status = 'new';
 						}
 						//echo $status.'<br/>';
-						
-						
-						$new_id_title = $data[1].'-'.$data[2];					
+
+
+						$new_id_title = $data[1].'-'.$data[2];
 						$new_id_title = str_replace(' ','-',$new_id_title);
 						$new_id_title = str_replace("/","-",$new_id_title);
 						$new_id_title = str_replace("'","",$new_id_title);
 						$new_id_title = str_replace("&","and",$new_id_title);
 						$new_id_title = str_replace("+","and",$new_id_title);
-						
+
 						$ndata = Array();
 						$ndata['id_title'] = $new_id_title;
 						//$ndata['title'] = $data[1];
@@ -1515,11 +1513,11 @@ class Adminproduct extends MX_Controller {
 						$ndata['long_desc'] = $data[5];
 						$ndata['features'] = $data[6];
 						$ndata['weight'] = $data[7];
-						
+
 						$cat = trim($data[8]);
-						
+
 						$new_cat = $this->category_model->identify_by_title($cat);
-						
+
 						/*
 						$category_id=0;
 												if($cat == 'new arrivals') {$category_id = 1;}
@@ -1530,10 +1528,10 @@ class Adminproduct extends MX_Controller {
 												if($cat == 'sale') {$category_id = 6;}
 												if($cat == 'stylefile') {$category_id = 7;}
 												if($cat == 'news') {$category_id = 8;}*/
-						
+
 						$mcat = $new_cat['id'];
 						$ndata['main_category'] = $new_cat['id'];
-						
+
 						$cat = trim($data[9]);
 						$scat = Array();
 						if($cat != '')
@@ -1550,15 +1548,15 @@ class Adminproduct extends MX_Controller {
 								$ccat++;
 							}
 						}
-						
-						
-						
+
+
+
 
 						$ndata['volume'] = $data[10];
 						$ndata['stock_id'] = $data[11];
-						
-						
-						
+
+
+
 						if($status == 'new')
 						{
 							//echo "new<br/>";
@@ -1566,27 +1564,27 @@ class Adminproduct extends MX_Controller {
 							//exit;
 							$product_id = $this->product_model->add($ndata);
 							//echo $status.'<br/>';
-							
+
 							//$sql = 'update products set title ="'.$ntitle.'" where id = '.$product_id;
 							//$sql = "";
 							//$query = $this->db->query($sql);
 						}
 						else
 						{
-							
+
 							//print_r($data);
 							//exit;
 							$product_id = $new_prodid;
 							$this->product_model->update($product_id,$ndata);
-							
+
 							$sql = "delete from products_categories where product_id = $product_id";
 							$query = $this->db->query($sql);
 							//main category
 							$mcatdata['product_id'] = $product_id;
 							$mcatdata['category_id'] = $mcat;
 							$this->product_model->add_category($mcatdata);
-							
-							
+
+
 							//sub categories
 							foreach($scat as $scatl)
 							{
@@ -1596,8 +1594,8 @@ class Adminproduct extends MX_Controller {
 							}
 
 						}
-						
-						
+
+
 						if($status == 'new')
 						{
 							$nprod = $this->product_model->identify($product_id);
@@ -1607,13 +1605,13 @@ class Adminproduct extends MX_Controller {
 							$long_desc = $nprod['long_desc'];
 							$long_desc = str_replace("?","'",$new_desc);
 							$ld = $long_desc;
-							
+
 							$sql = 'update products set short_desc ="'.$sd.'", long_desc = "'.$ld.'" where id = '.$product_id;
 							$query = $this->db->query($sql);
-							
-							
-							
-							
+
+
+
+
 							$mcatdata['product_id'] = $product_id;
 							$mcatdata['category_id'] = $mcat;
 							$this->product_model->add_category($mcatdata);
@@ -1624,19 +1622,19 @@ class Adminproduct extends MX_Controller {
 								$this->product_model->add_category($scatdata);
 							}
 						}
-						
-						
-						
-						
-						
-						
+
+
+
+
+
+
 						# Create dir for storing file related to the product
 						if($status == 'new')
 						{
 							$path = "./uploads/products";
 							$newfolder = md5('mbb'.$product_id);
 							$dir = $path."/".$newfolder;
-							
+
 							mkdir($dir,0777);
 							chmod($dir,0777);
 							$thumb1 = $dir."/thumb1";
@@ -1668,11 +1666,11 @@ class Adminproduct extends MX_Controller {
 					}
 					$cc++;
 				}
-				
+
 				//$this->session->set_flashdata('upload_csv_sc','your csv has been successfully Uploaded');
 				$cc--;
 				$this->session->set_flashdata('upload_csv_sc',"$cc data from your csv has been successfully Uploaded");
-				
+
 				redirect('admin/product');
 			}
 			else
@@ -1684,15 +1682,15 @@ class Adminproduct extends MX_Controller {
 		else
 		{
 			$this->session->set_flashdata('upload_csv_er','sorry, currently we cannot upload your file');
-			
+
 			//redirect('admin/product');
 		}
 	}
-	
+
 	function get_product($product_id)
 	{
-		return $this->product_model->identify($product_id);	
+		return $this->product_model->identify($product_id);
 	}
-	
+
 
 }
