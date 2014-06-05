@@ -32,7 +32,7 @@ class Customer extends MX_Controller {
 			break;
 
 			case 'download':
-				$this->download($param1);
+				$this->download($param1,$param2);
 			break;
 
 			case 'download_failed':
@@ -113,28 +113,25 @@ class Customer extends MX_Controller {
 		return $this->customer_model->identify($customer_id);
 	}
 
-	function download($order_item_id)
+	function download($order_item_id,$file_id)
 	{
 		if(modules::run('auth/is_customer_logged_in')){
 			$valid = true;
 			$this->load->helper('download');
 			$customer_id = $this->session->userdata('customer_id');
 			$order_item = $this->customer_model->validate_purchase($order_item_id,$customer_id);
-			var_dump($order_item); die();
 			if($order_item){
 				//valid order -> proceed with download
 				//product_file
 				//get product file name
 				$product_id = $order_item['product_id'];
-				$product = modules::run('adminproduct/get_product',$product_id);
+				$product_file = modules::run('product/get_product_file',$file_id);
 				$dir = md5('mbb'.$product_id); //get the encrypted dir
-				$filename = $product['product_file_name'];
-				//$path = "./uploads/products/".$dir."/".$filename;
-				$path = "./uploads/products/e9a6ec485065885af8afeabc7570d136/product_file/Agriculture Cert 1, 2 and 3.zip";
-				$filename = "Agriculture Cert 1, 2 and 3.zip";
+				$filename = $product_file['file_name'];
+				$path = $product_file['file_path'];
 				if(file_exists($path)){
 					$data = file_get_contents($path); // Read the file's contents
-					force_download($filename, $data);
+					redirect(base_url().$path);
 				}else{
 					redirect('customer/download_failed');
 				}

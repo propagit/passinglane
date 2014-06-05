@@ -260,5 +260,15 @@ class Product extends MX_Controller {
 		return $this->product_model->identify($product_id);
 	}
 	
+	function get_product_files($product_id)
+	{
+		return $this->product_model->get_files($product_id);
+	}
+	
+	function get_product_file($file_id)
+	{
+		return $this->product_model->get_file($file_id);	
+	}
+	
 	
 }

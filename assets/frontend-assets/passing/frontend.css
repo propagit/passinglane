@@ -824,6 +824,12 @@ span.mandatory-label{
 	content: "\f0d7";
 	margin-left: 12.5px;
 }
+.customer-download{
+	display: block;
+	line-height: 22px;
+	padding-left: 96px;
+	font-weight: 500;
+}
 
 /* customers */
 
@@ -988,6 +994,13 @@ span.cart-terms{
 	right:0;
 	bottom:0;	
 }
+.download-file-row{
+	line-height: 14px !important;
+	padding-left: 96px !important;
+}
+.download-file-row a{
+	font-weight:500 !important;	
+}
 /* helpers */
 #loading{
 	background-color:rgba(216,216,216,0.5);
@@ -1103,5 +1116,8 @@ span.cart-terms{
 }
 .no-padding{
 	padding:0 !important;	
+}
+.no-border-top{
+	border-top:none !important;	
 }
 
