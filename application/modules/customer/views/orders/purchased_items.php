@@ -26,7 +26,7 @@
                     if(count($product_files) > 0){
                         foreach($product_files as $product_file){
                 ?>
-                        <a class="customer-download" href="<?=base_url();?>customer/download/<?=$order->order_item_id;?>/<?=$product_file['file_id'];?>"><?=$product_file['file_name'];?></a>
+                        <a target="_blank" class="customer-download" href="<?=base_url();?>customer/download/<?=$order->order_item_id;?>/<?=$product_file['file_id'];?>"><?=$product_file['file_name'];?></a>
                 <?php
                         }
                     }

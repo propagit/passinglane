@@ -130,7 +130,6 @@ class Customer extends MX_Controller {
 				$filename = $product_file['file_name'];
 				$path = $product_file['file_path'];
 				if(file_exists($path)){
-					$data = file_get_contents($path); // Read the file's contents
 					redirect(base_url().$path);
 				}else{
 					redirect('customer/download_failed');
