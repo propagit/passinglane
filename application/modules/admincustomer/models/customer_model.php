@@ -286,7 +286,7 @@ class Customer_model extends CI_Model {
 				AND orders.customer_id = ".$customer_id."
 				AND order_items.order_item_id = ".$order_item_id." 
 				AND order_items.reg_expiry >= ".$today;	
-		return $this->db->query($sql)->row();
+		return $this->db->query($sql)->first_row('array');
 	}
 	
 	

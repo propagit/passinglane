@@ -125,13 +125,13 @@ class Customer extends MX_Controller {
 				//valid order -> proceed with download
 				//product_file
 				//get product file name
-
-				var_dump($order_item->product_id); die();
-				$product = modules::run('adminproduct/get_product',$order_item->product_id);
-				var_dump($order_item->product_id); die();
-				$dir = md5('mbb'.$order_item->product_id); //get the encrypted dir
+				$product_id = $order_item['product_id'];
+				$product = modules::run('adminproduct/get_product',$product_id);
+				$dir = md5('mbb'.$product_id); //get the encrypted dir
 				$filename = $product['product_file_name'];
-				$path = "./uploads/products/".$dir."/".$filename;
+				//$path = "./uploads/products/".$dir."/".$filename;
+				$path = "./uploads/products/e9a6ec485065885af8afeabc7570d136/product_file/Agriculture Cert 1, 2 and 3.zip";
+				$filename = "Agriculture Cert 1, 2 and 3.zip";
 				if(file_exists($path)){
 					$data = file_get_contents($path); // Read the file's contents
 					force_download($filename, $data);
