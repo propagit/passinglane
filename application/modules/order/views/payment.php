@@ -11,7 +11,7 @@
                     <?php echo modules::run('order/checkout_stage',checkout_stage_payment);?>
                 </div>
             </div>
-            
+
 			<div class="col-md-12 remove-left-gutter top-padding push">
             	<table class="table table-striped cart-table">
                     <thead>
@@ -26,7 +26,7 @@
                             </td>
                         </tr>
                         <tr>
-							<?php echo modules::run('cart/cart_total_table_row');?>
+							<?php echo modules::run('cart/cart_total_table_row', 'payment');?>
                         </tr>
                     </tbody>
                 </table>
@@ -40,7 +40,7 @@
                 		<?php echo modules::run('order/load_delivery_details_form');?>
                  	</div>
                 </div>
-                
+
                 <div class="col-md-6 remove-left-gutter">
                 	<h3 class="grey-text">PAYMENT DETAILS</h3>
                     <p>Enter your payment details to complete checkout</p>
@@ -50,7 +50,7 @@
                 </div>
           	</div>
             </form>
-            
+
         </div>
     </div>
 </div>
@@ -62,20 +62,20 @@ $j(function(){
 	set_same_billing_details();
 	//populate delivery details same as the billing address or empty those fields
 	$j('#same-as-billing-address').on('click',function(){
-		set_same_billing_details();	
+		set_same_billing_details();
 	});
-	
+
 	//process payment
 	$j('#process-payment').on('click',function(){
 		var type = $j('#payment-type').val();
 		if (type == "cc") {
 			if(help.validate_form('payment-form')){
-				$j('#payment-form').submit();	
+				$j('#payment-form').submit();
 			}
 		} else {
 			$j('#payment-form').submit();
 		}
-		
+
 	});
 });
 function set_same_billing_details() {
@@ -92,6 +92,6 @@ function set_same_billing_details() {
 			cart.remove_loading();
 			$j('#delivery-details-form-wrap').html(html);
 	  	}
-	});	
+	});
 }
 </script>

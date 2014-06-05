@@ -14,8 +14,8 @@
         <thead>
             <tr>
                 <th>Promotion Name <i class="fa fa-unsorted sort-results" sort-by="name"></i></th>
-                <th width="150">Type <i class="fa fa-unsorted sort-results" sort-by="applied_on"></i></th>
-                <th width="120">Status <i class="fa fa-unsorted sort-results" sort-by="order_status"></i></th>
+                <th width="150">Type <i class="fa fa-unsorted sort-results" sort-by="promotion_type"></i></th>
+                <th width="120">Status <i class="fa fa-unsorted sort-results" sort-by="status"></i></th>
                 <th width="100" class="center">View</th>
                 <th width="100" class="center">Delete</th>
             </tr>

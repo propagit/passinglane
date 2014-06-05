@@ -228,9 +228,15 @@ class Cart extends MX_Controller {
 	/* *
 		loads cart total in a table row
 	*/
-	function cart_total_table_row()
+	function cart_total_table_row($checkout = '')
 	{
-		$data['total'] = $this->get_cart_real_total();
+		$total = $this->get_cart_total();
+		if ($checkout) {
+			$total = $total - $this->get_discount_amount();
+			$total = $total + $this->get_shipping_amount();
+		}
+
+		$data['total'] = $total;
 		$this->load->view('cart_total_table_row', isset($data) ? $data : NULL);
 	}
 
@@ -240,7 +246,7 @@ class Cart extends MX_Controller {
 		//and show the delivery or shipping input
 		$data['enable_inputs'] = $enable_inputs;
 
-		$cart_total = $this->cart->total();
+		$cart_total = $this->get_cart_total();
 		$data['cart_total'] = $cart_total;
 		//popupate shipping data from backend modules if the system have a shipping modules
 		//else load the default one from this class (get_default_shippings())
@@ -297,6 +303,12 @@ class Cart extends MX_Controller {
 		}
 	}
 
+	function get_cart_total()
+	{
+		$total = $this->cart->total();
+		$shipping = $this->get_shipping_amount();
+		return $total - $shipping;
+	}
 
 	function get_cart_real_total()
 	{
@@ -322,7 +334,7 @@ class Cart extends MX_Controller {
 
 	function get_discount_amount()
 	{
-		$cart_total = $this->cart->total();
+		$cart_total = $this->get_cart_total();
 
 		# Promotions
 		$promotions = $this->promotion_model->get_cart_promotions();

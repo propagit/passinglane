@@ -7,7 +7,7 @@
             <th class="right col-md-1">REMOVE</th>
         </tr>
     </thead>
-    
+
     <tbody>
     	<?php if(isset($cart_items) && $cart_items){ ?>
         <?php foreach($cart_items as $item){ ?>
@@ -23,7 +23,8 @@
         	<td class="no-padding" colspan="5"><div id="cart-checkout-options">&nbsp;</div></td>
         </tr>
         <tr>
-        	<?php echo modules::run('cart/cart_total_table_row');?>
+        	<?php echo modules::run('cart/cart_total_table_row', $this->uri->segment(2));
+            ?>
         </tr>
         <tr>
         	<td colspan="5" class="border-solid"></td>
@@ -37,7 +38,7 @@
 </table>
 <script>
 $j(function(){
-	
+
 	//remove cart item
 	$j('.remove-cart-item').on('click',function(){
 		var row_id = $j(this).attr('data-rowid');
@@ -46,4 +47,4 @@ $j(function(){
 });
 </script>
 
-            
+

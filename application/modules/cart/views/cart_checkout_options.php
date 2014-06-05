@@ -1,20 +1,9 @@
+<?
+$total = $cart_total;
+?>
 <table class="table cart-checkout-options-table">
-    <tr>
-        <td>DELIVERY</td>
-        <td>
-        <?php if($enable_inputs){ ?>
-       	<input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[1]['shipping_id'];?>" <?=($current_shipping ? ($current_shipping['id'] == $shippings[1]['shipping_id'] ? 'checked="checked"' : '' ) : '');?>/><span class="cart-options-label"><?=$shippings[1]['name'];?> <strong>(<?=$shippings[1]['subtitle'];?>)</strong></span><?=nbs(6);?>
-        <input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[2]['shipping_id'];?>" <?=($current_shipping ? ($current_shipping['id'] == $shippings[2]['shipping_id'] ? 'checked="checked"' : '' ) : '');?>/><span class="cart-options-label"><?=$shippings[2]['name'];?>t (<strong>$<?=money_format('%i',$shippings[2]['price'])?></strong> <?=$shippings[2]['subtitle'];?>)</span>
-        <?php } ?>
-        </td>
-        <td class="right grey-text">
-           <?php if(isset($current_shipping)){ ?>
-           $<?=money_format('%i',$current_shipping['price']);?>
-           <?php } else { echo '$0.00';} ?>
-        </td>
-    </tr>
 	<tr>
-    	<td colspan="2">SUBTOTAL</td>
+    	<td colspan="2">ORDER SUBTOTAL</td>
         <td class="right grey-text">$<?=money_format('%i',$cart_total);?></td>
     </tr>
     <? if ($has_coupon) { ?>
@@ -57,9 +46,30 @@
         </td>
     </tr>
     <? } ?>
+    <? $total = $total - $total_discount; ?>
+    <tr>
+        <td>DELIVERY</td>
+        <td>
+        <?php if($enable_inputs){ ?>
+        <input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[1]['shipping_id'];?>" checked />
+
+        <span class="cart-options-label"><?=$shippings[1]['name'];?> <strong>(<?=$shippings[1]['subtitle'];?>)</strong></span>
+        <?=nbs(6);?>
+        <input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[2]['shipping_id'];?>" <?=($current_shipping ? ($current_shipping['id'] == $shippings[2]['shipping_id'] ? 'checked="checked"' : '' ) : '');?>/><span class="cart-options-label"><?=$shippings[2]['name'];?>t (<strong>$<?=money_format('%i',$shippings[2]['price'])?></strong> <?=$shippings[2]['subtitle'];?>)</span>
+        <?php } ?>
+        </td>
+        <td class="right grey-text">
+           <?php if(isset($current_shipping)){ $shipping_cost = $current_shipping['price']; ?>
+
+           <?php } else { $shipping_cost = 0; } ?>
+
+           $<?=money_format('%i', $shipping_cost);?>
+        </td>
+    </tr>
+    <? $total = $total + $shipping_cost; ?>
 	<tr>
     	<td colspan="2">GST</td>
-        <td class="right grey-text">$<?=money_format('%i',$cart_total - $total_discount) / 10;?></td>
+        <td class="right grey-text">$<?=money_format('%i', $total / 10);?></td>
     </tr>
 
 </table>
