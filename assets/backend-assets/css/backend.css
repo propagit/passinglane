@@ -202,12 +202,12 @@ header .menu-wrap {	font-family: 'Raleway', sans-serif;	font-weight:700;letter-s
 .navbar-header{	background:#302F2F;	}
 .navbar-collapse ul	{	background:#302F2F;	margin: 0 -15px;}
 #dynamic .center{text-align:center;}
-#content-menu{ left:0;}
-#product-menu{ left:-14px;}
-#customer-menu{ left:-10px;}
-#marketing-menu{ left:-14px;}
-#web-stats-menu{left:-32px;}
-#order-menu{ left:0;}
+#content-menu{ left:-8px;}
+#product-menu{ left:-26px;}
+#customer-menu{ left:0;}
+#marketing-menu{ left:2px;}
+#web-stats-menu{left:-40px;}
+#order-menu{ left:-12px;}
 /* firefox css */
 @-moz-document url-prefix() {
 	#content-menu{ left:14%;}
