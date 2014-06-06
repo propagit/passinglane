@@ -15,6 +15,6 @@ class Subscriber_model extends CI_Model {
 	
 	function get_all_subscriber() {
 		$query = $this->db->get('subscribers');
-		return $query->first_row('array');
+		return $query->result_array();
 	}
 }

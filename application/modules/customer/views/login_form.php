@@ -14,7 +14,7 @@
     <div class="form-group">
     	<!--<div class="alert alert-danger hide" id="msg-failed"><i class="fa fa-check"></i> &nbsp; Invalid login details.</div>-->
         <div class="col-sm-5 col-sm-offset-3">
-            <a class="forgot-password" href=""><i class="fa fa-question-circle"></i> FORGOT PASSWORD</a> <button id="login-customer" type="button" class="btn btn-primary pull"><i class="fa fa-unlock-alt"></i> LOGIN</button>
+            <a class="forgot-password" href="<?=base_url();?>customer/forgot_password"><i class="fa fa-question-circle"></i> FORGOT PASSWORD</a> <button id="login-customer" type="button" class="btn btn-primary pull"><i class="fa fa-unlock-alt"></i> LOGIN</button>
         </div>
     </div>
 </form>

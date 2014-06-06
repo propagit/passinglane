@@ -11,7 +11,7 @@
                             <input name="username" type="text" class="input-txt footer-login-input" placeholder="User Name" />
                             <input name="password" type="password" class="input-txt footer-login-input" placeholder="Password" />
                             <div class="left-side">
-                            	<a class="blue-link support-text-detail" href="#">Forgot Password</a><br />
+                            	<a class="blue-link support-text-detail" href="<?=base_url();?>customer/forgot_password">Forgot Password</a><br />
                             	<a class="blue-link support-text-detail" href="<?=base_url();?>customer/sign_in">Don't have an account?</a>
                             </div>
                             <div class="right-side">

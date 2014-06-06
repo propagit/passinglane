@@ -193,5 +193,31 @@ class Ajax extends MX_Controller {
 		
 		echo json_encode($out);
 	}
+	
+	function reset_password()
+	{
+		$out['status'] = true;
+		$out['msg'] = '';
+		$input_email = $this->input->post('email');
+		$email = trim($input_email);
+		//validate email
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$out['status'] = false;
+			$out['msg'] = 'Invalid email address';
+		}else{
+			//check if customer exists
+			$customer = $this->customer_model->identify_by_email($email);
+			if($customer){
+				$params['customer_id'] = $customer['id'];
+				$out['status'] = true;
+				$out['msg'] = 'Your new password has been sent to '.$email;
+				modules::run('customer/send_password_reset_email',$params);
+			}else{
+				$out['status'] = false;
+				$out['msg'] = 'This email does not exists in our system';	
+			}
+		}	
+		echo json_encode($out);	
+	}
 
 }

@@ -139,7 +139,7 @@
     	<div class="alert alert-danger hide" id="msg-profile-update-failed"><i class="fa fa-check"></i> &nbsp; This email already exist in our system. Please choose a different email and try again.</div>
         <div class="alert alert-success hide" id="msg-profile-update-success"><i class="fa fa-check"></i> &nbsp; Profile successfully updated.</div>
         <div class="col-sm-5 col-sm-offset-3">
-            <button type="button" class="btn btn-primary pull"><i class="fa fa-save"></i> UPDATE</button>
+            <button id="customer-update-btn" type="button" class="btn btn-primary pull"><i class="fa fa-save"></i> UPDATE</button>
         </div>
     </div>
 </form>
@@ -161,7 +161,7 @@ $j(function(){
 	toggle_other('description');	
 	
 	//form validate and submit	
-	$j('#customer-profile-update-form').click(function(){
+	$j('#customer-update-btn').on('click',function(){
 		if(help.validate_form('customer-profile-update-form')){
 			validate_other_fields();	
 		} 

@@ -14,6 +14,7 @@ class Admincustomer extends MX_Controller {
 		$this->load->model('user_model');
 		$this->load->model('system_model');
 		$this->load->model('lookup_model');
+		$this->load->model('subscriber_model');
 	}
 	
 	public function index($method='',$param='')
@@ -42,9 +43,11 @@ class Admincustomer extends MX_Controller {
 			case 'set_sort_cust':
 					$this->set_sort_cust($param);
 				break;	
-				
 			case 'export_csv':
 					$this->export_csv();
+				break;
+			case 'export_subscribers':
+					$this->export_subscribers();
 				break;			
 			default:
 					$this->customer_list();
@@ -331,6 +334,41 @@ class Admincustomer extends MX_Controller {
 		  ob_end_flush(); 
 		  exit();
 
+	}
+	
+	function export_subscribers()
+	{
+		$file_name = 'Subscribers-'.date('Y-m-d').'.csv';
+		ob_start();
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename=' . $file_name);
+		header('Expires: 0');
+		header("Content-Transfer-Encoding: binary");
+		// Generate the server headers
+		if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE"))
+		{
+		  header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		  header("Content-Transfer-Encoding: binary");
+		  header('Pragma: public');
+		}
+		else
+		{
+		  header('Pragma: no-cache');
+		} 
+  
+		// Output header
+		$headers = "Email,Subscription Date\r\n";
+	    $subscribers = $this->subscriber_model->get_all_subscriber();
+		$subscriber_list = '';
+		if($subscribers){
+			foreach($subscribers as $subscriber){
+				$subscriber_list .= $subscriber['email'] . "," . date('d M Y',strtotime($subscriber['created']))."\r\n";
+			}
+		}
+		echo $headers . $subscriber_list;
+  
+		ob_end_flush();	
+		exit();
 	}
 	
 

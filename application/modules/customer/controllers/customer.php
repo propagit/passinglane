@@ -38,6 +38,10 @@ class Customer extends MX_Controller {
 			case 'download_failed':
 				$this->download_failed();
 			break;
+			
+			case 'forgot_password':
+				$this->forgot_password();
+			break;
 
 			default:
 				$this->sign_up();
@@ -61,6 +65,11 @@ class Customer extends MX_Controller {
 	{
 		$data['states'] = modules::run('system/get_states');
 		$this->load->view('customer_sign_up_form', isset($data) ? $data : NULL);
+	}
+	
+	function forgot_password()
+	{
+		$this->load->view('forgot_password', isset($data) ? $data : NULL);	
 	}
 
 	function profile()
@@ -158,6 +167,26 @@ class Customer extends MX_Controller {
 			'subject' => 'Welcome @ Passing Lane Online Store',
 			'message' => $message
 		));
+	}
+	
+	function send_password_reset_email($params)
+	{
+		$customer = $this->customer_model->identify($params['customer_id']);
+		$data['customer'] = $customer;
+		$new_password = modules::run('helpers/generate_password');
+		$data['new_password'] = $new_password;
+		//update user with new password
+		$user_id = $this->session->userdata('user_id');
+		$this->user_model->update($user_id,array('password' => md5($new_password)));
+
+		$message = $this->load->view('emails/forgot_password', isset($data) ? $data : NULL, true);
+		modules::run('email/send_email', array(
+			'to' => $customer['email'],
+			'from' => 'webmaster@passinglane.com',
+			'from_text' => 'Passing Lane',
+			'subject' => 'Reset Password @ Passing Lane Online Store',
+			'message' => $message
+		));	
 	}
 
 
