@@ -98,10 +98,11 @@ class Order extends MX_Controller {
 			$card_number = $this->input->post('ccnumber',true);
 			$expiry_month = $this->input->post('expiry_month',true);
 			$expiry_year = $this->input->post('expiry_year',true);
+
 			$cvv = $this->input->post('cvv',true);
 
 
-			$total = modules::run('cart/get_cart_real_total');
+			$total = modules::run('cart/cart_final_amount');
 			#$payment = $this->process_eWay($order_id,$customer['firstname'],$customer['lastname'],$customer['email'],$customer['address'],$customer['postcode'],$card_name,$card_number,$expiry_month,$expiry_year,$cvv,$total);
 
 			$payment = $this->process_cmwBank($order_id, $order_id, $total, $card_number, $expiry_month, $expiry_year, $cvv);

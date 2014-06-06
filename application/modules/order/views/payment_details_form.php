@@ -32,14 +32,14 @@
 	            <select class="form-control custom-select col-sm-3" id="expiry-month" name="expiry_month" data="required">
 	            <? for($i = 1; $i <=12;$i++){ ?>
 	                <option value="<?=$i;?>"><?=($i < 10 ? '0'.$i : $i);?></option>
-	            <?php } ?> 
+	            <?php } ?>
 	            </select>
 	        </div>
 	        <div class="col-sm-6">
 	            <select class="form-control custom-select col-sm-3" id="expiry-year" name="expiry_year" data="required">
-	            <? for($i = date('Y'); $i <= (date('Y') + 10);$i++){ ?>
-	                <option value="<?=$i;?>"><?=$i;?></option>
-	            <?php } ?> 
+	            <? for($i = date('y'); $i <= (date('y') + 10);$i++){ ?>
+	                <option value="<?=$i;?>">20<?=$i;?></option>
+	            <?php } ?>
 	            </select>
 	        </div>
 	    </div>

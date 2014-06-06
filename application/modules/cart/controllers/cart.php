@@ -240,6 +240,14 @@ class Cart extends MX_Controller {
 		$this->load->view('cart_total_table_row', isset($data) ? $data : NULL);
 	}
 
+	function cart_final_amount()
+	{
+		$total = $this->get_cart_total();
+		$total = $total - $this->get_discount_amount();
+		$total = $total + $this->get_shipping_amount();
+		return $total;
+	}
+
 	function get_cart_checkout_options($enable_inputs,$return = true)
 	{
 		//if enable_inputs is true it shows the input field to add coupon code to get a discount
