@@ -206,16 +206,16 @@ header .menu-wrap {	font-family: 'Raleway', sans-serif;	font-weight:700;letter-s
 #product-menu{ left:-26px;}
 #customer-menu{ left:0;}
 #marketing-menu{ left:2px;}
-#web-stats-menu{left:-40px;}
+#web-stats-menu{left:-38px;}
 #order-menu{ left:-12px;}
 /* firefox css */
 @-moz-document url-prefix() {
-	#content-menu{ left:14%;}
-	#product-menu{ left:24.5%;}
-	#customer-menu{ left:50.2%;}
-	#marketing-menu{ left:64%;}
-	#web-stats-menu{ left:74%;}
-	#order-menu{ left:38.3%;}
+	#content-menu{ left:12.9%;}
+	#product-menu{ left:23.4%;}
+	#customer-menu{ left:49.4%;}
+	#marketing-menu{ left:62.9%;}
+	#web-stats-menu{ left:72.9%;}
+	#order-menu{ left:37.1%;}
 }
 /* end - header */
 
@@ -684,7 +684,7 @@ header a:hover, header a:focus, header a:active
 
 	header .triangle-menu img
 	{
-		margin-top:-41px;
+		margin-top:-38px;
 	}
 
 	header .menu-item
@@ -697,12 +697,20 @@ header a:hover, header a:focus, header a:active
 		/*font-weight: 600;*/
 		/*color: #3d3d3d;*/
 	}
+	#dynamic .center{text-align:center;}
+	#content-menu{ left:-28px;}
+	#product-menu{ left:-34px;}
+	#customer-menu{ left:-20px;}
+	#marketing-menu{ left:-22px;}
+	#web-stats-menu{left:-42px;}
+	#order-menu{ left:-28px;}
 	@-moz-document url-prefix() {
 		#content-menu{ left:9%;}
-		#product-menu{ left:21%;}
-		#customer-menu{ left:48%;}
-		#marketing-menu{ left:62%;}
-		#web-stats-menu{ left:72%;}
+		#product-menu{ left:20.2%;}
+		#customer-menu{ left:46.4%;}
+		#marketing-menu{ left:60%;}
+		#web-stats-menu{ left:70.8%;}
+		#order-menu{ left:32.8%;}
 	}
 	header .menu-item a
 	{
@@ -954,12 +962,20 @@ header a:hover, header a:focus, header a:active
 		letter-spacing:1px;
 
 	}
+	#dynamic .center{text-align:center;}
+	#content-menu{ left:-20px;}
+	#product-menu{ left:-39px;}
+	#customer-menu{ left:-11px;}
+	#marketing-menu{ left:-12px;}
+	#web-stats-menu{left:-50px;}
+	#order-menu{ left:-25px;}
 	@-moz-document url-prefix() {
-		#content-menu{ left:11%;}
-		#product-menu{ left:21%;}
+		#content-menu{ left:11.3%;}
+		#product-menu{ left:21.5%;}
 		#customer-menu{ left:48%;}
-		#marketing-menu{ left:62%;}
-		#web-stats-menu{ left:72%;}
+		#marketing-menu{ left:61.8%;}
+		#web-stats-menu{ left:71.5%;}
+		#order-menu{ left:35.7%;}
 	}
 	header .menu-wrap:hover, header .menu-wrap:focus
 	{

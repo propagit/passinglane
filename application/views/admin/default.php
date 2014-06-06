@@ -145,9 +145,9 @@
                         	<ul class="menu-inner-wrap list-menu-wrapper dropdown-menu" id="marketing-menu">
                             	<li class="triangle-menu" style="text-align:center;"><img alt="" src="<?=base_url()?>assets/backend-assets/img/menu-triangle.png"/></li>
                                 <li class="menu-item second-child"><a href="<?=base_url()?>admin/promotion">Promotions</a></li>
-                            	<li class="menu-item"><a href="<?=base_url()?>admin/marketing/call_email" target="_blank" >Email Marketing</a></li>
-                                <li class="menu-item"><a href="<?=base_url()?>admin/marketing/call_sms" target="_blank">SMS Marketing</a></li>
-                                <li class="menu-item"><a href="<?=base_url()?>admin/marketing/call_survey" target="_blank">Online Surveys</a></li>
+                            	<li class="menu-item"><a href="http://www.simplysuite.com.au/beta" target="_blank" >Email Marketing</a></li>
+                                <li class="menu-item"><a href="http://www.simplysuite.com.au/beta" target="_blank">SMS Marketing</a></li>
+                                <li class="menu-item"><a href="http://www.simplysuite.com.au/beta" target="_blank">Online Surveys</a></li>
                             </ul>
                         </li>
                         <li class="menu-wrap"><a class="dropdown-toggle"><i class="fa fa-wrench"></i>&nbsp;&nbsp;SETTINGS</a>
