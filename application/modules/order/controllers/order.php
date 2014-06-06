@@ -102,13 +102,17 @@ class Order extends MX_Controller {
 
 
 			$total = modules::run('cart/get_cart_real_total');
-			$payment = $this->process_eWay($order_id,$customer['firstname'],$customer['lastname'],$customer['email'],$customer['address'],$customer['postcode'],$card_name,$card_number,$expiry_month,$expiry_year,$cvv,$total);
-			if($payment){
+			#$payment = $this->process_eWay($order_id,$customer['firstname'],$customer['lastname'],$customer['email'],$customer['address'],$customer['postcode'],$card_name,$card_number,$expiry_month,$expiry_year,$cvv,$total);
+
+			$payment = $this->process_cmwBank($order_id, $order_id, $total, $card_number, $expiry_month, $expiry_year, $cvv);
+
+			if($payment['txnResponseCode'] == '0'){
 				$this->order_model->update_order($order_id,array('order_status' => 'success'));
 				$this->promotion_condition_model->increase_coupon_usages($this->session->userdata('condition_id'));
 				modules::run('cart/destroy_cart');
 				$order_successful = true;
 			} else {
+				$this->session->set_userdata('order_error_msg', $payment["message"]);
 				$this->order_model->update_order($order_id,array('order_status' => 'failed'));
 			}
 		}
@@ -121,6 +125,25 @@ class Order extends MX_Controller {
 		}else{
 			redirect('order/failed');
 		}
+	}
+
+	function test() {
+		$a = $this->process_cmwBank('testrf','testinfo',1.00,'4987654321098769','5','17','123');
+		var_dump($a);
+	}
+
+	function process_cmwBank($reference, $order_info, $amount, $card_number, $expmonth, $expyear, $ccv) {
+		$amount = $amount * 100; # Convert to cents
+		$exp = $expyear . str_pad($expmonth, 2, "0", STR_PAD_LEFT);
+		$this->load->model('cmwbank_model');
+		$this->cmwbank_model->init();
+		$this->cmwbank_model->add_data('vpc_MerchTxnRef', $reference);
+		$this->cmwbank_model->add_data('vpc_OrderInfo', $order_info);
+		$this->cmwbank_model->add_data('vpc_Amount', $amount);
+		$this->cmwbank_model->add_data('vpc_CardNum', $card_number);
+		$this->cmwbank_model->add_data('vpc_CardExp', $exp);
+		$this->cmwbank_model->add_data('vpc_CardSecurityCode', $ccv);
+		return $this->cmwbank_model->process();
 	}
 
 	function process_eWay($order_id,$firstname,$lastname,$email,$address,$postcode,$cardname,$cardnumber,$expmonth,$expyear,$cvv,$total) {
@@ -331,10 +354,6 @@ class Order extends MX_Controller {
 		));
 	}
 
-	function test()
-	{
-		echo $this->send_order_confirmation(28);
-	}
 
 
 
