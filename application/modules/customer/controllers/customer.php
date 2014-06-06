@@ -171,13 +171,14 @@ class Customer extends MX_Controller {
 	
 	function send_password_reset_email($params)
 	{
-		$customer = $this->customer_model->identify($params['customer_id']);
+		$customer_id = $params['customer_id'];
+		$customer = $this->customer_model->identify($customer_id);
 		$data['customer'] = $customer;
 		$new_password = modules::run('helpers/generate_password');
 		$data['new_password'] = $new_password;
 		//update user with new password
-		$user_id = $this->session->userdata('user_id');
-		$this->user_model->update($user_id,array('password' => md5($new_password)));
+		$user = $this->user_model->identify_cust_id($customer_id);
+		$this->user_model->update($user['id'],array('password' => md5($new_password)));
 
 		$message = $this->load->view('emails/forgot_password', isset($data) ? $data : NULL, true);
 		modules::run('email/send_email', array(
