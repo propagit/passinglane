@@ -21,83 +21,6 @@
 
 margin-left:0px!important}
 </style>
-
-<script>
-
-jQuery(function() {
-	$j('.edit-cust').tooltip({
-		showURL: false
-	});
-	
-	$j('#export').click(function(){
-		$j('#export-components').modal('show');
-	});
-	
-});
-
-var choose = 0;
-
-function export_csv() {
-	if (confirm('This will export the customers list to a csv file. Do you want to continue?')) {
-		//var type=document.customerform.type.value;
-		window.location = '<?=base_url()?>admin/customer/ajax/export';
-	}
-}
-function export_csv_myob() {
-	if (confirm('This will export the customers list to a csv file. Do you want to continue?')) {
-		//var type=document.customerform.type.value;
-		window.location = '<?=base_url()?>admin/customer/export_cust_for_MYOB';
-	}
-}
-function deletesubscribe(id) {
-	if (confirm('You are about to delete this subscribe from the system? Are you sure you want to do this?')) {
-		window.location = '<?=base_url()?>admin/customer/deletesubscribe/' + id;
-	}
-}
-function delete_customer(id)
-{
-	choose = id;
-	//alert(id);
-	$j('#deleteModal').modal('show');
-}
-function deletecustomer(id)
-{
-	$j('#deleteModal').modal('hide');
-	//alert(id);
-	
-	jQuery.ajax({
-		url: '<?=base_url()?>admin/customer/delete/'+id,
-		type: 'POST',	
-		dataType: "html",
-		success: function(html) {
-			jQuery('#user'+id).fadeOut('slow');
-			jQuery('#any_message').html("This customer has been successfully deleted");
-			$j('#anyModal').modal('show');
-			
-		}
-	})
-}
-function set_sort(input)
-{
-	/*
-	 * input = 0 = none
-	 * input = 1 = by customer name
-	 * input = 2 = by customer email
-	 */
-	jQuery.ajax({
-		url: '<?=base_url()?>admin/customer/set_sort_cust/'+input,
-		type: 'POST',	
-		dataType: "html",
-		success: function(html) {
-			
-			//j//Query('#user'+id).fadeOut('slow');
-			//jQuery('#any_message').html("This customer has been successfully deleted");
-			//$('#anyModal').modal('show');
-			location.reload(); 
-		}
-	})
-}
-</script>
 <div class="row row-bottom-margin">
 	<div class="col-md-12">
 		<div class="title-page">MANAGE CUSTOMERS</div>
@@ -105,6 +28,7 @@ function set_sort(input)
 		<div class="grey-box">
         	<button class="btn btn-info hidden" onclick="window.location='<?=base_url()?>admin/customer/add'" ><i class="fa fa-plus"></i> Add New Customer</button>
             <button class="btn btn-info" type="button" id="export"><i class="fa fa-download"></i> Export</button>
+            <a href="<?=base_url();?>admin/customer/export_subscribers" target="_blank"><div class="btn btn-info" id="export-subscribers"><i class="fa fa-download"></i> Export Subscribers</div></a>
         </div>
 		
         <div id="tablelist">
@@ -179,32 +103,7 @@ function set_sort(input)
 
 </div>
 </div>
-<script>
-function edit_cust(id,type)
-{
-	//alert(id);
-	if(type == 1)
-	{
-		window.location = "<?=base_url()?>admin/customer/detail/"+id;
-	}
-	else
-	{
-		window.location = "<?=base_url()?>admin/customer/detail/"+id;
-	}
-}
 
-function reload_page(){
-	if($('#data_exported').val() == 1){
-		location.reload();	
-	}
-}
-
-function export_data(){
-	$('#data_exported').val(1);
-	$('#customer_export').submit();
-}
- 
-</script>
 
 <!--begin export settings-->
 <div id="export-components" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -237,3 +136,106 @@ function export_data(){
     </div>
 </div>
 <!--end export settings-->
+
+<script>
+
+jQuery(function() {
+	$j('.edit-cust').tooltip({
+		showURL: false
+	});
+	
+	$j('#export').click(function(){
+		$j('#export-components').modal('show');
+	});
+	
+});
+
+
+function edit_cust(id,type)
+{
+	//alert(id);
+	if(type == 1)
+	{
+		window.location = "<?=base_url()?>admin/customer/detail/"+id;
+	}
+	else
+	{
+		window.location = "<?=base_url()?>admin/customer/detail/"+id;
+	}
+}
+
+function reload_page(){
+	if($('#data_exported').val() == 1){
+		location.reload();	
+	}
+}
+
+function export_data(){
+	$('#data_exported').val(1);
+	$('#customer_export').submit();
+}
+
+
+var choose = 0;
+
+function export_csv() {
+	if (confirm('This will export the customers list to a csv file. Do you want to continue?')) {
+		//var type=document.customerform.type.value;
+		window.location = '<?=base_url()?>admin/customer/ajax/export';
+	}
+}
+function export_csv_myob() {
+	if (confirm('This will export the customers list to a csv file. Do you want to continue?')) {
+		//var type=document.customerform.type.value;
+		window.location = '<?=base_url()?>admin/customer/export_cust_for_MYOB';
+	}
+}
+function deletesubscribe(id) {
+	if (confirm('You are about to delete this subscribe from the system? Are you sure you want to do this?')) {
+		window.location = '<?=base_url()?>admin/customer/deletesubscribe/' + id;
+	}
+}
+function delete_customer(id)
+{
+	choose = id;
+	//alert(id);
+	$j('#deleteModal').modal('show');
+}
+function deletecustomer(id)
+{
+	$j('#deleteModal').modal('hide');
+	//alert(id);
+	
+	jQuery.ajax({
+		url: '<?=base_url()?>admin/customer/delete/'+id,
+		type: 'POST',	
+		dataType: "html",
+		success: function(html) {
+			jQuery('#user'+id).fadeOut('slow');
+			jQuery('#any_message').html("This customer has been successfully deleted");
+			$j('#anyModal').modal('show');
+			
+		}
+	})
+}
+function set_sort(input)
+{
+	/*
+	 * input = 0 = none
+	 * input = 1 = by customer name
+	 * input = 2 = by customer email
+	 */
+	jQuery.ajax({
+		url: '<?=base_url()?>admin/customer/set_sort_cust/'+input,
+		type: 'POST',	
+		dataType: "html",
+		success: function(html) {
+			
+			//j//Query('#user'+id).fadeOut('slow');
+			//jQuery('#any_message').html("This customer has been successfully deleted");
+			//$('#anyModal').modal('show');
+			location.reload(); 
+		}
+	})
+}
+</script>

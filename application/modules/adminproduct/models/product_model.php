@@ -1726,6 +1726,7 @@ class Product_model extends CI_Model {
 		$sql = "SELECT `products`.* FROM `products`,`feature_products`
 				WHERE `products`.`id` = `feature_products`.`product_id`
 				AND `products`.`deleted` = 0
+				AND `products`.`status` = 1 
 				ORDER  BY `feature_products`.`display_order` ASC";
 		$query = $this->db->query($sql);
 		return $query->result();

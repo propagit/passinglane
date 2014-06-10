@@ -32,11 +32,15 @@ class Customer extends MX_Controller {
 			break;
 
 			case 'download':
-				$this->download($param1);
+				$this->download($param1,$param2);
 			break;
 
 			case 'download_failed':
 				$this->download_failed();
+			break;
+			
+			case 'forgot_password':
+				$this->forgot_password();
 			break;
 
 			default:
@@ -61,6 +65,11 @@ class Customer extends MX_Controller {
 	{
 		$data['states'] = modules::run('system/get_states');
 		$this->load->view('customer_sign_up_form', isset($data) ? $data : NULL);
+	}
+	
+	function forgot_password()
+	{
+		$this->load->view('forgot_password', isset($data) ? $data : NULL);	
 	}
 
 	function profile()
@@ -100,11 +109,14 @@ class Customer extends MX_Controller {
 		$this->load->view('orders/main_view', isset($data) ? $data : NULL);
 	}
 
-	function purchased_items()
+	function purchased_items($params = array())
 	{
 		modules::run('auth/is_customer_logged_in');
 		$customer_id = $this->session->userdata('customer_id');
-		$data['orders'] = $this->customer_model->get_customer_orders($customer_id);
+		$params['customer_id'] = $customer_id;
+		$data['orders'] = $this->customer_model->get_customer_orders($params);
+		$data['sort_order'] = isset($params['sort_order']) ? strtolower($params['sort_order']) : 'asc';
+		$data['sort_by'] = isset($params['sort_by']) ? strtolower($params['sort_by']) : 'product_name';
 		$this->load->view('orders/purchased_items', isset($data) ? $data : NULL);
 	}
 
@@ -113,28 +125,24 @@ class Customer extends MX_Controller {
 		return $this->customer_model->identify($customer_id);
 	}
 
-	function download($order_item_id)
+	function download($order_item_id,$file_id)
 	{
 		if(modules::run('auth/is_customer_logged_in')){
 			$valid = true;
 			$this->load->helper('download');
 			$customer_id = $this->session->userdata('customer_id');
 			$order_item = $this->customer_model->validate_purchase($order_item_id,$customer_id);
-			var_dump($order_item); die();
 			if($order_item){
 				//valid order -> proceed with download
 				//product_file
 				//get product file name
-
-				var_dump($order_item->product_id); die();
-				$product = modules::run('adminproduct/get_product',$order_item->product_id);
-				var_dump($order_item->product_id); die();
-				$dir = md5('mbb'.$order_item->product_id); //get the encrypted dir
-				$filename = $product['product_file_name'];
-				$path = "./uploads/products/".$dir."/".$filename;
+				$product_id = $order_item['product_id'];
+				$product_file = modules::run('product/get_product_file',$file_id);
+				$dir = md5('mbb'.$product_id); //get the encrypted dir
+				$filename = $product_file['file_name'];
+				$path = $product_file['file_path'];
 				if(file_exists($path)){
-					$data = file_get_contents($path); // Read the file's contents
-					force_download($filename, $data);
+					redirect(base_url().$path);
 				}else{
 					redirect('customer/download_failed');
 				}
@@ -159,6 +167,27 @@ class Customer extends MX_Controller {
 			'subject' => 'Welcome @ Passing Lane Online Store',
 			'message' => $message
 		));
+	}
+	
+	function send_password_reset_email($params)
+	{
+		$customer_id = $params['customer_id'];
+		$customer = $this->customer_model->identify($customer_id);
+		$data['customer'] = $customer;
+		$new_password = modules::run('helpers/generate_password');
+		$data['new_password'] = $new_password;
+		//update user with new password
+		$user = $this->user_model->identify_cust_id($customer_id);
+		$this->user_model->update($user['id'],array('password' => md5($new_password)));
+
+		$message = $this->load->view('emails/forgot_password', isset($data) ? $data : NULL, true);
+		modules::run('email/send_email', array(
+			'to' => $customer['email'],
+			'from' => 'webmaster@passinglane.com',
+			'from_text' => 'Passing Lane',
+			'subject' => 'Reset Password @ Passing Lane Online Store',
+			'message' => $message
+		));	
 	}
 
 

@@ -11,7 +11,7 @@
                             <input name="username" type="text" class="input-txt footer-login-input" placeholder="User Name" />
                             <input name="password" type="password" class="input-txt footer-login-input" placeholder="Password" />
                             <div class="left-side">
-                            	<a class="blue-link support-text-detail" href="#">Forgot Password</a><br />
+                            	<a class="blue-link support-text-detail" href="<?=base_url();?>customer/forgot_password">Forgot Password</a><br />
                             	<a class="blue-link support-text-detail" href="<?=base_url();?>customer/sign_in">Don't have an account?</a>
                             </div>
                             <div class="right-side">
@@ -58,10 +58,11 @@
                     	<div class="join-column">
                         	<span class="footer-title">Join - </span><span class="footer-subtitle">Our Mailing List</span>
                             <p class="p-description">Keep up to date with with resource updates and special member only discounts.</p>
-                            <input type="text" class="input-txt" placeholder="Your Email Address" /><br />                                                      
+                            <input id="subscriber-email" type="text" class="input-txt" placeholder="Your Email Address" required/><br />                                                      
                             <div class="right-side">
-                            	<button type="button" class="btn btn-primary right10"><i class="fa fa-envelope-o right5"></i> JOIN</button>
+                            	<button id="subscriber-btn" type="button" class="btn btn-primary right10"><i class="fa fa-envelope-o right5"></i> JOIN</button>
                             </div>
+                             <div id="subscription-msg" class="alert subscription-msg-alert"></div>
                         </div>
                     </div>
                 </div>
@@ -124,7 +125,34 @@ $j(function(){
 	$j('#footer-login-btn').click(function(){
 		footer_login();
 	});
+	
+	$j('#subscriber-btn').on('click',function(){
+		subscribe_to_newsletter();
+	});
 });
+
+function subscribe_to_newsletter()
+{
+	$j('#subscription-msg').addClass('alert-warning').html('<i class="fa fa-spinner fa-spin"></i>');
+	$j.ajax({
+	type: "POST",
+	dataType: "JSON",
+	url: "<?=base_url();?>customer/ajax/add_subscriber",
+	data: {email:$j('#subscriber-email').val()},
+	success: function(data) {
+			$j('#subscription-msg').removeClass('alert-warning');
+			if(data['status']){
+				$j('#subscriber-email').val('');
+				$j('#subscription-msg').addClass('alert-success').html(data['msg']);	
+			}else{
+				$j('#subscription-msg').addClass('alert-danger').html(data['msg']);	
+			}
+			setTimeout(function(){
+				$j('#subscription-msg').removeClass('alert-success').removeClass('alert-danger').html('');
+			},3000);
+	  	}
+	});		
+}
 
 function footer_login()
 {

@@ -9,6 +9,7 @@ class Ajax extends MX_Controller {
 		parent::__construct();
 		$this->load->model('admincustomer/customer_model');
 		$this->load->model('admincustomer/user_model');
+		$this->load->model('admincustomer/subscriber_model');
 	}
 		
 	function create_new_customer()
@@ -154,6 +155,69 @@ class Ajax extends MX_Controller {
 			echo 'failed';
 		}				
 
+	}
+	
+	function get_customer_order()
+	{
+		$params = $this->input->post();
+		echo modules::run('customer/purchased_items',$params);	
+	}
+	
+	function add_subscriber()
+	{
+		$out['status'] = true;
+		$out['msg'] = '';
+		$input_email = $this->input->post('email');
+		$email = trim($input_email);
+		//validate email
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$out['status'] = false;
+			$out['msg'] = 'Invalid email address';
+		}else{
+			//check if this email address is already in our system
+			if($this->subscriber_model->get_subscriber($email)){
+				$out['status'] = false;
+				$out['msg'] = 'This email already exists in our subscription list';	
+			}else{
+				//if new email address add to subscription list, if successful
+				if($this->subscriber_model->add(array('email' => $email))){
+					$out['status'] = true;
+					$out['msg'] = 'Subscription successful';
+				}else{
+					//if subscription unsuccessful
+					$out['status'] = false;
+					$out['msg'] = 'Subscription failed! Please try again!';	
+				}
+			}
+		}
+		
+		echo json_encode($out);
+	}
+	
+	function reset_password()
+	{
+		$out['status'] = true;
+		$out['msg'] = '';
+		$input_email = $this->input->post('email');
+		$email = trim($input_email);
+		//validate email
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$out['status'] = false;
+			$out['msg'] = 'Invalid email address';
+		}else{
+			//check if customer exists
+			$customer = $this->customer_model->identify_by_email($email);
+			if($customer){
+				$params['customer_id'] = $customer['id'];
+				$out['status'] = true;
+				$out['msg'] = 'Your new password has been sent to '.$email;
+				modules::run('customer/send_password_reset_email',$params);
+			}else{
+				$out['status'] = false;
+				$out['msg'] = 'This email does not exists in our system';	
+			}
+		}	
+		echo json_encode($out);	
 	}
 
 }
