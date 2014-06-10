@@ -27,7 +27,7 @@ class Ajax extends MX_Controller {
         }
 
         modules::run('email/send_email', array(
-            'to' => 'nam@propagate.com.au',
+            'to' => INFO_EMAIL,
             'from' => $input['email'],
             'from_text' =>  $input['name'],
             'subject' => 'Website Contact Form',
