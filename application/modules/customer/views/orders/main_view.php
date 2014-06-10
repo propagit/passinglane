@@ -3,7 +3,7 @@
         <div class="inner-content top-padding">
             <div class="col-md-12 remove-gutters customer-purchase-head-wrap push">
                 <div class="col-md-9 remove-gutters">
-                	<a class="back-link"><i class="fa fa-angle-left"></i>Keep Shopping</a>
+                	<?=modules::run('pages/keep_shopping');?>
                     <h1>VIEW YOUR ORDERS</h1>
                     <p class="short-desc">
                         Your pruchased products are available for download for 3 years from the date of purchase. <br />
