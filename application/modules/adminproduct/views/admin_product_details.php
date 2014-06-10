@@ -236,7 +236,7 @@ var uploader = new plupload.Uploader({
 		},
 
 		FilesAdded: function(up, files) {
-			$('#upload-progress').parent().css("visibility", "visible");
+			$j('#upload-progress').parent().css("visibility", "visible");
 
 			plupload.each(files, function(file) {
 				document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
@@ -245,9 +245,9 @@ var uploader = new plupload.Uploader({
 
 		UploadProgress: function(up, file) {
 			//document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-			$('#upload-progress').attr('aria-valuenow', 60);
-			$('#upload-progress').css("width", file.percent + "%");
-			$('#upload-progress').html(file.percent + '% completed');
+			$j('#upload-progress').attr('aria-valuenow', 60);
+			$j('#upload-progress').css("width", file.percent + "%");
+			$j('#upload-progress').html(file.percent + '% completed');
 		},
 		UploadComplete: function() {
 			location.reload();
@@ -291,7 +291,7 @@ var uploader_brochure = new plupload.Uploader({
         },
 
         FilesAdded: function(up, files) {
-            $('#upload-progress-brochure').parent().css("visibility", "visible");
+            $j('#upload-progress-brochure').parent().css("visibility", "visible");
 
             plupload.each(files, function(file) {
                 document.getElementById('filelist_brochure').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
@@ -300,9 +300,9 @@ var uploader_brochure = new plupload.Uploader({
 
         UploadProgress: function(up, file) {
             //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-            $('#upload-progress-brochure').attr('aria-valuenow', 60);
-            $('#upload-progress-brochure').css("width", file.percent + "%");
-            $('#upload-progress-brochure').html(file.percent + '% completed');
+            $j('#upload-progress-brochure').attr('aria-valuenow', 60);
+            $j('#upload-progress-brochure').css("width", file.percent + "%");
+            $j('#upload-progress-brochure').html(file.percent + '% completed');
         },
         UploadComplete: function() {
             location.reload();
@@ -329,7 +329,7 @@ $j(function(){
 	$j('.delete-brochure').on('click',function(){
 		var title = 'Delete Brochure';
 		var message ='Are you sure you would like to delete this "Brochure"';
-		var group_id = $(this).attr('delete-data-id');
+		var group_id = $j(this).attr('delete-data-id');
 		help.confirm_delete(title,message,function(confirmed){
 			 if(confirmed){
 				window.location.href = "<?=base_url();?>admin/product/delete_product_brochure/<?=$product['id'];?>"
@@ -341,7 +341,7 @@ $j(function(){
 	$j('.delete-product-file').on('click',function(){
 		var title = 'Delete Product File';
 		var message ='Are you sure you would like to delete this "Product File"';
-		var file_id = $(this).attr('delete-data-id');
+		var file_id = $j(this).attr('delete-data-id');
 		help.confirm_delete(title,message,function(confirmed){
 			 if(confirmed){
                 window.location.href = "<?=base_url();?>admin/product/delete_product_file/" + file_id;
