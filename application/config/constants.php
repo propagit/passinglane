@@ -59,6 +59,8 @@ define('records_per_page',25);
 define('PROMOTION_DISABLED', 0);
 define('PROMOTION_ACTIVED', 1);
 
+define('INFO_EMAIL','info@passinglane.com.au');
+
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

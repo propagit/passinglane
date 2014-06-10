@@ -39,7 +39,7 @@
                                 <tr>
                                 	<td valign="top"><i class="fa fa-envelope-o blue"></i></td>
                                     <td valign="top"><span class="support-text">Email</span></td>
-                                    <td><a href="mailto:info@passinglane.com.au" class="blue-link support-text-detail">CLICK HERE</a></td>
+                                    <td><a href="mailto:<?=INFO_EMAIL;?>" class="blue-link support-text-detail">CLICK HERE</a></td>
                                 </tr>
                                 <tr>
                                 	<td valign="top"><i class="fa fa-info-circle blue"></i></td>

@@ -75,7 +75,10 @@ $j(function(){
 		} else {
 			$j('#payment-form').submit();
 		}
-
+	});
+	
+	$j('#payment-form').on('submit',function(){
+		cart.processing_payment_msg();
 	});
 });
 function set_same_billing_details() {
