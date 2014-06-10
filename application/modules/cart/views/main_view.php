@@ -2,7 +2,7 @@
 	<div class="content-wrap">
         <div class="inner-content top-padding">
             <div class="col-md-12 remove-left-gutter">
-                <a class="back-link"><i class="fa fa-angle-left"></i>Keep Shopping</a>
+                <?=modules::run('pages/keep_shopping');?>
                 <h1>YOUR CART <i class="fa fa-shopping-cart"></i></h1>
                 <p class="short-desc">Manage Your shopping cart before proceeding to checkout <span class="cart-terms right pull">Prices listed include GST.</span></p>
             </div>

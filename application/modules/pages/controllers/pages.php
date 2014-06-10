@@ -141,6 +141,11 @@ class Pages extends MX_Controller {
 	{
 		return $this->load->view('contact_form', isset($data) ? $data : NULL, true);
 	}
+	
+	function keep_shopping()
+	{
+		$this->load->view('keep_shopping', isset($data) ? $data : NULL);
+	}
 
 
 
