@@ -6,7 +6,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="password" class="col-sm-3 control-label">Your Email Address</label>
+        <label for="password" class="col-sm-3 control-label">Your Password</label>
         <div class="col-sm-5">
             <input type="password" class="form-control login-input" id="login_password" name="password" placeholder="">
         </div>

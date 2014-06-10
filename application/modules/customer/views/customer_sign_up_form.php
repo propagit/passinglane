@@ -138,7 +138,7 @@
         </div>
     </div>
     <div class="form-group">
-    	<div class="alert alert-danger hide" id="msg-profile-creation-failed"><i class="fa fa-check"></i> &nbsp; This email already exist in our system. Please choose a different email and try again.</div>
+    	<div class="alert alert-danger hide add-gutters" id="msg-profile-creation-failed"><i class="fa fa-check"></i> &nbsp; This email already exist in our system. Please choose a different email and try again.</div>
         <div class="col-sm-5 col-sm-offset-3">
             <button id="create-customer" type="button" class="btn btn-primary pull"><i class="fa fa-plus-circle"></i> CREATE</button>
         </div>
@@ -205,7 +205,7 @@ function validate_other_fields()
 function create_customer()
 {
 	help.loading();
-	/* $j.ajax({
+	$j.ajax({
 	type: "POST",
 	url: "<?=base_url();?>customer/ajax/create_new_customer",
 	data: $j('#customer-signup-form').serialize(),
@@ -221,7 +221,7 @@ function create_customer()
 			window.location.href = "<?=$redirect_after_login_url;?>";	
 		}
 	  }
-	});	 */
+	});	 
 }
 
 function toggle_other(element_id)

@@ -55,7 +55,7 @@ $total = $cart_total;
 
         <span class="cart-options-label"><?=$shippings[1]['name'];?> <strong>(<?=$shippings[1]['subtitle'];?>)</strong></span>
         <?=nbs(6);?>
-        <input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[2]['shipping_id'];?>" <?=($current_shipping ? ($current_shipping['id'] == $shippings[2]['shipping_id'] ? 'checked="checked"' : '' ) : '');?>/><span class="cart-options-label"><?=$shippings[2]['name'];?>t (<strong>$<?=money_format('%i',$shippings[2]['price'])?></strong> <?=$shippings[2]['subtitle'];?>)</span>
+        <input class="update-shipping-info" type="radio" name="shipping_id" value="<?=$shippings[2]['shipping_id'];?>" <?=($current_shipping ? ($current_shipping['id'] == $shippings[2]['shipping_id'] ? 'checked="checked"' : '' ) : '');?>/><span class="cart-options-label"><?=$shippings[2]['name'];?> (<strong>$<?=money_format('%i',$shippings[2]['price'])?></strong> <?=$shippings[2]['subtitle'];?>)</span>
         <?php } ?>
         </td>
         <td class="right grey-text">
