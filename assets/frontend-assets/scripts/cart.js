@@ -186,6 +186,11 @@ var cart = {
 	item_added_to_cart:function(){
 		$j('body').append('<div id="cart-success-msg" class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header cart-success-modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button></div><div class="modal-body center"><p>Item successfully added to cart</p></div></div></div></div>');
 		$j('#cart-success-msg').modal('show');
+	},
+	
+	processing_payment_msg:function(){
+		$j('body').append('<div id="processing-payment-msg" class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header cart-success-modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button></div><div class="modal-body center"><p>Please wait while we process your payment. Once your payment is confirmed the page will automatically redirect to your orders page.</p></div></div></div></div>');
+		$j('#processing-payment-msg').modal('show');
 	}
 	
 	
