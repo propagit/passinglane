@@ -50,7 +50,7 @@
 	        <div class="col-sm-6">
 	            <input type="text" class="form-control" id="cvv" name="cvv" placeholder="" onkeypress="return cart.check_numeric(this, event,'n');" data="required">
 	        </div>
-	        <div class="col-sm-6 remove-gutters blue-text form-info-label"><i class="fa fa-question-circle"></i> WHAT'S THIS </div>
+	        <div id="cvv-tooltip" class="col-sm-6 remove-gutters blue-text form-info-label pointer" data-toggle="tooltip" data-placement="bottom" title="This is a 3-digit code on the back of your credit card next to your signature."><i class="fa fa-question-circle"></i> WHAT'S THIS </div>
 	    </div>
 	</div>
 </div>
@@ -68,6 +68,9 @@ $j(function(){
 	$j('#payment-type').change(function(){
 		check_payment_type();
 	})
+	
+	//cvv tooltip
+	$j('#cvv-tooltip').tooltip();
 })
 function check_payment_type() {
 	var type = $j('#payment-type').val();

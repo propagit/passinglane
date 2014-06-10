@@ -39,12 +39,12 @@
                                 <tr>
                                 	<td valign="top"><i class="fa fa-envelope-o blue"></i></td>
                                     <td valign="top"><span class="support-text">Email</span></td>
-                                    <td><a href="#" class="blue-link support-text-detail">CLICK HERE</a></td>
+                                    <td><a href="mailto:info@passinglane.com.au" class="blue-link support-text-detail">CLICK HERE</a></td>
                                 </tr>
                                 <tr>
                                 	<td valign="top"><i class="fa fa-info-circle blue"></i></td>
                                     <td valign="top"><span class="support-text">Terms</span></td>
-                                    <td><a href="#" class="blue-link support-text-detail">CLICK HERE</a></td>
+                                    <td><a href="<?=base_url();?>page/Terms-and-Conditions" class="blue-link support-text-detail">CLICK HERE</a></td>
                                 </tr>
                                 <tr>
                                 	<td valign="top"><i class="fa fa-home blue"></i> </td>
@@ -76,43 +76,40 @@
                     
                     <span class="footer-title">Link - </span><span class="footer-subtitle">Jump</span><br />
                     <ul class="footer-jump">
-                        <li><a href="#" class="blue-link">HOME</a></li>
-                        <li><a href="#" class="blue-link">ABOUT</a></li>
-                        <li><a href="#" class="blue-link">RESOURCES</a></li>
-                        <li><a href="#" class="blue-link">TRAINING VIDEOS</a></li>
-                        <li><a href="#" class="blue-link">CONTACT</a></li>
+                        <li><a href="<?=base_url();?>" class="blue-link">HOME</a></li>
+                        <li><a href="<?=base_url();?>page/About-Us" class="blue-link">ABOUT</a></li>
+                        <li><a href="<?=base_url();?>resources" class="blue-link">RESOURCES</a></li>
+                        <li><a href="<?=base_url();?>videos" class="blue-link">TRAINING VIDEOS</a></li>
+                        <li><a href="<?=base_url();?>page/Contact" class="blue-link">CONTACT</a></li>
                     </ul>
                     
                     <ul class="footer-jump">
-                        <li><a href="#" class="blue-link">MY CART</a></li>
-                        <li><a href="#" class="blue-link">MY ACCOUNT</a></li>
-                        <li><a href="#" class="blue-link">SIGN UP</a></li>
-                        <li><a href="#" class="blue-link">TERMS & CONDITIONS</a></li>
-                        <li><a href="#" class="blue-link">PRIVACY POLICY</a></li>
+                        <li><a href="<?=base_url();?>cart" class="blue-link">MY CART</a></li>
+                        <li><a href="<?=base_url();?>customer/profile" class="blue-link">MY ACCOUNT</a></li>
+                        <li><a href="<?=base_url();?>customer/sign_in" class="blue-link">SIGN UP</a></li>
+                        <li><a href="<?=base_url();?>page/Terms-and-Conditions" class="blue-link">TERMS & CONDITIONS</a></li>
+                        <li><a href="<?=base_url();?>page/Privacy-Policy" class="blue-link">PRIVACY POLICY</a></li>
                     </ul>
                     
                     <ul class="footer-jump">
-                        <li><a href="#" class="blue-link">HOSPITALITY</a></li>
-                        <li><a href="#" class="blue-link">BUSINESS</a></li>
-                        <li><a href="#" class="blue-link">AGRICULTURE</a></li>
-                        <li><a href="#" class="blue-link">RETAIL</a></li>
-                        <li><a href="#" class="blue-link">TRANSPORT & LOGISTICS</a></li>
+                    	<li><a href="<?=base_url();?>products/agriculture-cert-1-2-and-3" class="blue-link">AGRICULTURE</a></li>
+                        <li><a href="<?=base_url();?>products/business-cert-1-2-and-3" class="blue-link">BUSINESS</a></li>
+                        <li><a href="<?=base_url()?>products/community-services-cert-1-and-2" class="blue-link">COMMUNITY SERVICES</a></li> 
+                        <li><a href="<?=base_url()?>products/community-services-cert-1-and-2" class="blue-link">CONSTRUCTION</a></li>
+                        <li><a href="<?=base_url();?>products/hospitality-cert-1-2-and-3" class="blue-link">HOSPITALITY</a></li>
                     </ul>
                     
                     <ul class="footer-jump">
-                        <li><a href="#" class="blue-link">EVENTS</a></li>
-                        <li><a href="#" class="blue-link">TOURISM</a></li>
-                        <li><a href="#" class="blue-link">SPORT & RECREATIONAL</a></li>
-                        <li><a href="#" class="blue-link">INFORMATION TECHNOLOGY</a></li>
-                        <li><a href="#" class="blue-link">CONSTRUCTION</a></li>
+                        <li><a href="<?=base_url()?>products/information-digital-media-and-technology-cert-1-2-and-3" class="blue-link">INFO TECH (1,2,3)</a></li>
+                        <li><a href="<?=base_url()?>products/information-digital-media-and-technology-cert-4" class="blue-link">INFO TECH (4)</a></li>
+                        <li><a href="<?=base_url()?>products/live-performance-and-entertainment-cert-2-and-3" class="blue-link">LIVE PERFORMANCE</a></li>
+                        <li><a href="<?=base_url()?>products/nsw-work-studies-nsw-work-studies-cec-2012" class="blue-link">WORK STUDIES (NSW)</a></li>
+                        <li><a href="<?=base_url()?>products/queensland-workplace-practices-cert-2" class="blue-link">WORK STUDIES (QLD)</a></li>
                     </ul>
                     
                     <ul class="footer-jump">
-                        <li><a href="#" class="blue-link">SCREEN & MEDIA</a></li>
-                        <li><a href="#" class="blue-link">METAL & ENGINEERING</a></li>
-                        <li><a href="#" class="blue-link">HORTICULTURE</a></li>
-                        <li><a href="#" class="blue-link">COMMUNITY SERVICES</a></li>
-                        <li><a href="#" class="blue-link">WORK STUDIES (NSW & QLD)</a></li>
+                    	<li><a href="<?=base_url();?>products/retail-cert-1-2-and-3" class="blue-link">RETAIL</a></li>
+                        <li><a href="<?=base_url()?>products/screen-and-media-cert-1-2-and-3" class="blue-link">SCREEN & MEDIA</a></li>
                     </ul>
                 </div>
             </div>

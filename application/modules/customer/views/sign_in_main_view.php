@@ -5,7 +5,7 @@
             	<div class="col-md-7 push remove-gutters">
                      <a class="back-link"><i class="fa fa-angle-left"></i>Keep Shopping</a>
                 	<h1>SIGN IN</h1>
-					<p class="short-desc">If you have already registered with Passign Lane, the sign in as below.</p>
+					<p class="short-desc">If you have already registered with Passing Lane, then sign in as below.</p>
                 </div>
                 <div class="col-md-5 checkout-stages pull">
                     <?php echo modules::run('cart/checkout_stage',checkout_stage_signin);?>

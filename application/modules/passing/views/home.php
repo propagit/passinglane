@@ -107,7 +107,7 @@ var banner = {
                     	<div class="icon-wrapper"><i class="fa fa-question-circle"></i></div>
                         <div class="icon-title">Why<br /> Passing Lane</div>
                         <div class="icon-desc"><p class="p-description">Passing Lane is an Australian business offering comprehensive but affordable vocational education and training resources for teachers and trainers.</p></div>
-                        <button type="button" class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</button>
+                        <a href="<?=base_url();?>page/About-Us"><div class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</div></a>
                     </div>
                 </div>
                 <div class="col-xs-4">
@@ -115,7 +115,7 @@ var banner = {
                     	<div class="icon-wrapper"><i class="fa fa-download"></i></div>
                         <div class="icon-title">3 Year<br />Download Licence</div>
                         <div class="icon-desc"><p class="p-description">All resources purchased can be downloaded at any time over a three year licence period. This ensures you have the most up to date resources. </p></div>
-                    	<button type="button" class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</button>
+                    	<a href="<?=base_url();?>page/Product-Licences"><div class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</div></a>
                     </div>
                 </div>
                 <div class="col-xs-4">
@@ -123,7 +123,7 @@ var banner = {
                     	<div class="icon-wrapper"><i class="fa fa-trophy"></i></div>
                         <div class="icon-title">Supporting the Accredited <br /> Training Framework</div>
                         <div class="icon-desc"><p class="p-description">The Passing Lane vocational education and training (VET) support resources are develop in line and to support the Australian Accredited Training Framework.</p></div>
-                    	<button type="button" class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</button>
+                    	<a href="<?=base_url();?>page/Product-Updates-and-Revisions"><div class="btn btn-primary"><i class="fa fa-info-circle right5"></i> MORE INFO</div></a>
                     </div>
                 </div>
             </div>
