@@ -287,54 +287,7 @@ class Adminproduct extends MX_Controller {
 			//create folders
 			$folder_name = modules::run('helpers/create_folders',$path,$salt,$subfolders);
 
-			//if product brochure has been uploaded
-			if($_FILES['product_brochure']){
-				$product_brochure_path = $path.'/'.$folder_name."/doc";
-				$this->load->library('upload');
-				$config['upload_path'] = $product_brochure_path;
-				$config['allowed_types'] = 'pdf|doc|docx|ppt|mp4|avi|jpg|jpeg|png|gif';
-				$config['max_size']	= '0'; // unlimited
-				$config['overwrite'] = FALSE;
-				$config['remove_space'] = TRUE;
-				$this->upload->initialize($config);
 
-				if (!$this->upload->do_upload('product_brochure')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
-					echo $this->upload->display_errors();exit();
-				}else{
-					$data = array('upload_data' => $this->upload->data());
-					$product_brochure_name = $data['upload_data']['file_name'];
-					# Add details to database
-					$product_update_data = array(
-						'product_brochure' => $product_brochure_name
-					);
-					$this->product_model->update($product_id,$product_update_data);
-				}
-			}
-
-			//if product file has been uploaded
-			if($_FILES['product_file']){
-				$product_file_path = $path.'/'.$folder_name."/product_file";
-				$this->load->library('upload');
-				$config['upload_path'] = $product_file_path;
-				$config['allowed_types'] = 'pdf|doc|docx|ppt|mp4|avi|mov|zip';
-				$config['max_size']	= '0'; // unlimited
-				$config['overwrite'] = FALSE;
-				$config['remove_space'] = TRUE;
-				$this->upload->initialize($config);
-
-				if (!$this->upload->do_upload('product_file')) {
-					$this->session->set_flashdata('error_upload',$this->upload->display_errors());
-				}else{
-					$data = array('upload_data' => $this->upload->data());
-					$product_file_name = $data['upload_data']['file_name'];
-					# Add details to database
-					$product_update_data = array(
-						'product_file_name' => $product_file_name
-					);
-					$this->product_model->update($product_id,$product_update_data);
-				}
-			}
 
 
 			redirect('admin/product');

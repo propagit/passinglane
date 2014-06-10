@@ -101,16 +101,9 @@
                         <div id="upload_container">
 						    <button id="pickfiles" href="javascript:;" class="btn btn-info">Select files</button>
 						    <button id="uploadfiles" href="javascript:;" class="btn btn-info">Upload files</button>
+                            <span id="console"></span>
 						</div>
-                        <!--
-<div class="fileupload fileupload-new custom-fileupload" data-provides="fileupload">
-                        <div class="input-append">
-                        <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div>
-                        <span class="btn btn-file"><span class="fileupload-new">Select file</span><span class="fileupload-exists">Change</span>
-                        <input type="file" name="product_file" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                        </div>
-                        </div>
--->
+
                     </div>
                 </div>
                 <div class="form-common-gap">&nbsp;</div>
@@ -155,8 +148,29 @@
 				File size restriction: (None)
             </div>
             <div>
-				<div class="form-common-label"><?=$product['product_brochure'] ? 'Replace' : 'Upload';?> Product Brochure</div>
-				<div class="form-common-input">
+                <div>
+
+                    <div class="form-common-label"><?=$product['product_brochure'] ? 'Replace' : 'Upload';?> Product Brochure</div>
+
+                    <div class="form-common-input">
+                        <div id="filelist_brochure">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+                        <div class="progress progress-striped active" style="visibility: hidden;">
+                          <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;" id="upload-progress-brochure">
+                            0%
+                          </div>
+                        </div>
+
+
+                        <div id="upload_container_brochure">
+                            <button id="pickfiles_brochure" href="javascript:;" class="btn btn-info">Select files</button>
+                            <button id="uploadfiles_brochure" href="javascript:;" class="btn btn-info">Upload files</button>
+                            <span id="console_brochure"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- <div class="form-common-input">
 					<div class="fileupload fileupload-new custom-fileupload" data-provides="fileupload">
                     <div class="input-append">
                     <div class="uneditable-input span3"><i class="icon-file fileupload-exists"></i> <span class="fileupload-preview"></span></div>
@@ -164,7 +178,7 @@
                     <input type="file" name="product_brochure" /></span><a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
                     </div>
                     </div>
-				</div>
+				</div> -->
 			</div>
             <div class="form-common-gap">&nbsp;</div>
             <?php if($product['product_brochure']){ ?>
@@ -177,14 +191,18 @@
 			</div>
 			<div class="form-common-gap">&nbsp;</div>
             <?php } ?>
-            <button class="btn btn-info" type="submit">Update</button>
+            <div>
+                <div class="form-common-label"></div>
+                <div class="form-common-input">
+                    <button class="btn btn-info" type="submit">Update</button>
+                </div>
+            </div>
 		</form>
 
 
 
 	</div>
 </div>
-
 <script>
 // Custom example logic
 
@@ -242,6 +260,61 @@ var uploader = new plupload.Uploader({
 });
 
 uploader.init();
+
+var uploader_brochure = new plupload.Uploader({
+    runtimes : 'html5,flash,silverlight,html4',
+    browse_button : 'pickfiles_brochure', // you can pass in id...
+    container: document.getElementById('upload_container_brochure'), // ... or DOM Element itself
+    url : '<?=base_url();?>admin/product/ajax/uploading_brochure/<?=$product['id'];?>',
+    chunk_size: '400kb',
+    max_retries: 5,
+    flash_swf_url : '<?=base_url();?>assets/js/plupload/Moxie.swf',
+    silverlight_xap_url : '<?=base_url();?>assets/js/plupload/Moxie.xap',
+
+    filters : {
+        max_file_size : '500mb',
+        mime_types: [
+            {title : "Image files", extensions : "jpg,gif,png"},
+            {title : "Zip files", extensions : "zip"},
+            {title : "Movie files", extensions : "mov,mp4,avi"},
+            {title : "Document files", extensions : "pdf,doc,docx,ppt"}
+        ]
+    },
+
+    init: {
+        PostInit: function() {
+            document.getElementById('filelist_brochure').innerHTML = '';
+            document.getElementById('uploadfiles_brochure').onclick = function() {
+                uploader_brochure.start();
+                return false;
+            };
+        },
+
+        FilesAdded: function(up, files) {
+            $('#upload-progress-brochure').parent().css("visibility", "visible");
+
+            plupload.each(files, function(file) {
+                document.getElementById('filelist_brochure').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+            });
+        },
+
+        UploadProgress: function(up, file) {
+            //document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+            $('#upload-progress-brochure').attr('aria-valuenow', 60);
+            $('#upload-progress-brochure').css("width", file.percent + "%");
+            $('#upload-progress-brochure').html(file.percent + '% completed');
+        },
+        UploadComplete: function() {
+            location.reload();
+        },
+
+        Error: function(up, err) {
+            document.getElementById('console_brochure').innerHTML += "\nError #" + err.code + ": " + err.message;
+        }
+    }
+});
+
+uploader_brochure.init();
 
 $j(function(){
 	$j('.custom-select').selectpicker();
