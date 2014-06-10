@@ -3,7 +3,7 @@
         <div class="inner-content top-padding">
             <div class="col-md-12 remove-gutters push">
             	<div class="col-md-7 push remove-gutters">
-                    <a class="back-link"><i class="fa fa-angle-left"></i>Keep Shopping</a>
+                    <?=modules::run('pages/keep_shopping');?>
                     <h1>PAYMENT DETAILS <i class="fa fa-shopping-cart"></i></h1>
                     <p class="short-desc">Review your order</p>
                 </div>
