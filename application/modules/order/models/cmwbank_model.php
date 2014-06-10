@@ -11,8 +11,11 @@ define('VPC3_URL', 'https://migs.mastercard.com.au/vpcpay'); # 3-party (CommWeb 
 
 // m0r3c4sh
 // Define Access Code
-define('ACCESS_CODE', 'E330A7C4'); #  Live mode: FAE163FC
-define('MERCHANT_ID', 'TESTEDSONICOM01'); # Live mode: EDSONICOM01
+#define('ACCESS_CODE', 'E330A7C4'); #  Test mode
+#define('MERCHANT_ID', 'TESTEDSONICOM01'); # Test mode
+
+define('ACCESS_CODE', 'FAE163FC'); # Live mode
+define('MERCHANT_ID', 'EDSONICOM01'); # Live mode
 
 class cmwbank_model extends CI_Model {
 
