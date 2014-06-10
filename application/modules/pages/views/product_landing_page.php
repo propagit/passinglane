@@ -2,10 +2,10 @@
     <div class="content-wrap">
         <div class="inner-content">
             <div class="col-md-12 page-breaker">
-                <h3 class="stitched grey-bg">Resources</h3><br />
+                <h3 class="stitched grey-bg"><?=$title;?></h3><br />
                 <ul>
                 <? foreach($products as $product) { ?>
-                 <li class="col-md-3" style="margin-bottom: 10px;">
+                 <li class="col-md-3" style="margin-bottom: 15px;">
                   <div class="carousel-product-box">
                       <a href="<?=base_url();?>products/<?=$product->id_title;?>">
                       <div class="product-img-box">

@@ -20,8 +20,9 @@ class Pages extends MX_Controller {
 			case 'Resources':
 				$this->resources_landing_page();
 				break;
-			case 'Products':
-				$this->products_landing_page();
+			case 'Video':
+				$this->video_landing_page();
+				break;
 			default:
 				$this->page($param);
 			break;
@@ -60,13 +61,15 @@ class Pages extends MX_Controller {
 	{
 		$this->load->model('adminproduct/product_model');
 		$data['products'] = $this->product_model->get_similar_products('written');
+		$data['title'] = 'Resources';
 		$this->load->view('product_landing_page', isset($data) ? $data : NULL);
 	}
 
-	function products_landing_page()
+	function video_landing_page()
 	{
 		$this->load->model('adminproduct/product_model');
 		$data['products'] = $this->product_model->get_similar_products('video');
+		$data['title'] = 'Video';
 		$this->load->view('product_landing_page', isset($data) ? $data : NULL);
 	}
 

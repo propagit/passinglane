@@ -2,7 +2,12 @@
 	<div class="content-wrap">
         <div class="inner-content">
             <div class="col-md-6 remove-gutters resource-info">
-                <a class="back-link uppercase"><i class="fa fa-angle-left"></i> Back To Resources</a>
+                <? if ($product->product_type == 'video') { ?>
+                <a class="back-link uppercase" href="<?=base_url();?>page/Video"><i class="fa fa-angle-left"></i> Back To Video</a>
+                <? } else { ?>
+                <a class="back-link uppercase" href="<?=base_url();?>page/Resources"><i class="fa fa-angle-left"></i> Back To Resources</a>
+                <? } ?>
+
                 <h1><?=$product->title;?></h1>
                 <h2><?=$product->subtitle;?></h2>
                 <p class="short-desc"><?=$product->short_desc;?></p>
