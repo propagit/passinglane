@@ -28,6 +28,7 @@ var cart = {
 		success: function(data) {
 				cart.remove_loading();
 				cart.update_item_count();
+				cart.item_added_to_cart();
 		  	}
 		});		
 		
@@ -180,7 +181,16 @@ var cart = {
 			if((keyCode >=48 && keyCode<=57) || keyCode==8 || keyCode==9){return true;} 
 			else{return false;}
 		}
+	},
+	
+	item_added_to_cart:function(){
+		$j('body').append('<div id="cart-success-msg" class="modal fade"><div class="modal-dialog"><div class="modal-content"><div class="modal-header cart-success-modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button></div><div class="modal-body center"><p>Item successfully added to cart</p></div></div></div></div>');
+		$j('#cart-success-msg').modal('show');
 	}
+	
+	
+	
+	
 	
 	
 	

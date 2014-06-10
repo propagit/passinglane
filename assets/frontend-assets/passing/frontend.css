@@ -982,6 +982,10 @@ span.cart-terms{
 	line-height:30px !important;	
 }
 
+.cart-success-modal-header{
+	padding-bottom:30px !important;	
+}
+
 /* payemnts */
 .payments-info-wrap{
 	float:left;
@@ -1125,4 +1129,7 @@ span.cart-terms{
 .no-border-top{
 	border-top:none !important;	
 }
-
+.add-gutters{
+	margin-left:15px;
+	margin-right:15px;	
+}
