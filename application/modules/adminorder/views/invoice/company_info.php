@@ -6,7 +6,7 @@
         <td colspan="2">PO Box 975</td>
     </tr>
     <tr>
-        <td colspan="2">COSES VIC 3922</td>
+        <td colspan="2">COWES VIC 3922</td>
     </tr>
     <tr>
         <td><span class="title-page">Tel:</span></td>

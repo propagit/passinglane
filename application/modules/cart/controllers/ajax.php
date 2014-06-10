@@ -79,7 +79,7 @@ class Ajax extends MX_Controller {
 	function get_total()
 	{
 		#$total = $this->cart->total();
-		$total = modules::run('cart/get_cart_total');
+		$total = modules::run('cart/cart_final_amount');
 		$out['is_empty'] = $total > 0 ? false : true;
 		$out['total'] = '$'.money_format('%i',$total);
 		echo json_encode($out);

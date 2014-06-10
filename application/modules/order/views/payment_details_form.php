@@ -56,9 +56,6 @@
 </div>
 <div class="form-group">
     <div class="col-sm-8 col-sm-offset-4 remove-gutters">
-        <div class="col-sm-6" style="height: 83px;">
-            <img id="wp_eway_logo" style="width:100%;" src="<?=base_url();?>assets/frontend-assets/passing/dummy/eway-secure.png" />
-        </div>
         <div class="col-sm-6 confirm-payment-btn-wrap">
             <button id="process-payment" type="button" class="btn btn-primary btn-lg"><i class="fa fa-arrow-circle-right"></i> PAY NOW</button>
         </div>

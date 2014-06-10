@@ -210,10 +210,11 @@ class Order extends MX_Controller {
 		$shipping = modules::run('cart/get_shipping_info');
 		$discount = modules::run('cart/get_discount_info');
 		$discount_amount = modules::run('cart/get_discount_amount');
-		$tax = modules::run('cart/get_cart_gst');
-		$subtotal = modules::run('cart/get_cart_subtotal');
-		$total = modules::run('cart/get_cart_real_total');
-
+		#$tax = modules::run('cart/get_cart_gst');
+		#$subtotal = modules::run('cart/get_cart_subtotal');
+		$total = modules::run('cart/cart_final_amount');
+		$tax = $total / 10;
+		$subtotal = $total - $tax;
 
 		$customer_id = $this->session->userdata('customer_id');
 		$customer = modules::run('customer/get_customer',$customer_id);
@@ -300,7 +301,7 @@ class Order extends MX_Controller {
 										'quantity' => $item['qty'],
 										'price' => $item['price'],
 										'attributes' => json_encode($item['options']),
-										'reg_expiry' => date('Y-m-d',strtotime('+3 years',$today))
+										'reg_expiry' => date('Y-m-d',strtotime('+3 years',strtotime($today)))
 										);
 					if($this->order_model->add_order_items($order_items)){
 						$count++;

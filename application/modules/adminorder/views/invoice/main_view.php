@@ -22,7 +22,7 @@
                     </table>
                 </td>
             </tr>
-            
+
             <!--end row 1-->
         	<tr><td colspan="3">&nbsp;</td></tr>
             <!--row 2-->
@@ -47,21 +47,13 @@
                         </tr>
                     </table>
                 </td>
-            
+
             </tr>
        		<!--end row 2-->
 
             <tr>
             	<td colspan="3">
                 	<?=modules::run('adminorder/invoice_items',$order_id);?>
-                </td>
-            </tr>
-            <tr class="invoice-summary">
-            	<td colspan="2"><span class="title-page">Order Total</span></td>
-                <td align="right">
-                	<div class="td100">
-                		<span class="title-page">$<?=money_format('%i',$order->total);?></span>
-                	</div>
                 </td>
             </tr>
             <tr class="invoice-summary">
@@ -73,6 +65,14 @@
                 </td>
             </tr>
             <tr class="invoice-summary">
+                <td colspan="2"><span class="title-page">Shipping Cost</span></td>
+                <td>
+                    <div class="td100">
+                        <span class="title-page">$<?=money_format('%i',$order->shipping_cost);?></span>
+                    </div>
+                </td>
+            </tr>
+            <tr class="invoice-summary">
             	<td colspan="2" class="top-border bottom-border"><span class="invoice-header">Total</span></td>
                 <td class="top-border bottom-border">
                 	<div class="td100">
@@ -81,7 +81,7 @@
                 </td>
             </tr>
             <tr class="invoice-summary">
-            	<td colspan="2"><span class="title-page">Price Includes 10% GST</span></td>
+            	<td colspan="2"><span class="title-page">GST</span></td>
                 <td>
                 	<div class="td100">
                 		<span class="title-page">$<?=money_format('%i',$order->tax);?></span>
@@ -140,18 +140,18 @@
             </tr>
             <tr>
             	<td>
-                	<table class="tbl-how-to-pay">
+                	<table class="tbl-how-to-pay" width="100%">
                     	<tr>
-                        	<td><span class="title-page">Account Name:</span></td>
-                            <td>Passing Lane Pty Ltd.</td>
+                        	<td><span class="title-page">Passing Lane Pty Ltd.</span></td>
                         </tr>
                         <tr>
-                        	<td><span class="title-page">BSB:</span></td>
-                            <td>014 245</td>
+                            <td><span class="title-page">Commonwealth Bank</span></td>
                         </tr>
                         <tr>
-                        	<td><span class="title-page">Account:</span></td>
-                            <td>205 022 334</td>
+                        	<td><span class="title-page">BSB 014 245</span></td>
+                        </tr>
+                        <tr>
+                        	<td><span class="title-page">Account Number 205 022 334</span></td>
                         </tr>
                     </table>
                 </td>
@@ -165,6 +165,6 @@
                 </td>
             </tr>
             <!--end how to pay row-->
-        </tbody>	
+        </tbody>
     </table>
 </div>
