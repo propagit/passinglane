@@ -401,8 +401,8 @@ class Adminproduct extends MX_Controller {
 
 				$product_brochure_path = $prod_folder_path."/doc";
 				//delete old file
-				$product_brochure_full_path = $product_brochure_path."/".$product_info['product_brochure'];
-				modules::run('helpers/delete_file',$product_brochure_full_path);
+				#$product_brochure_full_path = $product_brochure_path."/".$product_info['product_brochure'];
+				#modules::run('helpers/delete_file',$product_brochure_full_path);
 
 				$this->load->library('upload');
 				$config['upload_path'] = $product_brochure_path;
@@ -422,6 +422,7 @@ class Adminproduct extends MX_Controller {
 						'product_brochure' => $product_brochure_name
 					);
 					$this->product_model->update($update_id,$product_update_data);
+					
 				}
 			}
 
