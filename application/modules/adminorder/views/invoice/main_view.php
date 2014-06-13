@@ -103,7 +103,7 @@
             	<td colspan="2"><span class="title-page">Payment Due</span></td>
                 <td>
                 	<div class="td100">
-                		<span class="title-page"><?=date('Y-m-d',strtotime($order->created) + 259200);?></span>
+                		<span class="title-page"><?=date('Y-m-d',strtotime($order->created) + 2592000);?></span>
                 	</div>
                 </td>
             </tr>

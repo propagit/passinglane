@@ -99,7 +99,7 @@ class Dashboard_model extends CI_Model {
 	
 	function get_international_customers()
 	{
-		$sql = 'select count(id) as total from customers where deleted = 0 and country != 13';
+		$sql = 'select count(id) as total from customers where deleted = 0 and country != 13 and id != 1';
 		$customers = $this->db->query($sql)->row();
 		if($customers){
 			return $customers->total;	
@@ -110,6 +110,12 @@ class Dashboard_model extends CI_Model {
 	function total_newsletter_subscribers()
 	{
 		/* as this project lacks newsletter module */
+		$sql = "SELECT count(subscriber_id) AS total 
+				FROM subscribers";
+		$subscribers = $this->db->query($sql)->row();
+		if($subscribers){
+			return $subscribers->total;	
+		}
 		return 0;
 	}
 	
@@ -362,6 +368,13 @@ class Dashboard_model extends CI_Model {
 			}
 		}
 		
+		foreach($sales_stats as $sale){
+			if($this->check_dash_module_visibility_status($sale)){
+				$out .= 'dash.sales_stats();';	
+				break;
+			}
+		}
+		
 		if($this->check_dash_module_visibility_status($products_stats)){
 			$out .= 'dash.product_stats();';
 		}
@@ -382,7 +395,93 @@ class Dashboard_model extends CI_Model {
 		
 	}
 
+	/* sales stats */
+	function get_todays_sales($today)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders
+				WHERE (order_status = 'success' OR order_status = 'not paid')
+				AND deleted = 'no'  
+				AND created LIKE '%".$today."%'";
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;			
+	}
 	
+	function get_week_sales($monday)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders
+				WHERE (order_status = 'success' OR order_status = 'not paid') 
+				AND deleted = 'no'  
+				AND created >= '".$monday."'";
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;			
+	}
+	
+	function get_todays_failed_sales($today)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders
+				WHERE order_status = 'failed'  
+				AND deleted = 'no'  
+				AND created LIKE '%".$today."%'";
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;			
+	}
+	
+	function get_week_failed_sales($monday)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders
+				WHERE order_status = 'failed'
+				AND deleted = 'no'   
+				AND created >= '".$monday."'";
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;			
+	}
+	
+	function get_month_sales($year,$month)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders 
+				WHERE (order_status = 'success' OR order_status = 'not paid') 
+				AND deleted = 'no'  
+				AND YEAR(created) = ".$year." 
+				AND MONTH(created) = ".$month;
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;
+					
+	}
+	
+	function get_year_sales($year)
+	{
+		$sql = "SELECT count(order_id) as total 
+				FROM orders 
+				WHERE (order_status = 'success' OR order_status = 'not paid') 
+				AND deleted = 'no'  
+				AND YEAR(created) = ".$year;
+		$sales = $this->db->query($sql)->row();
+		if($sales){
+			return $sales->total;	
+		}
+		return 0;
+					
+	}
 	
 	
 	

@@ -37,11 +37,13 @@ var dash = {
 	},
 	
 	cust_stats:function(){
+		$('#newsletter-subscribers').addClass('loading').html('');
 		$('#member-account').addClass('loading').html('');
 		$('#australian-members').addClass('loading').html('');
 		$('#international-members').addClass('loading').html('');
 		var action_url = '<?=base_url();?>admin/dashboard/ajax/get_customer_stats';
 		dash.get_stat(action_url,function (cust_stats) { 
+			$('#newsletter-subscribers').removeClass('loading').html(cust_stats['newsletter']);
 			$('#member-account').removeClass('loading').html(cust_stats['total_customers']);
 			$('#australian-members').removeClass('loading').html(cust_stats['aussi_customers']);
 			$('#international-members').removeClass('loading').html(cust_stats['international_customers']);
@@ -77,6 +79,24 @@ var dash = {
 		var action_url = '<?=base_url();?>admin/dashboard/ajax/get_galleries_stats';
 		dash.get_stat(action_url,function (galleries_stats) { 
             $('#total-galleries').removeClass('loading').html(galleries_stats['galleries']);
+   		});
+	},
+	
+	sales_stats:function(){
+		$('#sales-today').addClass('loading').html('');
+		$('#today-failed-sales').html(0);
+		$('#sales-week').addClass('loading').html('');
+		$('#week-failed-sales').html(0);
+		$('#sales-month').addClass('loading').html('');
+		$('#sales-year').addClass('loading').html('');
+		var action_url = '<?=base_url();?>admin/dashboard/ajax/get_sales_stats';
+		dash.get_stat(action_url,function (sales_stats) { 
+			$('#sales-today').removeClass('loading').html(sales_stats['sales_today']);
+			$('#today-failed-sales').html(sales_stats['today_failed_sales']);
+			$('#sales-week').removeClass('loading').html(sales_stats['sales_week']);
+			$('#week-failed-sales').html(sales_stats['week_failed_sales']);
+			$('#sales-month').removeClass('loading').html(sales_stats['sales_month']);
+			$('#sales-year').removeClass('loading').html(sales_stats['sales_year']);
    		});
 	}
 };

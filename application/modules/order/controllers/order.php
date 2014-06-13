@@ -87,6 +87,10 @@ class Order extends MX_Controller {
 			if ($payment_type == 'trading') {
 				$this->order_model->update_order($order_id,array('order_status' => 'not paid'));
 				$this->promotion_condition_model->increase_coupon_usages($this->session->userdata('condition_id'));
+				//send order confirmation to customer
+				$this->send_order_confirmation($order_id);
+				//send order notification to admin
+				$this->send_order_notification($order_id);
 				modules::run('cart/destroy_cart');
 				redirect('order/successful');
 			}
@@ -129,8 +133,9 @@ class Order extends MX_Controller {
 	}
 
 	function test() {
-		$a = $this->process_cmwBank('testrf','testinfo',1.00,'4987654321098769','5','17','123');
-		var_dump($a);
+		//$a = $this->process_cmwBank('testrf','testinfo',1.00,'4987654321098769','5','17','123');
+		//var_dump($a);
+		$this->send_order_confirmation(84);
 	}
 
 	function process_cmwBank($reference, $order_info, $amount, $card_number, $expmonth, $expyear, $ccv) {

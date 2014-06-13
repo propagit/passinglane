@@ -45,7 +45,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 | E.g: Social Url - such as facebook etc, contact page emails etc
 |
 */
-define('LIVE_SERVER', false);
+define('LIVE_SERVER', true);
 define('fb_url','https://www.facebook.com');
 define('twitter_url','https://www.twitter.com');
 define('linkedin_url','http://www.linkedin.com');
@@ -60,6 +60,7 @@ define('PROMOTION_DISABLED', 0);
 define('PROMOTION_ACTIVED', 1);
 
 define('INFO_EMAIL','info@passinglane.com.au');
+define('DB_NAME','passinglane');
 
 
 /* End of file constants.php */

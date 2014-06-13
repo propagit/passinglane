@@ -53,15 +53,15 @@
 	        <div id="cvv-tooltip" class="col-sm-6 remove-gutters blue-text form-info-label pointer" data-toggle="tooltip" data-placement="bottom" title="This is a 3-digit code on the back of your credit card next to your signature."><i class="fa fa-question-circle"></i> WHAT'S THIS </div>
 	    </div>
 	</div>
-    <div class="form-group">
-        <div class="col-sm-8 col-sm-offset-4 remove-gutters">
-            <div class="col-sm-6">
-                <button id="process-payment" type="button" class="btn btn-primary btn-lg"><i class="fa fa-arrow-circle-right"></i> PAY NOW</button>
-            </div>
-        </div>
-	</div>
 </div>
 
+<div class="form-group">
+    <div class="col-sm-8 col-sm-offset-4 remove-gutters">
+        <div class="col-sm-6">
+            <button id="process-payment" type="button" class="btn btn-primary btn-lg"><i class="fa fa-arrow-circle-right"></i> PAY NOW</button>
+        </div>
+    </div>
+</div>
 
 <script>
 $j(function(){

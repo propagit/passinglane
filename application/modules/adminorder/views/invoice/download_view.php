@@ -146,7 +146,7 @@
             <tr class="invoice-summary">
             	<td colspan="3"><span class="title-page"><b>Payment Due</b></span></td>
                 <td>
-                		<span class="title-page"><b><?=date('Y-m-d',strtotime($order->created) + 259200);?></b></span>
+                		<span class="title-page"><b><?=date('Y-m-d',strtotime($order->created) + 2592000);?></b></span>
                 </td>
             </tr>
             <? } else if ($order->order_status == "paid") { ?>

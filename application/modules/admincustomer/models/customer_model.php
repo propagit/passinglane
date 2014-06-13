@@ -225,7 +225,7 @@ class Customer_model extends CI_Model {
 	/* Export Functions */
 	function get_export_settings()
 	{
-		$database = "propates_wave1";
+		$database = DB_NAME;
 		$table_name = 'customers';
 		//use this sql to get field name or describe the field name manually
 		$sql = "SELECT COLUMN_NAME as field_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = '".$database."' AND TABLE_NAME = '".$table_name."'";
